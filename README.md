@@ -14,9 +14,9 @@ A voice-first personal AI agent in Egyptian Arabic for adults with ADHD (and any
 - **Papers**: tell it "the passport expires in March" and it reminds you to renew a month before.
 - **Money advisor**: "can I buy this?" against balance, bills and payday; never decides for you.
 - **Hard-day mode, crisis safety, family reminders by link, doctor's diary export.**
-- **Reminders while closed**: whole calendar export (.ics); Telegram reminders (server ready, bot pending).
+- **Reminders while closed**: every upcoming appointment exported to the phone calendar (.ics) with alerts.
 - **Backup** to a file and restore on a new phone.
 
 ## How it runs
 - Static PWA (this repo) on GitHub Pages.
-- n8n on NRG's server: `Sanady - Brain` (Claude), `Wasl - Egyptian Voice` (speech), `Sanady - Reminders API` and `Sanady - Telegram Bot` (Telegram reminders). Every request carries the app key and a signed device token.
+- n8n on NRG's server: `Sanady - Brain` (Claude) and `Wasl - Egyptian Voice` (speech). Every request carries the app key and a signed device token.

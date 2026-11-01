@@ -368,7 +368,7 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
   if(awake&&t-bAt>3*36e5){const slot=Math.floor(t/(3*36e5)),B=[['💧','اشرب كوباية مية دلوقتي. الدماغ بيركز أحسن وهو مش عطشان.','شربت ✓'],['🚶','قوم اتحرك دقيقتين: افرد ضهرك وامشي شوية.','اتحركت ✓'],['🍎','كلت حاجة من بدري؟ خد حاجة صغيرة تاكلها.','كلت ✓']][slot%3];
    out.push({id:'bd'+slot,pr:hard?50:15,i:B[0],p:B[1],acts:[[B[2],()=>{store.set('bodyAt',nowMs());award(2);render()}],['بعدين',()=>{store.set('bodyAt',nowMs()-2*36e5);render()}]]})}}
  const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
- if(fresh.length>=2&&!DEMO&&!store.get('tg',false))out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
+ if(fresh.length>=2&&!DEMO&&!tgOn())out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
  return out.filter(x=>!(nsn[x.id]>t)).sort((a,b)=>(b.pr||50)-(a.pr||50))}
 function learnTravel(i,late){const base=(i.where&&travel[i.where])||prof.travel||30;if(i.where){travel[i.where]=Math.round(base+late*.8)}i.done=true;i.doneAt=nowMs();save();
@@ -445,7 +445,8 @@ function icsAll(){const n=nowMs();const list=items.filter(i=>!i.done&&i.type!=='
 /* ---------- MONEY screen ---------- */
 /* ---------- Telegram reminders: reach the phone even when Sanady is closed ---------- */
 const REMIND_URL='https://2.31.109.72.sslip.io/webhook/sanady-remind';
-function tgOn(){return !DEMO&&store.get('tg',false)}
+const TG_READY=false; // Telegram reminders are switched off until the Sanady bot exists
+function tgOn(){return TG_READY&&!DEMO&&store.get('tg',false)}
 async function tgCall(mode,extra){let dev='';try{dev=localStorage.getItem('sn_dev')||''}catch(e){}
  const r=await fetch(REMIND_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({k:'wasl-nrg-2026',d:dev,mode},extra||{}))});
  const j=await r.json().catch(()=>({}));if(!r.ok&&!j.error)j.error='http';return j}
@@ -470,7 +471,7 @@ async function tgSync(force){if(!tgOn())return;const rem=tgList();const sig=JSON
   store.set('tgSig',sig);store.set('tgAt',nowMs())}catch(e){}}
 function tgSoon(){if(!tgOn())return;clearTimeout(window.__tgT);window.__tgT=setTimeout(()=>tgSync(),4000)}
 /* after the user pressed Start in Telegram and came back */
-async function tgCheck(){const w=store.get('tgWait',0);if(!w||DEMO)return;if(nowMs()-w>35*6e4){store.set('tgWait',0);return}
+async function tgCheck(){const w=store.get('tgWait',0);if(!TG_READY||!w||DEMO)return;if(nowMs()-w>35*6e4){store.set('tgWait',0);return}
  try{const j=await tgCall('status');if(j.linked){store.set('tgWait',0);store.set('tg',true);await tgSync(true);confetti();toast('✅ تليجرام اتربط. تذكيراتك هتوصلك هناك حتى لو سندي مقفول',5000);if(!$('sheet').hidden&&$('tgBox'))tgSheet()}}catch(e){}}
 function tgSheet(){const on=store.get('tg',false);
  openSheet(`<h2>تذكير على تليجرام</h2><div class="stack" id="tgBox">${on?
@@ -586,7 +587,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
  <button class="btn" id="sSave">احفظ</button>
- <button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>
+ ${TG_READY?'<button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>':''}
  <button class="btn ghost" id="sDoc">📄 ورقي ومواعيد التجديد</button>
  <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
@@ -595,13 +596,13 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
  <a class="btn ghost" href="privacy.html">🔒 الخصوصية والأمان</a>
  <button class="btn ghost" id="sWipe" style="color:var(--red)">امسح كل بياناتي</button>
- <p class="note">سندي مش دكتور ولا علاج، وبيكمّل الدكتور مش بيبدله. مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك (إلا تذكيرات تليجرام لو شغّلتها)، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
+ <p class="note">سندي مش دكتور ولا علاج، وبيكمّل الدكتور مش بيبدله. مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
  $('sCal').onclick=()=>icsAll();
- $('sTg').onclick=()=>tgSheet();
+ if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();
  $('sDoc').onclick=()=>docsSheet();
- $('sNot').onclick=async()=>{try{const p=await Notification.requestPermission();toast(p==='granted'?'تمام، هنبهك والتطبيق مفتوح. للتنبيه وهو مقفول اربط تليجرام أو ضيفها للكالندر':'التنبيهات مقفولة من المتصفح',4500)}catch(e){toast('المتصفح ده مش بيدعم التنبيهات')}};
+ $('sNot').onclick=async()=>{try{const p=await Notification.requestPermission();toast(p==='granted'?'تمام، هنبهك والتطبيق مفتوح. للتنبيه وهو مقفول ضيف مواعيدك للكالندر':'التنبيهات مقفولة من المتصفح',4500)}catch(e){toast('المتصفح ده مش بيدعم التنبيهات')}};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
   $('sheetBody').innerHTML=`<h2>تذكير من العيلة</h2><div class="stack"><p>ابعت اللينك ده لحد بتثق فيه. يكتب التذكير، ويبعتهولك، وإنت توافق عليه قبل ما يتضاف. مفيش حسابات ولا سيرفر.</p>${draftBox(txt)}
   <details><summary><b>شرح بسيط للعيلة عن الـ ADHD</b></summary>${draftBox('الـ ADHD مش كسل ولا قلة اهتمام. الدماغ بيلاقي صعوبة في البدء والتنظيم وحساب الوقت، مش في الذكاء. اللي بيساعد: تذكير هادي بدل اللوم، وطلب حاجة واحدة في المرة، ومساعدة في أول خطوة. شكراً إنك بتحاول تفهم 💜')}</details></div>`};

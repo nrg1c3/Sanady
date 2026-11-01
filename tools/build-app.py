@@ -16,5 +16,6 @@ for ic in m['icons']: ic['src'] = '../' + ic['src']
 for sc in m.get('shortcuts', []):
     for ic in sc.get('icons', []): ic['src'] = '../' + ic['src']
 json.dump(m, open(os.path.join(R, 'app', 'manifest.webmanifest'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-open(os.path.join(R, 'app', 'sw.js'), 'w').write("/* Sanady for everyone: same worker as the ADHD app, its own scope, caches and alarms */\nimportScripts('../sw.js');\n")
+# a full copy (not importScripts) so store tools detect the worker; it adapts to the /app/ scope by itself
+open(os.path.join(R, 'app', 'sw.js'), 'w', encoding='utf-8').write('/* generated from ../sw.js by tools/build-app.py: do not edit */\n' + open(os.path.join(R, 'sw.js'), encoding='utf-8').read())
 print('built app/')

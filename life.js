@@ -148,3 +148,16 @@ if(IS_ADHD){
   $('qDopa').onclick=dopaSheet;$('qDoor').onclick=doorSheet;$('qMed').onclick=medSheet}
  NUDGE_EXTRA.push(t=>{const w=medWin();if(!w||!w.on||curMode()!=='one')return[];const big=candidates().find(i=>i.big);if(!big)return[];return[{id:'mw'+dayKey(),pr:57,i:'🎯',p:'دلوقتي شباك تركيزك لحد '+fmtT(w.e)+'. ده أحسن وقت لـ «'+big.title+'».',acts:[['يلا نبدأ',()=>startTask(big.id)],['تمام',()=>{nsn['mw'+dayKey()]=t+864e5;save();render()}]]}]});
 }
+
+/* the brain sends things that belong to these sections; put each in its place */
+window.applyLife=(L,lines,added,r)=>{if(!L)return;let ch=false;
+ (L.debts||[]).forEach(d=>{LIFE.debts.push({id:uid(),dir:d.dir==='me'?'me':'them',who:d.who,amount:d.amount,note:d.note||'',due:d.due||'',at:nowMs()});ch=true;lines.push('💸 '+(d.dir==='me'?'عليك لـ '+d.who:d.who+' عليه')+' '+money(d.amount))});
+ (L.occ||[]).forEach(o=>{const k=OCCK[o.kind]?o.kind:'other';const t=k==='other'?o.who:OCCK[k][1]+' '+o.who;if(LIFE.occ.some(x=>x.t===t))return;LIFE.occ.push({id:uid(),k,who:o.who,t,d:o.date,gift:o.gift||''});ch=true;lines.push('🎂 '+t+' · هفكّرك قبلها بـ 3 أيام');
+  if(o.gift&&r&&r.wants)r.wants=r.wants.filter(w=>!arN(w.name).includes(arN(o.gift)))});
+ (L.subs||[]).forEach(x=>{if(subs().some(i=>arN(i.title)===arN(x.name)))return;const it=addItem({type:'bill',sec:'money',title:x.name,amount:x.amount||0,due:(x.due||dayKey())+'T10:00',repeat:x.repeat==='yearly'?'yearly':'monthly'});it.sub=1;it.usedAt=nowMs();added.push(it);lines.push('🔁 اشتراك '+x.name+(x.amount?' '+money(x.amount)+' ج':''))});
+ (L.needs||[]).forEach(x=>{if(needItems().some(i=>arN(i.title)===arN(x.t)))return;const it=addItem({type:'buy',sec:'shop',title:x.t,cat:x.cat||'food'});added.push(it)});
+ (L.habits||[]).forEach(h=>{if(LIFE.habits.some(x=>x.t===h.t))return;LIFE.habits.push({id:uid(),t:h.t,at:h.at||'',days:{}});ch=true;lines.push('✅ عادة جديدة: '+h.t+(h.at?' · هفكّرك '+h.at:''))});
+ (L.kid||[]).forEach(x=>{let k=HOME.kids.find(c=>arN(c.name)===arN(x.name));if(!k){k={id:uid(),name:x.name,age:'',doc:'',docPhone:''};HOME.kids.push(k);store.set('home',HOME)}
+  const it=addItem({type:x.type,sec:x.type==='task'?'people':'health',title:x.type==='med'?'دوا '+k.name+' ('+x.title+')':x.title.includes(k.name)?x.title:x.title+' ('+k.name+')',due:x.due||'',repeat:x.repeat||''});it.kid=k.id;added.push(it)});
+ if(r&&r.wants&&!r.wants.length)delete r.wants;
+ if(ch)store.set('life',LIFE)};

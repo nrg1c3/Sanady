@@ -148,9 +148,12 @@ async function brain(mode,extra){if(DEMO&&DEMO.brain){const r=DEMO.brain(mode,ex
   if(r.ok){const j=await r.json();if(!j.error)return j}}catch(e){}}
  return null}
 /* offline: simple keyword sorting so the brain dump never gets lost */
-function localSort(text){const parts=text.split(/[،,.؛\n]+|\s+و(?=(?:أ|ا|إ|ن|لازم|كمان|محتاج|عايز|عايزة|فاتورة|ميعاد))/).map(s=>s.trim()).filter(s=>s.length>2);
- const n=NOW();const out=[];
+function localSort(text){const needs=[];
+ text=text.replace(/(?:^|\s)و?(?:خلص|خلصت|خلاص خلص)\s+([^،,.؛\n]+)/g,(m,g)=>{g.split(/\s+و/).map(x=>x.replace(/^ال/,'').trim()).filter(Boolean).forEach(t=>needs.push({t,cat:/حفاض|أطفال/.test(t)?'kids':/منظف|صابون|مناديل/.test(t)?'home':'food'}));return ' '});const parts=text.split(/[،,.؛\n]+|\s+و(?=(?:أ|ا|إ|ن|لازم|كمان|محتاج|عايز|عايزة|فاتورة|ميعاد))/).map(s=>s.trim()).filter(s=>s.length>2);
+ const n=NOW();const out=[];const life={debts:[],needs};
  parts.forEach(p=>{let type='task',sec='home',due='';const has=r=>r.test(p);
+  let dm=p.match(/^(?:و)?(سلفت|سلّفت|استلفت من)\s+(\S+)\s+(\d+)/);if(dm){life.debts.push({who:dm[2],amount:+dm[3],dir:/استلفت/.test(dm[1])?'me':'them',note:'',due:''});return}
+
   if(has(/اشتري|أشتري|لبن|جبن|عيش|خضار|سوبر/))type='buy',sec='shop';
   else if(has(/فاتورة|قسط|اشتراك/))type='bill',sec='money';
   else if(has(/أكلم|اكلم|أتصل|اتصل|أرد|ارد|ابعت|أبعت/))type='call',sec='people';
@@ -166,7 +169,7 @@ function localSort(text){const parts=text.split(/[،,.؛\n]+|\s+و(?=(?:أ|ا|إ
   else if(has(/بالليل/)){d.setHours(21,0,0,0);set=true}
   if(set)due=toLocal(d);const am=p.match(/(\d{2,6})\s*(?:جنيه|ج)?/);
   out.push({type,sec,title:p.replace(/^(و|كمان|ولازم|لازم)\s*/,''),due,amount:type==='bill'&&am?+am[1]:0})});
- return{reply:'رتبت '+out.length+' حاجات. النت مش شغال دلوقتي، فرتبتهم بنفسي، وتقدر تعدّلهم.',add:out,update:[],spend:[],wants:[],places:[],find:'',crisis:false,offline:true}}
+ return{reply:'رتبت '+(out.length+life.debts.length+life.needs.length)+' حاجات. النت مش شغال دلوقتي، فرتبتهم بنفسي، وتقدر تعدّلهم.',life,add:out,update:[],spend:[],wants:[],places:[],find:'',crisis:false,offline:true}}
 
 /* ---------- safety: crisis ---------- */
 const CRISIS_RX=/(انتحر|أنتحر|انتحار|أموت نفسي|اموت نفسي|عايز أموت|عايز اموت|عايزة أموت|نفسي أموت|مش عايز أعيش|مش عايز اعيش|مش عايزة أعيش|أقتل نفسي|اقتل نفسي|أأذي نفسي|اأذي نفسي|أنهي حياتي|انهي حياتي|kill myself|suicide)/i;
@@ -210,6 +213,7 @@ function applyTalk(r,text){const added=[];const lines=[];
  if(r.salary){M.sal=r.salary;lines.push('المرتب '+money(r.salary))}if(r.payday){M.pay=r.payday;lines.push('القبض يوم '+r.payday)}
  (r.places||[]).forEach(p=>{places[p.thing]={w:p.where,d:nowMs()};lines.push('📍 '+p.thing+': '+p.where)});
  (r.docs||[]).forEach(dc=>{const it=docRenew(dc.name,dc.expires);if(!it)return;if(!added.includes(it)&&it.created>=nowMs()-5e3)added.push(it);lines.push('📄 '+dc.name+' بيخلص '+docDate(dc.expires)+'. هفكّرك تجدده قبلها بشهر')});
+ if(r.life&&window.applyLife)applyLife(r.life,lines,added,r);
  save();
  let found='';if(r.find){const k=placeOf(r.find);found=k?'📍 '+k+' في '+places[k].w:'مش فاكر إنك قلتلي مكان '+r.find+'. لما تلاقيه قولي "'+r.find+' في ..." وهفتكر.'}
  const groups={};added.forEach(a=>{const k=a.type==='idea'?'idea':a.sec;(groups[k]=groups[k]||[]).push(a)});

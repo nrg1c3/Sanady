@@ -1,0 +1,8 @@
+[
+ {"relation":["delegate_permission/common.handle_all_urls"],
+  "target":{"namespace":"android_app","package_name":"com.nrg.sanady",
+   "sha256_cert_fingerprints":["10:35:6C:BF:8D:B4:56:F2:F5:A1:54:94:0B:7B:5E:E9:7F:81:74:FF:2C:D9:33:4B:CB:24:55:3B:52:BE:3C:0C"]}},
+ {"relation":["delegate_permission/common.handle_all_urls"],
+  "target":{"namespace":"android_app","package_name":"com.nrg.sanady.app",
+   "sha256_cert_fingerprints":["A1:27:CE:A4:80:B4:E3:DC:64:1F:62:21:31:C8:36:BB:35:5D:AC:2B:2E:57:65:6F:2F:F3:67:EC:04:F6:13:BD"]}}
+]

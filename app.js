@@ -359,6 +359,8 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
    else if(!w.wait&&A.avail>=w.price)out.push({id:'wa'+w.id,pr:45,i:'🎁',p:`دلوقتي تقدر تشتري ${w.name} من غير ما تأثر على الفواتير.`,speak:1,acts:[['اشتريتها',()=>buyWish(w)],['مش دلوقتي',()=>{nsn['wa'+w.id]=t+3*864e5;save();render()}]]})});
   if(A.avail<0&&(M.bal||M.sal))out.push({id:'lo',pr:60,i:'💳',p:'الفلوس لحد المرتب مش هتكفي الفواتير والمصاريف. خلّي بالك من الصرف الأيام دي، وقولي لو اتغير الرصيد.',acts:[['شوف التفاصيل',()=>show('money')]]});
   const ideas=items.filter(i=>i.type==='idea'&&!i.done);if(ideas.length>=5&&t-(store.get('ideaRev',0))>30*864e5)out.push({id:'ir',pr:20,i:'💡',p:`عندك ${ideas.length} أفكار في الخزنة. نختار واحدة تستاهل؟`,acts:[['يلا نختار',()=>{store.set('ideaRev',t);show('all');setSeg('ideas')}],['بعدين',()=>{nsn.ir=t+7*864e5;save();render()}]]})}
+ if(!hard&&!DEMO){const wr=store.get('weekRev',0);if((n.getDay()===5||t-wr>8*864e5)&&t-wr>5*864e5&&n.getHours()>=10&&items.filter(i=>!i.done).length>=4)out.push({id:'wk'+dayKey(),pr:42,i:'🗓️',p:'وقت مراجعة الأسبوع: 5 دقايق نرتب اللي فات واللي جاي.',acts:[['يلا',()=>weekSheet()],['بعدين',()=>{nsn['wk'+dayKey()]=t+864e5;save();render()}]]});
+  const bk=store.get('bkAt',0),first=items.reduce((m,i)=>Math.min(m,i.created||t),t);if(items.length>=15&&t-first>7*864e5&&t-bk>30*864e5)out.push({id:'bk',pr:18,i:'💾',p:'كل حاجاتك على الموبايل ده بس. احفظ نسخة عشان لو ضاع أو غيرته ما تخسرش حاجة.',acts:[['احفظ نسخة',()=>{backupSave();render()}],['بعدين',()=>{nsn.bk=t+14*864e5;save();render()}]]})}
  const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
  if(fresh.length>=2&&!DEMO&&!store.get('tg',false))out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
@@ -495,7 +497,7 @@ function drawMoney(){const A=availCalc();const col=A.avail<0?'var(--red)':A.avai
 $('mSave').onclick=()=>{[['mBal','bal'],['mSal','sal'],['mPay','pay'],['mDaily','daily'],['mBuf','buf'],['mWeek','week'],['mBrake','brake']].forEach(([id,k])=>M[k]=+$(id).value||0);save();toast('اتحفظ');render()};
 
 /* ---------- NIGHT REVIEW ---------- */
-$('qNight').onclick=()=>nightSheet();
+$('qNight').onclick=()=>nightSheet();$('qWeek').onclick=()=>weekSheet();
 function nightSheet(){const d=doneToday();const n=d.length;const steps=items.reduce((s,i)=>s,0);
  const msg=n?'النهارده عملت '+n+' '+(n===1?'حاجة':'حاجات')+'. '+cheer():'النهارده كان يوم، وده كفاية. بكرة يوم جديد.';
  openSheet(`<h2>🌙 ملخص اليوم</h2><div class="stack"><div class="say">${esc(msg)}</div>${n?'<div class="res">'+d.map(i=>'<div class="item done"><span class="ck on">✓</span><div class="tx"><b>'+esc(i.title)+'</b></div></div>').join('')+'</div>':''}
@@ -507,6 +509,51 @@ function nightSheet(){const d=doneToday();const n=d.length;const steps=items.red
  $('nS').querySelectorAll('button').forEach(b=>b.onclick=()=>{log('sleep',b.textContent);$('nS').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
  $('nF').querySelectorAll('button').forEach(b=>b.onclick=()=>{log('focus',b.textContent);$('nF').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
  $('nDump').onclick=()=>openDump(null,'إيه اللي في دماغك لبكرة؟ قوله وسيبه لسندي، ونام وإنت مرتاح.');$('nSleep').onclick=()=>{closeSheet();sleepMode()};speak(msg)}
+
+/* ---------- weekly review: a calm 5-minute reset once a week ---------- */
+function nextWeek(id){const it=byId(id);if(!it)return;const d=NOW();d.setDate(d.getDate()+7);d.setHours(10,0,0,0);it.due=toLocal(d);it.touched=nowMs();it.notified=0;save();render()}
+function weekSheet(){const n=nowMs(),wk=7*864e5;
+ const done=items.filter(i=>i.done&&i.doneAt&&n-i.doneAt<wk).length;
+ const late=items.filter(i=>!i.done&&i.type!=='idea'&&i.type!=='med'&&i.due&&parseL(i.due)<n).sort((a,b)=>parseL(a.due)-parseL(b.due)).slice(0,8);
+ const next=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>=n&&parseL(i.due)-n<wk).sort((a,b)=>parseL(a.due)-parseL(b.due)).slice(0,10);
+ const pick=items.filter(i=>!i.done&&i.type!=='idea'&&i.type!=='buy'&&!i.due).sort((a,b)=>(b.star?1:0)-(a.star?1:0)||(a.created||0)-(b.created||0)).slice(0,10);
+ const msg=done?'الأسبوع ده خلّصت '+done+' '+(done===1?'حاجة':done<=10?'حاجات':'حاجة')+'. '+cheer():'أسبوع جديد، بداية جديدة. يلا نرتب سوا من غير لوم.';
+ const W=i=>(SEC[i.sec]||['•'])[0];
+ openSheet(`<h2>🗓️ مراجعة الأسبوع</h2><div class="stack"><div class="say">${esc(msg)}</div>
+ ${late.length?`<p><b>حاجات عدّى وقتها (${late.length})</b><br><small>نقرر في كل واحدة بسرعة:</small></p>`+late.map(i=>`<div class="wrow" data-w="${i.id}"><div class="item"><div class="tx"><b>${W(i)} ${esc(i.title)}</b><small>كان ${esc(fmtWhen(i.due))}</small></div></div><div class="acts"><button class="chip" data-a="t">بكرة</button><button class="chip" data-a="w">الأسبوع الجاي</button><button class="chip" data-a="d">خلصت ✓</button><button class="chip" data-a="x">شيلها</button></div></div>`).join(''):'<p>👌 مفيش حاجة متأخرة.</p>'}
+ ${next.length?`<p><b>الأسبوع الجاي</b></p><div class="res">`+next.map(i=>`<div class="item"><div class="tx"><b>${W(i)} ${esc(i.title)}</b><small>${esc(fmtWhen(i.due))}${i.type==='bill'&&i.amount?' · '+money(i.amount)+' جنيه':''}</small></div></div>`).join('')+'</div>':''}
+ ${pick.length?`<p><b>اختار لحد 3 حاجات مهمة للأسبوع</b><br><small>هيطلعوا لك فوق في الصفحة الرئيسية.</small></p><div class="feel" id="wPick">`+pick.map(i=>`<button class="chip ${i.star?'on':''}" data-id="${i.id}">${esc(i.title)}</button>`).join('')+'</div>':''}
+ <button class="btn big" id="wDone">خلصت المراجعة ✓</button></div>`);
+ document.querySelectorAll('.wrow').forEach(r=>r.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const id=r.dataset.w,a=b.dataset.a;
+  if(a==='t')toTomorrow(id);else if(a==='w')nextWeek(id);else if(a==='d')finish(id,true);else removeItem(id);r.remove()}));
+ const wp=$('wPick');if(wp)wp.querySelectorAll('button').forEach(b=>b.onclick=()=>{const it=byId(b.dataset.id);if(!it)return;
+  if(!it.star&&items.filter(i=>i.star&&!i.done).length>=3){toast('3 كفاية. شيل واحدة الأول');return}
+  it.star=!it.star;it.touched=nowMs();b.classList.toggle('on',it.star);save()});
+ $('wDone').onclick=()=>{store.set('weekRev',nowMs());award(15);closeSheet();confetti();toast('أسبوعك مترتب 🗓️ '+cheer(),3500);render()}}
+
+/* ---------- backup: data lives only on this phone, so let it move to a new one ---------- */
+const BK_SKIP=['dev','tok','tok_at','tg','tgSig','tgAt','tgWait'];
+function backupSave(){const data={};Object.keys(localStorage).forEach(k=>{if(!k.startsWith(PFX))return;const nm=k.slice(PFX.length);if(BK_SKIP.includes(nm))return;data[nm]=localStorage.getItem(k)});
+ const f={app:'sanady',v:1,at:new Date(nowMs()).toISOString(),data};
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(f)],{type:'application/json'}));a.download='sanady-backup-'+dayKey()+'.json';a.click();
+ store.set('bkAt',nowMs());toast('اتحفظت نسخة. ابعتها لنفسك على واتساب أو حطها على درايف',4500)}
+function backupLoad(file){if(!file)return;if(file.size>5e6){toast('الملف كبير قوي، ده مش نسخة من سندي');return}
+ const r=new FileReader();r.onload=()=>{let f=null;try{f=JSON.parse(r.result)}catch(e){}
+  if(!f||f.app!=='sanady'||!f.data||typeof f.data!=='object'){toast('الملف ده مش نسخة من سندي');return}
+  const keys=Object.keys(f.data).filter(k=>/^[A-Za-z0-9_]{1,30}$/.test(k)&&!BK_SKIP.includes(k)&&typeof f.data[k]==='string');
+  let it0=[];try{it0=JSON.parse(f.data.items||'[]')}catch(e){}
+  if(!confirm('هنرجّع نسخة '+String(f.at||'').slice(0,10)+' فيها '+(Array.isArray(it0)?it0.length:0)+' حاجة. اللي على الموبايل دلوقتي هيتبدل بيها. موافق؟'))return;
+  Object.keys(localStorage).filter(k=>k.startsWith(PFX)&&!BK_SKIP.includes(k.slice(PFX.length))).forEach(k=>localStorage.removeItem(k));
+  keys.forEach(k=>{try{localStorage.setItem(PFX+k,f.data[k])}catch(e){}});
+  try{localStorage.removeItem(PFX+'tgSig')}catch(e){}
+  toast('رجعت بياناتك ✓');setTimeout(()=>location.reload(),900)};r.readAsText(file)}
+function backupSheet(){const at=store.get('bkAt',0);
+ openSheet(`<h2>💾 نسخة احتياطية</h2><div class="stack"><p>كل حاجة في سندي محفوظة على الموبايل ده بس. لو ضاع أو غيرته، النسخة دي بترجّع كل حاجة: مهامك وفلوسك وأماكن حاجاتك ويومياتك.</p>
+ <p><small>${at?'آخر نسخة: '+esc(fmtWhen(toLocal(new Date(at)))):'لسه ما عملتش نسخة.'}</small></p>
+ <button class="btn" id="bkSave">💾 احفظ نسخة دلوقتي</button>
+ <label class="btn ghost" style="text-align:center">📂 رجّع من نسخة<input type="file" id="bkFile" accept="application/json,.json" hidden></label>
+ <p class="note">الملف فيه كل بياناتك، فابعته لنفسك بس (واتساب لنفسك أو درايف). ربط تليجرام ما بيتنقلش، اربطه تاني على الموبايل الجديد.</p></div>`);
+ $('bkSave').onclick=()=>{backupSave();closeSheet()};$('bkFile').onchange=e=>backupLoad(e.target.files&&e.target.files[0])}
 
 /* ---------- SETTINGS ---------- */
 $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form">
@@ -520,6 +567,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
  <button class="btn" id="sSave">احفظ</button>
  <button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>
+ <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">🔔 شغّل التنبيهات</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
@@ -530,6 +578,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
  $('sCal').onclick=()=>icsAll();
  $('sTg').onclick=()=>tgSheet();
+ $('sBk').onclick=()=>backupSheet();
  $('sNot').onclick=async()=>{try{const p=await Notification.requestPermission();toast(p==='granted'?'تمام، هنبهك والتطبيق مفتوح. للتنبيه وهو مقفول اربط تليجرام أو ضيفها للكالندر':'التنبيهات مقفولة من المتصفح',4500)}catch(e){toast('المتصفح ده مش بيدعم التنبيهات')}};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
   $('sheetBody').innerHTML=`<h2>تذكير من العيلة</h2><div class="stack"><p>ابعت اللينك ده لحد بتثق فيه. يكتب التذكير، ويبعتهولك، وإنت توافق عليه قبل ما يتضاف. مفيش حسابات ولا سيرفر.</p>${draftBox(txt)}

@@ -135,3 +135,7 @@ body.demo #app{padding-top:48px}
 .badge{display:inline-block;background:var(--amb);color:#2B1B00;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600}
 .lvl{font-size:13px;color:var(--mut)}
 #allBody{display:flex;flex-direction:column;gap:14px}
+
+.wrow{display:flex;flex-direction:column;gap:6px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.wrow .acts{display:flex;gap:6px;flex-wrap:wrap}
+#wPick{display:flex;gap:8px;flex-wrap:wrap}

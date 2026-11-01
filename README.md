@@ -20,6 +20,9 @@ A voice-first personal AI agent in Egyptian Arabic for adults with ADHD (and any
 - **Two editions from one code**: *Sanady ADHD* (default) and *Sanady* for everyone (`?ed=main`, also in settings).
 - **ADHD home modes, the user picks**: *One thing* (time bar to leaving, "start 2 minutes", "I can't start", energy picker), *With you* (body double: timer, quiet check-ins every 10 minutes, blame-free "I drifted", hyperfocus guard after an hour), *Waiting* (tasks that fit before leaving for an appointment, 10-minute warning, then the leave alarm).
 - **Everyone edition layouts, the user picks**: blocks, day timeline, chat, or one thing.
+- **Mom mode** (both editions): today's plan, cleaning rotation (lighter on work days), house needs list shared on WhatsApp, quick meals from what's at home, and each child's medicine times (no doses), doctor, school and events.
+- **Child phone**: parents set it up with a PIN; big routine steps, homework sent by link, stars and rewards, and one-tap "arrived at school / home / I'm OK" messages to the parent by WhatsApp or SMS. No location, no recording, no free chat with AI.
+- **Interests**: prayer times computed on the phone (Egypt, UAE, KSA, Kuwait, Qatar cities) with alarms and the user's own adhan recording, morning/evening adhkar with counters, Quran recitation (alquran.cloud), Friday Al-Kahf; Christian prayer, Bible reading and mass reminders; pets (feeding, walks, vaccines, vet); any custom hobby reminder.
 - **Three color themes**: night (default, yellow accent), warm, light.
 
 ## How it runs

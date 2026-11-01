@@ -436,6 +436,7 @@ function drawAll(){const b=$('allBody');
   <div class="card form"><input id="pN" placeholder="الاسم (ماما، أحمد...)"><input id="pE" type="number" inputmode="numeric" placeholder="فكّرني كل كام يوم؟ (30)"><input id="pB" placeholder="عيد الميلاد (اختياري، مثلاً 14/3)"><button class="btn" id="pGo">ضيف</button></div>`;
   b.querySelectorAll('[data-p]').forEach(r=>{const p=people.find(x=>x.id===r.dataset.p);r.querySelector('.ok').onclick=()=>{p.last=nowMs();save();award(5);toast(cheer());drawAll()};r.querySelector('.rm').onclick=()=>{people=people.filter(x=>x!==p);save();drawAll()};r.querySelector('.hi').onclick=()=>draftFor('hello',p.name,'سلام وطمأنينة على '+p.name,()=>{p.last=nowMs();save()})});
   $('pGo').onclick=()=>{const n=$('pN').value.trim();if(!n)return;people.push({id:uid(),name:n,every:+$('pE').value||30,bday:$('pB').value.trim(),last:nowMs()});save();drawAll()}}
+ else if(SEG==='me')drawInterests(b);
  else{const ks=Object.keys(places);b.innerHTML=`<div class="card"><div class="ch"><h3>🔑 أماكن الحاجات</h3><small>قول "الباسبور في الدولاب" ولما تنسى اسأل "فين الباسبور؟"</small></div><input id="plS" placeholder="دوّر..."><div id="plL"></div></div>
   <div class="card form"><input id="plT" placeholder="الحاجة"><input id="plW" placeholder="مكانها"><button class="btn" id="plGo">احفظ</button></div>`;
   const drawL=()=>{const q=$('plS').value.trim();$('plL').innerHTML=ks.filter(k=>!q||k.includes(q)||places[k].w.includes(q)).map(k=>`<div class="item"><div class="tx"><b>${esc(k)}</b><small>${esc(places[k].w)} · من ${daysAgo(places[k].d)} يوم</small></div><button class="mini-b" data-k="${esc(k)}">✕</button></div>`).join('')||'<p class="note">مفيش.</p>';$('plL').querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{delete places[x.dataset.k];save();drawAll()})};
@@ -588,7 +589,9 @@ function alarmList(from){const n=nowMs(),end=n+14*864e5,out=[];from=from==null?n
    if(at>=from)out.push({k:(i.id+'@'+at).replace(/[^A-Za-z0-9@._:-]/g,''),iid:i.id,at,text:alarmText(i,d)});
    if(i.type==='appt'&&!i.repeat&&at-6e5>=from)out.push({k:(i.id+'@'+at+'p').replace(/[^A-Za-z0-9@._:-]/g,''),iid:i.id,at:at-6e5,text:'🎒 كمان 10 دقايق تتحرك لـ '+i.title+'. لمّ حاجتك: '+prof.prep});
    if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else d.setMonth(d.getMonth()+1)}});
+ ALARM_EXTRA.forEach(f=>{try{f(from,end).forEach(a=>out.push(a))}catch(e){}});
  return out.sort((a,b)=>a.at-b.at).slice(0,200)}
+const ALARM_EXTRA=[]; // prayer times etc. register here
 /* tiny key-value store shared with the service worker */
 const KV={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{try{const r=indexedDB.open('sanady-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))},
  async get(k){try{const db=await this.open();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}},
@@ -617,13 +620,13 @@ async function enablePush(){if(DEMO){toast('المنبّه بيشتغل في ا�
 async function disablePush(){try{await pushCall('off')}catch(e){}try{const r=await navigator.serviceWorker.ready;const s=await r.pushManager.getSubscription();s&&await s.unsubscribe()}catch(e){}store.set('push',false);store.set('pushSig','');toast('المنبّه اتقفل');render()}
 /* the ringing screen */
 let ringing=null;
-function stopRing(){if(!ringing)return;clearInterval(ringing.t);clearTimeout(ringing.end);try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}const el=$('alarm');if(el)el.remove();ringing=null}
+function stopRing(){if(!ringing)return;if(window.stopAdhan)stopAdhan();clearInterval(ringing.t);clearTimeout(ringing.end);try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}const el=$('alarm');if(el)el.remove();ringing=null}
 function ringAlarm(a){rung[a.k]=nowMs();store.set('rung',rung);KV.get('shown').then(sh=>{sh=sh||{};sh[a.k]=nowMs();KV.set('shown',sh)});
  if(document.visibilityState!=='visible'){if(!pushOn())try{navigator.serviceWorker.ready.then(r=>r.showNotification('⏰ سندي بيفكّرك',{body:a.text,icon:'icon-192.png',badge:'icon-192.png',tag:a.k,renotify:true,requireInteraction:true,vibrate:[600,250,600,250,900],lang:'ar',dir:'rtl',data:{k:a.k,iid:a.iid}}))}catch(e){}return}
  stopRing();const it=byId(a.iid);const el=document.createElement('div');el.id='alarm';el.className='alarm';
  el.innerHTML=`<div class="abox"><div class="abell">⏰</div><div class="atime">${esc(fmtT(NOW()))}</div><div class="atext">${esc(a.text)}</div>
- <div class="aacts"><button class="btn big" data-a="ok">تمام ✓</button>${it&&it.type!=='appt'?'<button class="btn ghost" data-a="done">خلصتها</button>':''}<button class="btn ghost" data-a="snz">فكّرني بعد 10 دقايق</button></div></div>`;
- document.body.appendChild(el);const go=()=>{try{SND.ring()}catch(e){}try{navigator.vibrate&&navigator.vibrate([600,250,600,250,900])}catch(e){}};go();
+ <div class="aacts"><button class="btn big" data-a="ok">تمام ✓</button>${it&&it.type!=='appt'?'<button class="btn ghost" data-a="done">خلصتها</button>':''}${it?'<button class="btn ghost" data-a="snz">فكّرني بعد 10 دقايق</button>':''}</div></div>`;
+ document.body.appendChild(el);if(a.adhan&&window.playAdhan&&playAdhan(a.adhan)){ringing={t:0,end:setTimeout(stopRing,240000)};el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{stopAdhan();stopRing();render()});return}const go=()=>{try{SND.ring()}catch(e){}try{navigator.vibrate&&navigator.vibrate([600,250,600,250,900])}catch(e){}};go();
  ringing={t:setInterval(go,3000),end:setTimeout(stopRing,90000)};if(prof.voice&&audUnlocked)setTimeout(()=>speak(a.text.replace(/^\S+\s/,'')),1200);
  el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const k=b.dataset.a;stopRing();hush();
   if(k==='snz'&&it){snooze(it.id,10);toast('هرن عليك تاني بعد 10 دقايق')}else if(k==='done'&&it)finish(it.id);render()})}
@@ -696,6 +699,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
+ <button class="btn ghost" id="sKid">👧 حوّل الموبايل ده لموبايل طفل</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
  <a class="btn ghost" href="privacy.html">🔒 الخصوصية والأمان</a>
@@ -707,6 +711,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  $('sEd').onchange=()=>{store.set('ed',$('sEd').value);location.href=location.pathname};
  if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();
+ $('sKid').onclick=()=>kidSetup();
  $('sDoc').onclick=()=>docsSheet();
  $('sNot').onclick=()=>{closeSheet();store.get('push',false)?disablePush():enablePush()};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
@@ -728,7 +733,7 @@ function familyFlows(){const q=new URLSearchParams(location.search);
  return false}
 
 /* ---------- home modes: the user picks how the home screen works, nothing is forced ---------- */
-const MODES=IS_ADHD?[['one','حاجة واحدة'],['with','جنبك'],['wait','انتظار']]:[['blocks','مربعات'],['line','خط اليوم'],['chat','كلام'],['one','حاجة واحدة']];
+const MODES=IS_ADHD?[['one','حاجة واحدة'],['with','جنبك'],['wait','انتظار'],['mom','الأم']]:[['blocks','مربعات'],['line','خط اليوم'],['chat','كلام'],['one','حاجة واحدة'],['mom','الأم']];
 const curMode=()=>{const m=store.get(IS_ADHD?'mode':'lay',IS_ADHD?'one':'blocks');return MODES.some(x=>x[0]===m)?m:MODES[0][0]};
 function setMode(m){store.set(IS_ADHD?'mode':'lay',m);show('now')}
 const durAr=m=>{m=Math.max(0,Math.round(m));if(m<60)return minsAr(m);const h=Math.floor(m/60),r=m%60;const hs=h===1?'ساعة':h===2?'ساعتين':h+' ساعات';return r?hs+' و'+minsAr(r):hs};
@@ -737,9 +742,9 @@ function nextAppt(maxH){const n=nowMs();return items.filter(i=>!i.done&&i.type==
 function drawNow(){const m=curMode();
  $('modeSeg').innerHTML=MODES.map(([k,v])=>`<button data-m="${k}" role="tab" aria-selected="${k===m}" class="${k===m?'on':''}">${v}</button>`).join('');
  $('modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
- $('nowOne').hidden=m!=='one';$('nowWith').hidden=m!=='with';$('nowWait').hidden=m!=='wait';$('nowLay').hidden=!['blocks','line','chat'].includes(m);
+ $('nowOne').hidden=m!=='one';$('nowWith').hidden=m!=='with';$('nowWait').hidden=m!=='wait';$('nowMom').hidden=m!=='mom';$('nowLay').hidden=!['blocks','line','chat'].includes(m);
  if(m==='one'){drawTBar();drawNudge();drawNext();drawEnergy();drawTop3();drawMini()}
- else if(m==='with')drawWith();else if(m==='wait')drawWait();else drawLay(m)}
+ else if(m==='with')drawWith();else if(m==='wait')drawWait();else if(m==='mom')drawMom();else drawLay(m)}
 
 /* time made visible: "40 minutes left before you leave" instead of a clock time */
 function drawTBar(){const box=$('tBar'),n=nowMs();const A=nextAppt(4);
@@ -876,7 +881,7 @@ if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('messag
 
 /* ---------- boot ---------- */
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.addEventListener('DOMContentLoaded',()=>{if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync();applyPending().then(()=>{checkAlarms();writeAlarms();pushSync()})},1500);if(store.get('seen',false))morning();
+window.addEventListener('DOMContentLoaded',()=>{if(window.kidBoot&&kidBoot())return;if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync();applyPending().then(()=>{checkAlarms();writeAlarms();pushSync()})},1500);if(store.get('seen',false))morning();
  const go=new URLSearchParams(location.search).get('go');if(go==='focus')show('focus');else if(go==='money')show('money');else if(go==='dump'&&store.get('seen',false))setTimeout(()=>openDump(),300);
  if(!store.get('seen',false)&&!DEMO){store.set('seen',true);openSheet(`<h2>أهلاً، أنا سندي 💜</h2><div class="stack"><div class="say">سندك اللي جواك. قولّي كل اللي في دماغك وأنا أرتبه، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.</div>
  <label class="form">اسمك إيه؟<input id="wN" placeholder="اسمك"></label><div class="acts"><button class="btn ghost" data-x="m">كلّمني بصيغة المذكر</button><button class="btn ghost" data-x="f">بصيغة المؤنث</button></div>

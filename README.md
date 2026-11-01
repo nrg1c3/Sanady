@@ -17,6 +17,10 @@ A voice-first personal AI agent in Egyptian Arabic for adults with ADHD (and any
 - **Alarms that ring**: full-screen ringing with sound and vibration inside the app; when the app is closed, a signed web push wakes the phone and it shows its own reminder (snooze 10 min from the notification). Calendar export (.ics) too.
 - **Calming sounds** made in the app: white, pink and brown noise, rain, waves, forest, fire, fan, with a sleep timer.
 - **Backup** to a file and restore on a new phone.
+- **Two editions from one code**: *Sanady ADHD* (default) and *Sanady* for everyone (`?ed=main`, also in settings).
+- **ADHD home modes, the user picks**: *One thing* (time bar to leaving, "start 2 minutes", "I can't start", energy picker), *With you* (body double: timer, quiet check-ins every 10 minutes, blame-free "I drifted", hyperfocus guard after an hour), *Waiting* (tasks that fit before leaving for an appointment, 10-minute warning, then the leave alarm).
+- **Everyone edition layouts, the user picks**: blocks, day timeline, chat, or one thing.
+- **Three color themes**: night (default, yellow accent), warm, light.
 
 ## How it runs
 - Static PWA (this repo) on GitHub Pages.

@@ -18,6 +18,13 @@ const minsAr=m=>m==1?'دقيقة':m==2?'دقيقتين':m<=10?m+' دقايق':m+
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const PFX=new URLSearchParams(location.search).has('demo')?'sndemo_':'sn_';
 const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(PFX+k));return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(PFX+k,JSON.stringify(v))}catch(e){}}};
+/* two editions from one code: 'adhd' (competition) and 'main' (commercial). ?ed=main or ?ed=adhd switches and remembers */
+const ED=(()=>{const q=new URLSearchParams(location.search).get('ed');if(q==='main'||q==='adhd')store.set('ed',q);return store.get('ed','adhd')})();
+const IS_ADHD=ED==='adhd';
+const START=IS_ADHD?2:5; // first push into a task: 2 minutes for ADHD
+const THEMES={night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
+function applyTheme(th){th=THEMES[th]?th:store.get('theme','night');if(!THEMES[th])th='night';document.body.dataset.th=th;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[th][1]}
+applyTheme();
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let DEMO=null; // set by demo.js
 const nowMs=()=>DEMO&&DEMO.t0?DEMO.t0+(Date.now()-DEMO.real0):Date.now();
@@ -215,7 +222,7 @@ function applyTalk(r,text){const added=[];const lines=[];
  $('dRes').querySelectorAll('.rm').forEach(b=>b.onclick=()=>{const row=b.closest('.item');removeItem(row.dataset.id);row.remove()});
  if(V)bindVerdict(V,r.wants);
  $('dOk').onclick=closeSheet;$('dMore').onclick=()=>openDump();
- speak(reply+(found?' '+found.replace('📍',''):'')+(V?' '+V.say:''));render()}
+ chatLog('s',reply+(found?' '+found:''));speak(reply+(found?' '+found.replace('📍',''):'')+(V?' '+V.say:''));render()}
 
 /* ---------- places: "where did I put X?" answered from what the user said, word for word ---------- */
 const arN=t=>String(t||'').replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/[؟?!.،,]/g,' ').replace(/\s+/g,' ').trim();
@@ -244,16 +251,16 @@ $('spGo').onclick=()=>{const a=+$('spAmt').value;if(!a)return;M.bal-=a;M.spends.
 
 /* ---------- START / BREAKDOWN ---------- */
 async function startTask(id){const it=byId(id);if(!it)return;
- if(!it.big&&!(it.steps&&it.steps.length)){goFocus(it,5);return}
+ if(!it.big&&!(it.steps&&it.steps.length)){goFocus(it,START);return}
  openSheet(`<h2>${esc(it.title)}</h2><div class="stack" id="bdBody"><div class="listening thinking"><span class="dot"></span><span>بقسّمها لخطوات صغيرة...</span></div></div>`);
  if(!(it.steps&&it.steps.length)){const r=await brain('breakdown',{text:it.title});it.steps=(r&&r.steps&&r.steps.length?r.steps:[{t:'افتح الحاجة اللي هتشتغل عليها بس',min:2},{t:'اعمل أول جزء صغير',min:10},{t:'كمّل جزء تاني',min:15},{t:'راجع وخلّص',min:10}]).map(s=>({...s,done:false}));it.go=(r&&r.go)||'يلا، 5 دقايق بس';save()}
  drawSteps(it)}
 function drawSteps(it){const body=$('bdBody');if(!body)return;const nx=it.steps.findIndex(s=>!s.done);
  body.innerHTML=`<div class="say">${esc(nx<0?'خلصت كل الخطوات! '+cheer():it.go||'يلا، 5 دقايق بس')}</div><div class="res steps">${it.steps.map((s,k)=>`<div class="item ${s.done?'done':''}"><button class="ck ${s.done?'on':''}" data-k="${k}">${s.done?'✓':''}</button><div class="tx"><b>${esc(s.t)}</b><small>${minsAr(s.min)} تقريباً</small></div></div>`).join('')}</div>
- <div class="acts">${nx<0?'<button class="btn ok" id="bdFin">خلصت المهمة كلها 🎉</button>':`<button class="btn big" id="bdGo">ابدأ الخطوة دي (${Math.min(it.steps[nx].min,nx===0?5:it.steps[nx].min)} د)</button>`}</div>`;
+ <div class="acts">${nx<0?'<button class="btn ok" id="bdFin">خلصت المهمة كلها 🎉</button>':`<button class="btn big" id="bdGo">ابدأ الخطوة دي (${Math.min(it.steps[nx].min,nx===0?START:it.steps[nx].min)} د)</button>`}</div>`;
  if(nx<0){speak('خلصت كل الخطوات! '+cheer())}else if(!drawSteps.spoken){drawSteps.spoken=1;speak(it.go||'يلا، خمس دقايق بس')}
  body.querySelectorAll('.ck').forEach(b=>b.onclick=()=>{const s=it.steps[+b.dataset.k];s.done=!s.done;if(s.done){award(5);buzz(20)}save();drawSteps(it)});
- const g=$('bdGo');if(g)g.onclick=()=>{drawSteps.spoken=0;closeSheet();goFocus(it,Math.min(it.steps[nx].min,nx===0?5:it.steps[nx].min),nx)};
+ const g=$('bdGo');if(g)g.onclick=()=>{drawSteps.spoken=0;closeSheet();goFocus(it,Math.min(it.steps[nx].min,nx===0?START:it.steps[nx].min),nx)};
  const f=$('bdFin');if(f)f.onclick=()=>{closeSheet();finish(it.id)}}
 
 /* ---------- FOCUS ---------- */
@@ -265,7 +272,7 @@ function goFocus(it,mins,step){show('focus');F.task=it?it.id:null;F.step=step==n
  $('fPre').querySelectorAll('button').forEach(x=>x.classList.toggle('on',+x.dataset.m===F.mins));drawRing();startFocus()}
 function startFocus(){if(F.timer)return;F.total=F.mins*60;F.left=F.total;$('fGo').hidden=true;$('fStop').hidden=false;if(SND.cur==='off'&&store.get('lastSnd','brown')!=='off'){}
  if(nowMs()-F.lastEnd>15*6e4)F.chain=0;
- if($('fBuddy').checked)speak(F.mins<=5?'يلا، '+F.mins+' دقايق بس. أنا معاك.':'يلا نبدأ. أنا هنا معاك، ولو سرحت ارجع للحاجة دي بس.');
+ if($('fBuddy').checked)speak(F.mins<=5?'يلا، '+minsAr(F.mins)+' بس. أنا معاك.':'يلا نبدأ. أنا هنا معاك، ولو سرحت ارجع للحاجة دي بس.');
  F.timer=setInterval(()=>{F.left--;drawRing();
   if($('fBuddy').checked&&F.total>=600&&F.left===Math.floor(F.total/2))speak('نص الوقت عدّى. كمّل، إنت ماشي كويس.');
   if(F.left<=0)endFocus(true)},1000)}
@@ -287,7 +294,7 @@ $('sTimer').querySelectorAll('button').forEach(b=>b.onclick=()=>{const m=+b.data
 $('vol').oninput=()=>SND.setVol($('vol').value/100*.9);
 function setSound(s){const b=$('sounds').querySelector('[data-s="'+s+'"]');b&&b.click()}
 $('tSleep').onclick=()=>sleepMode();
-function sleepMode(){document.body.classList.add('night');if(SND.cur==='off')setSound('rain');SND.fadeOut(30,()=>{setSound('off')});
+function sleepMode(){applyTheme('night');if(SND.cur==='off')setSound('rain');SND.fadeOut(30,()=>{setSound('off')});
  openSheet('<h2>تصبح على خير 🌙</h2><div class="stack"><div class="say">الصوت هيوطى لوحده في نص ساعة ويقف. سيب الموبايل وغمّض عينك.</div><p class="note">بكرة الصحيان '+esc(prof.wake)+'. حاول تصحى في نفس الميعاد حتى في الإجازة.</p><button class="btn ghost" onclick="closeSheet()">تمام</button></div>');speak('تصبح على خير. الصوت هيوطى لوحده ويقف.')}
 $('tBreath').onclick=()=>breathe();
 function breathe(after){openSheet(`<h2>نتنفس سوا</h2><div class="stack" style="align-items:center;text-align:center"><div class="breath" id="br">شهيق</div><p class="note" id="brT">دقيقتين بس. اتبع الدايرة.</p></div>`);
@@ -332,7 +339,8 @@ function score(i){const n=nowMs();const d=parseL(i.due);let s=10;
  else s=15+Math.min(25,daysAgo(i.created||n));
  if(i.star)s+=45;if(i.urgent)s+=35;if(i.later)s-=25;if(i.type==='appt'){if(!d||(d-n)/6e4>leaveMins(i)+60)s=-1}if(d&&(i.type==='call'||i.type==='med')&&(d-n)/36e5>1)s=-1;if(d&&i.type==='task'&&(d-n)/36e5>3&&dayKey(d)===dayKey())s=40;if(i.type==='idea'||i.type==='bill')s=-1;
  return s}
-function candidates(){const n=nowMs();return items.filter(i=>!i.done&&!(i.snooze>n)&&(!isHard()||essential(i))).map(i=>({i,s:score(i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i)}
+function energyAdj(i){const e=energy();if(!e)return 0;const quick=i.type==='call'||i.type==='buy'||(!i.big&&!(i.steps&&i.steps.length>2));if(e==='low')return i.big?-30:quick?12:0;if(e==='high')return i.big?22:0;return 0}
+function candidates(){const n=nowMs();return items.filter(i=>!i.done&&!(i.snooze>n)&&(!isHard()||essential(i))).map(i=>{const s=score(i);return{i,s:s>0?s+energyAdj(i):s}}).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i)}
 function leaveMins(i){const t=(i.where&&travel[i.where])||prof.travel||30;return t+10}
 function ringSVG(it){const d=parseL(it.due);if(!d)return'';const mins=(d-nowMs())/6e4;if(mins<0||mins>240)return'';const frac=Math.max(0,Math.min(1,mins/240));const R=2*Math.PI*26;
  return`<svg class="tring" viewBox="0 0 64 64"><circle class="a" cx="32" cy="32" r="26"/><circle class="b" cx="32" cy="32" r="26" stroke-dasharray="${R}" stroke-dashoffset="${R*(1-frac)}"/><text x="32" y="33">${mins<60?Math.round(mins)+'د':Math.round(mins/60)+'س'}</text></svg>`}
@@ -341,11 +349,14 @@ function drawNext(){const c=candidates();const it=c[0];const box=$('nextCard');
  const h=SEC[it.sec]||['•',''];const d=parseL(it.due);const late=d&&d<NOW();
  box.innerHTML=`<div class="lab">الحاجة الجاية · واحدة بس</div><div class="nrow"><div style="flex:1"><h2>${esc(it.title)}</h2></div>${ringSVG(it)}</div>
  <div class="meta"><span>${h[0]} ${h[1]}</span>${it.due?`<span>${late?'كان ':''}${esc(fmtWhen(it.due))}</span>`:''}${it.big?'<span>كبيرة، هنقسّمها</span>':''}${it.star?'<span>⭐ من أهم 3</span>':''}</div>
- <div class="acts">${it.type==='call'?'<button class="btn" id="nxMsg">اكتبلي الرسالة</button>':`<button class="btn" id="nxGo">يلا، 5 دقايق بس</button>`}<button class="btn ghost" id="nxDone">خلصت ✓</button><button class="btn ghost" id="nxLater">مش دلوقتي</button></div>`;
+ ${IS_ADHD?`${it.type==='call'?'<button class="btn go" id="nxMsg">اكتبلي الرسالة</button>':'<button class="btn go" id="nxGo">ابدأ دقيقتين بس</button>'}<div class="two"><button class="btn ghost" id="nxCant">مش قادر أبدأ</button><button class="btn ghost" id="nxDone">خلصت ✓</button></div>`
+ :`<div class="acts">${it.type==='call'?'<button class="btn" id="nxMsg">اكتبلي الرسالة</button>':`<button class="btn" id="nxGo">يلا، 5 دقايق بس</button>`}<button class="btn ghost" id="nxDone">خلصت ✓</button><button class="btn ghost" id="nxLater">مش دلوقتي</button></div>`}`;
+ const cn=$('nxCant');if(cn)cn.onclick=()=>cantStart(it);
  const g=$('nxGo');if(g)g.onclick=()=>startTask(it.id);
  const m=$('nxMsg');if(m)m.onclick=()=>draftFor('remind',it.title,it.title,()=>finish(it.id,true));
  $('nxDone').onclick=()=>finish(it.id);
- $('nxLater').onclick=()=>{openSheet(`<h2>نأجلها لامتى؟</h2><div class="stack"><p class="note">عادي خالص. هرجعلك بيها.</p><div class="acts"><button class="btn ghost" data-m="60">ساعة</button><button class="btn ghost" data-m="180">3 ساعات</button><button class="btn ghost" data-m="tm">بكرة</button><button class="btn ghost" data-m="rm">شيلها خالص</button></div></div>`);
+ const nl=$('nxLater');if(nl)nl.onclick=()=>laterSheet(it)}
+function laterSheet(it){{openSheet(`<h2>نأجلها لامتى؟</h2><div class="stack"><p class="note">عادي خالص. هرجعلك بيها.</p><div class="acts"><button class="btn ghost" data-m="60">ساعة</button><button class="btn ghost" data-m="180">3 ساعات</button><button class="btn ghost" data-m="tm">بكرة</button><button class="btn ghost" data-m="rm">شيلها خالص</button></div></div>`);
   document.querySelectorAll('#sheetBody [data-m]').forEach(b=>b.onclick=()=>{const v=b.dataset.m;if(v==='tm')toTomorrow(it.id);else if(v==='rm')removeItem(it.id);else snooze(it.id,+v);closeSheet()})}}
 function drawTop3(){const s=items.filter(i=>i.star&&!i.done);const d=items.filter(i=>i.star&&i.done&&i.doneAt&&dayKey(new Date(i.doneAt))===dayKey());const all=[...s,...d].slice(0,3);
  $('top3').innerHTML=all.length?all.map(i=>`<div class="item ${i.done?'done':''}"><button class="ck ${i.done?'on':''}" data-id="${i.id}">${i.done?'✓':''}</button><div class="tx"><b>${esc(i.title)}</b><small>${esc(fmtWhen(i.due))}</small></div></div>`).join(''):'<p class="note">مفيش لسه. 3 بس كفاية، مش أكتر.</p>';
@@ -366,8 +377,8 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
   else if(i.type==='med'&&d&&mins<=0&&mins>-240)out.push({id:'md'+i.id,pr:92,i:'💊',p:`ميعاد ${i.title}. خدته؟`,speak:1,acts:[['خدته ✓',()=>{if(!i.repeat)i.repeat='daily';diary.push({d:dayKey(),t,med:i.title});finish(i.id,true);toast('تمام 💊')}],['بعد ربع ساعة',()=>snooze(i.id,15)]]});
   else if(!hard&&d&&mins<=5&&mins>-30&&i.type!=='appt'){out.push({id:'du'+i.id,pr:88,i:W[0],p:mins>0?`كمان ${Math.ceil(mins)} دقايق: ${i.title}. ابدأ تقفل اللي في إيدك.`:`${fmtT(d)}: ${i.title}`,speak:1,
     acts:i.type==='call'?[['اكتبلي الرسالة',()=>draftFor('remind',i.title,i.title,()=>finish(i.id,true))],['خلصت ✓',()=>finish(i.id)],['بعد ساعة',()=>snooze(i.id,60)]]:[['يلا',()=>startTask(i.id)],['خلصت ✓',()=>finish(i.id)],['بعد ساعة',()=>snooze(i.id,60)]]})}
-  else if(!hard&&i.type!=='idea'&&!d&&daysAgo(i.touched||i.created)>=7)out.push({id:'fg'+i.id,pr:30,i:'🔁',p:`قلت هت${i.title.replace(/^أ/,'')} من ${nDays(daysAgo(i.created))}. نعملها النهارده ولا نأجلها؟`,acts:[['يلا 5 دقايق',()=>startTask(i.id)],['بكرة',()=>toTomorrow(i.id)],['شيلها',()=>removeItem(i.id)]]});
-  else if(!hard&&i.big&&daysAgo(i.created)>=2&&!(i.steps&&i.steps.some(s=>s.done)))out.push({id:'bg'+i.id,pr:55,i:'🧩',p:`${i.title} بقاله ${nDays(daysAgo(i.created))}. يلا نبدأ 5 دقايق بس؟`,speak:1,acts:[['يلا نبدأ',()=>startTask(i.id)],['بعدين',()=>snooze(i.id,180)]]})});
+  else if(!hard&&i.type!=='idea'&&!d&&daysAgo(i.touched||i.created)>=7)out.push({id:'fg'+i.id,pr:30,i:'🔁',p:`قلت هت${i.title.replace(/^أ/,'')} من ${nDays(daysAgo(i.created))}. نعملها النهارده ولا نأجلها؟`,acts:[['يلا '+minsAr(START),()=>startTask(i.id)],['بكرة',()=>toTomorrow(i.id)],['شيلها',()=>removeItem(i.id)]]});
+  else if(!hard&&i.big&&daysAgo(i.created)>=2&&!(i.steps&&i.steps.some(s=>s.done)))out.push({id:'bg'+i.id,pr:55,i:'🧩',p:`${i.title} بقاله ${nDays(daysAgo(i.created))}. يلا نبدأ ${minsAr(START)} بس؟`,speak:1,acts:[['يلا نبدأ',()=>startTask(i.id)],['بعدين',()=>snooze(i.id,180)]]})});
  if(!hard){people.forEach(p=>{const dd=daysAgo(p.last||t);if(dd>=(p.every||30))out.push({id:'pp'+p.id,pr:25,i:'💬',p:`بقالك ${nDays(dd)} ما كلمتش ${p.name}.`,acts:[['اكتبلي رسالة',()=>draftFor('hello',p.name,'سلام وطمأنينة على '+p.name,()=>{p.last=nowMs();save()})],['كلمته ✓',()=>{p.last=nowMs();save();award(5);render()}]]})});
   const A=availCalc();wish.forEach(w=>{if(w.wait&&t>w.wait)out.push({id:'wt'+w.id,pr:35,i:'⏳',p:`عدّى يوم. لسه عايز ${w.name}؟`,acts:[['أيوه، هشتريها',()=>{w.wait=0;buyWish(w)}],['لأ، شيلها',()=>{wish=wish.filter(x=>x!==w);save();toast('وفرت '+money(w.price)+' جنيه 👏');award(10);render()}]]});
    else if(!w.wait&&A.avail>=w.price)out.push({id:'wa'+w.id,pr:45,i:'🎁',p:`دلوقتي تقدر تشتري ${w.name} من غير ما تأثر على الفواتير.`,speak:1,acts:[['اشتريتها',()=>buyWish(w)],['مش دلوقتي',()=>{nsn['wa'+w.id]=t+3*864e5;save();render()}]]})});
@@ -382,6 +393,7 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
  if(M.daily&&!DEMO){const y=new Date(n);y.setDate(y.getDate()-1);const yk=dayKey(y);const started=store.get('dayStart','');if(!started)store.set('dayStart',dayKey());
   else if(started<=yk&&!dayLogged(yk))out.push({id:'dy'+yk,pr:hard?20:46,i:'🍽️',p:`امبارح صرفت كام على الأكل والمواصلات؟ (المحدد ${money(M.daily)})`,acts:[['ولا حاجة',()=>{logDay(yk,0);award(5);toast('وفرت '+money(M.daily)+' جنيه 👏');render()}],['زي العادة',()=>{logDay(yk,M.daily);render()}],['رقم تاني',()=>daySheet(yk)]]})}
  if(!DEMO&&!pushOn()&&'PushManager' in window&&typeof Notification!=='undefined'&&Notification.permission!=='denied'&&alarmList().length)out.push({id:'push',pr:58,i:'🔔',p:'عشان أرن عليك وأهزّ الموبايل في ميعاد كل حاجة، حتى والتطبيق مقفول والموبايل في جيبك، شغّل المنبّه.',acts:[['شغّل المنبّه',()=>enablePush()],['بعدين',()=>{nsn.push=t+3*864e5;save();render()}]]});
+ if(IS_ADHD&&!hard&&curMode()==='one'){const A=nextAppt(4);if(A){const lm=(A.d-t)/6e4-leaveMins(A.i);if(lm>=50)out.push({id:'wm'+A.i.id,pr:48,i:'⏳',p:'عندك '+A.i.title+' '+fmtT(A.d)+'، وقدامك '+durAr(lm)+' قبل ما تتحرك. أقولك تعمل إيه لحد ساعتها؟',acts:[['يلا',()=>setMode('wait')],['لأ، تمام',()=>{nsn['wm'+A.i.id]=t+864e5;save();render()}]]})}}
  const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
  if(fresh.length>=2&&!DEMO&&!tgOn()&&!pushOn())out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
@@ -407,7 +419,7 @@ function itemRow(i){return`<div class="item ${i.done?'done':''}" data-id="${i.id
 function drawAll(){const b=$('allBody');
  if(SEG==='tasks'){const open=items.filter(i=>!i.done&&i.type!=='idea');const by={};open.forEach(i=>(by[i.sec]=by[i.sec]||[]).push(i));
   const order=Object.keys(SEC).filter(k=>by[k]);
-  b.innerHTML=(order.length?order.map(k=>`<div class="card sec"><div class="sech">${SEC[k][0]} ${SEC[k][1]} <span>${by[k].length}</span></div>${by[k].sort((a,c)=>(a.due||'9').localeCompare(c.due||'9')).map(itemRow).join('')}</div>`).join(''):'<div class="card empty">مفيش حاجات مفتوحة. دوس 🎙️ وفرّغ دماغك.</div>')+
+  b.innerHTML=(order.length?order.map(k=>`<div class="card sec" id="sec-${k}"><div class="sech">${SEC[k][0]} ${SEC[k][1]} <span>${by[k].length}</span></div>${by[k].sort((a,c)=>(a.due||'9').localeCompare(c.due||'9')).map(itemRow).join('')}</div>`).join(''):'<div class="card empty">مفيش حاجات مفتوحة. دوس 🎙️ وفرّغ دماغك.</div>')+
   (doneToday().length?`<details class="card"><summary><b>اللي خلص النهارده (${doneToday().length})</b></summary>${doneToday().map(itemRow).join('')}</details>`:'')+
   '<button class="btn ghost" id="addMan">+ ضيف حاجة بإيدك</button>';
   bindRows(b);$('addMan').onclick=()=>editItem(null)}
@@ -574,6 +586,7 @@ function alarmList(from){const n=nowMs(),end=n+14*864e5,out=[];from=from==null?n
   while(d.getTime()<=end&&g++<40){let at=d.getTime()-(i.type==='appt'?leaveMins(i)*6e4:0);
    if(g===1&&i.snooze>at)at=i.snooze;
    if(at>=from)out.push({k:(i.id+'@'+at).replace(/[^A-Za-z0-9@._:-]/g,''),iid:i.id,at,text:alarmText(i,d)});
+   if(i.type==='appt'&&!i.repeat&&at-6e5>=from)out.push({k:(i.id+'@'+at+'p').replace(/[^A-Za-z0-9@._:-]/g,''),iid:i.id,at:at-6e5,text:'🎒 كمان 10 دقايق تتحرك لـ '+i.title+'. لمّ حاجتك: '+prof.prep});
    if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else d.setMonth(d.getMonth()+1)}});
  return out.sort((a,b)=>a.at-b.at).slice(0,200)}
 /* tiny key-value store shared with the service worker */
@@ -675,6 +688,8 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>بتنام الساعة كام؟<input id="sS" type="time" value="${esc(prof.sleep)}"></label>
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
+ <label>ألوان الشاشة</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${document.body.dataset.th===k?'on':''}" style="background:${v[1]};color:${k==='night'?'#F3F4FB':'#1C1B1F'}"><span style="color:${v[2]}">●</span> ${v[0]}</button>`).join('')}</div>
+ <label>النسخة<select id="sEd"><option value="adhd" ${IS_ADHD?'selected':''}>سندي ADHD</option><option value="main" ${IS_ADHD?'':'selected'}>سندي (للكل)</option></select></label>
  <button class="btn" id="sSave">احفظ</button>
  ${TG_READY?'<button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>':''}
  <button class="btn ghost" id="sDoc">📄 ورقي ومواعيد التجديد</button>
@@ -688,13 +703,15 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <p class="note">سندي مش دكتور ولا علاج، وبيكمّل الدكتور مش بيبدله. مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
  $('sCal').onclick=()=>icsAll();
+ $('sTh').querySelectorAll('button').forEach(b=>b.onclick=()=>{store.set('theme',b.dataset.th);applyTheme(b.dataset.th);$('sTh').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
+ $('sEd').onchange=()=>{store.set('ed',$('sEd').value);location.href=location.pathname};
  if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();
  $('sDoc').onclick=()=>docsSheet();
  $('sNot').onclick=()=>{closeSheet();store.get('push',false)?disablePush():enablePush()};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
   $('sheetBody').innerHTML=`<h2>تذكير من العيلة</h2><div class="stack"><p>ابعت اللينك ده لحد بتثق فيه. يكتب التذكير، ويبعتهولك، وإنت توافق عليه قبل ما يتضاف. مفيش حسابات ولا سيرفر.</p>${draftBox(txt)}
-  <details><summary><b>شرح بسيط للعيلة عن الـ ADHD</b></summary>${draftBox('الـ ADHD مش كسل ولا قلة اهتمام. الدماغ بيلاقي صعوبة في البدء والتنظيم وحساب الوقت، مش في الذكاء. اللي بيساعد: تذكير هادي بدل اللوم، وطلب حاجة واحدة في المرة، ومساعدة في أول خطوة. شكراً إنك بتحاول تفهم 💜')}</details></div>`};
+  ${IS_ADHD?'':'<!--'}<details><summary><b>شرح بسيط للعيلة عن الـ ADHD</b></summary>${draftBox('الـ ADHD مش كسل ولا قلة اهتمام. الدماغ بيلاقي صعوبة في البدء والتنظيم وحساب الوقت، مش في الذكاء. اللي بيساعد: تذكير هادي بدل اللوم، وطلب حاجة واحدة في المرة، ومساعدة في أول خطوة. شكراً إنك بتحاول تفهم 💜')}</details>${IS_ADHD?'':'-->'}</div>`};
  $('sExp').onclick=()=>{const rows=[['التاريخ','نوم (ساعات)','تركيز','إحساس','دوا اتاخد']];const by={};diary.forEach(e=>{const r=by[e.d]=by[e.d]||{d:e.d,sleep:'',focus:'',feel:[],med:[]};if(e.sleep)r.sleep=e.sleep;if(e.focus)r.focus=e.focus;if(e.feel)r.feel.push(e.feel);if(e.med)r.med.push(e.med)});
   Object.values(by).sort((a,b)=>a.d.localeCompare(b.d)).forEach(r=>rows.push([r.d,r.sleep,r.focus,r.feel.join(' / '),r.med.join(' / ')]));
   const csv='﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='sanady-diary.csv';a.click()};
@@ -710,6 +727,138 @@ function familyFlows(){const q=new URLSearchParams(location.search);
  if(location.hash.startsWith('#add=')){const o=b64d(location.hash.slice(5));history.replaceState(null,'',location.pathname+location.search);if(o&&o.t){setTimeout(()=>{openSheet(`<h2>تذكير من ${esc(o.f||'حد بيحبك')}</h2><div class="stack"><div class="say">${esc(o.t)}${o.d?' · '+esc(fmtWhen(o.d)):''}</div><div class="acts"><button class="btn" id="faY">ضيفه</button><button class="btn ghost" onclick="closeSheet()">لأ</button></div></div>`);$('faY').onclick=()=>{addItem({type:'task',sec:'people',title:o.t,due:o.d||'',from:o.f});closeSheet();toast('اتضاف 💜')}},400)}}
  return false}
 
+/* ---------- home modes: the user picks how the home screen works, nothing is forced ---------- */
+const MODES=IS_ADHD?[['one','حاجة واحدة'],['with','جنبك'],['wait','انتظار']]:[['blocks','مربعات'],['line','خط اليوم'],['chat','كلام'],['one','حاجة واحدة']];
+const curMode=()=>{const m=store.get(IS_ADHD?'mode':'lay',IS_ADHD?'one':'blocks');return MODES.some(x=>x[0]===m)?m:MODES[0][0]};
+function setMode(m){store.set(IS_ADHD?'mode':'lay',m);show('now')}
+const durAr=m=>{m=Math.max(0,Math.round(m));if(m<60)return minsAr(m);const h=Math.floor(m/60),r=m%60;const hs=h===1?'ساعة':h===2?'ساعتين':h+' ساعات';return r?hs+' و'+minsAr(r):hs};
+const energy=()=>{const e=store.get('energy',null);return e&&e.d===dayKey()?e.e:null};
+function nextAppt(maxH){const n=nowMs();return items.filter(i=>!i.done&&i.type==='appt'&&i.due&&!i.left).map(i=>({i,d:parseL(i.due)})).filter(x=>x.d&&x.d-n>-5*6e4&&x.d-n<(maxH||8)*36e5).sort((a,b)=>a.d-b.d)[0]||null}
+function drawNow(){const m=curMode();
+ $('modeSeg').innerHTML=MODES.map(([k,v])=>`<button data-m="${k}" role="tab" aria-selected="${k===m}" class="${k===m?'on':''}">${v}</button>`).join('');
+ $('modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+ $('nowOne').hidden=m!=='one';$('nowWith').hidden=m!=='with';$('nowWait').hidden=m!=='wait';$('nowLay').hidden=!['blocks','line','chat'].includes(m);
+ if(m==='one'){drawTBar();drawNudge();drawNext();drawEnergy();drawTop3();drawMini()}
+ else if(m==='with')drawWith();else if(m==='wait')drawWait();else drawLay(m)}
+
+/* time made visible: "40 minutes left before you leave" instead of a clock time */
+function drawTBar(){const box=$('tBar'),n=nowMs();const A=nextAppt(4);
+ if(A){const leave=A.d.getTime()-leaveMins(A.i)*6e4,mins=(leave-n)/6e4;const frac=Math.max(0,Math.min(1,1-mins/240));
+  box.innerHTML=`<div class="tbar ${mins<=10?'now':''}"><div class="tt"><span>${mins<=0?'اتحرك دلوقتي لـ '+esc(A.i.title):'فاضل '+durAr(mins)+' وتتحرك لـ '+esc(A.i.title)}</span><small>${esc(fmtT(new Date(leave)))}</small></div><div class="bar"><i style="width:${frac*100}%"></i></div>${mins>40?`<button class="link" style="align-self:flex-start" id="tbWait">إيه اللي ألحق أعمله قبلها؟</button>`:''}</div>`;
+  const w=$('tbWait');if(w)w.onclick=()=>setMode(IS_ADHD?'wait':'line');return}
+ const it=items.filter(i=>!i.done&&i.due&&i.type!=='idea'&&i.type!=='bill').map(i=>({i,d:parseL(i.due)})).filter(x=>x.d-n>0&&x.d-n<3*36e5).sort((a,b)=>a.d-b.d)[0];
+ if(it){const mins=(it.d-n)/6e4;box.innerHTML=`<div class="tbar"><div class="tt"><span>فاضل ${durAr(mins)} على ${esc(it.i.title)}</span><small>${esc(fmtT(it.d))}</small></div><div class="bar"><i style="width:${Math.max(0,Math.min(1,1-mins/180))*100}%"></i></div></div>`;return}
+ box.innerHTML=''}
+
+/* energy: pick the task that fits how you feel today */
+function drawEnergy(){const box=$('energy');if(!IS_ADHD||!candidates().length){box.hidden=true;return}box.hidden=false;const e=energy();
+ box.innerHTML=`<p>طاقتك عاملة إزاي؟ هختارلك على قدّها</p><div class="eg">${[['low','قليلة'],['mid','متوسطة'],['high','عالية']].map(([k,v])=>`<button data-e="${k}" class="${e===k?'on':''}" aria-pressed="${e===k}">${v}</button>`).join('')}</div>`;
+ box.querySelectorAll('button').forEach(b=>b.onclick=()=>{store.set('energy',{d:dayKey(),e:b.dataset.e});const t=candidates()[0];toast(b.dataset.e==='low'?'ولا يهمك. اخترتلك حاجة خفيفة'+(t?': '+t.title:''):b.dataset.e==='high'?'حلو! ده وقت الحاجة الكبيرة'+(t?': '+t.title:''):'تمام'+(t?'، نبدأ بـ '+t.title:''),3500);render()})}
+
+/* "I can't start": shrink the step, sit with me, swap to something easier, or not today */
+function cantStart(it){openSheet(`<h2>عادي، ده بيحصل</h2><div class="stack"><div class="say">البداية أصعب حاجة، مش إنت. نختار طريقة:</div>
+ <button class="btn" id="csTiny">أصغر خطوة ممكنة</button><button class="btn ghost" id="csWith">سندي يقعد جنبي</button><button class="btn ghost" id="csEasy">حاجة أسهل الأول</button><button class="btn ghost" id="csTm">مش النهارده</button></div>`);
+ speak('البداية أصعب حاجة، مش إنت. نختار طريقة.');
+ $('csTiny').onclick=()=>{const st=it.steps&&it.steps.find(s=>!s.done);const tiny=st?st.t:'افتح '+it.title+' بس، أو حط الحاجة قدامك';
+  $('sheetBody').innerHTML=`<h2>دقيقتين بس</h2><div class="stack"><div class="say">${esc(tiny)}. ومتعملش أي حاجة تانية. لو عايز تقف بعد دقيقتين، اقف.</div><button class="btn big" id="csGo">يلا دقيقتين</button></div>`;
+  speak('دقيقتين بس. ولو عايز تقف بعدهم، اقف.');$('csGo').onclick=()=>{closeSheet();goFocus(it,2,st?it.steps.indexOf(st):undefined)}};
+ $('csWith').onclick=()=>{closeSheet();W.task=it.id;setMode('with')};
+ $('csEasy').onclick=()=>{snooze(it.id,60);closeSheet();const t=candidates().find(x=>x.id!==it.id&&!x.big);toast(t?'أجلتها ساعة. خد دي الأول: '+t.title:'أجلتها ساعة',4000)};
+ $('csTm').onclick=()=>{toTomorrow(it.id);closeSheet();toast('خلاص، بكرة. ولا يهمك 🫶')}}
+
+/* ---------- body double: Sanady sits with you while you work ---------- */
+const WCFG={every:10*6e4,guard:60*6e4};
+let W={task:null,t:null,left:0,total:0,mins:25,start:0,lastCheck:0,guard:false,check:'',drift:0};
+const wItem=()=>{let it=W.task&&byId(W.task);if(!it||it.done){it=candidates().find(i=>i.type!=='appt'&&i.type!=='med'&&i.type!=='bill')||null;W.task=it?it.id:null}return it};
+const wStep=it=>it&&it.steps?it.steps.findIndex(s=>!s.done):-1;
+function drawWith(){const box=$('nowWith'),it=wItem();
+ if(!box.querySelector('#wRing')){box.innerHTML=`<span class="badge2">سندي جنبك</span><div class="card wwrap"><p class="wl">بتشتغل على</p><h2 id="wT"></h2><p class="note" id="wS"></p>
+  <svg viewBox="0 0 200 200" class="ring" aria-hidden="true"><circle cx="100" cy="100" r="86" class="rbg"/><circle cx="100" cy="100" r="86" class="rfg" id="wRing"/></svg><div class="rtime" id="wTime"></div>
+  <div class="presets" id="wPre">${[15,25,45].map(m=>`<button data-m="${m}">${m}</button>`).join('')}</div>
+  <button class="btn big big-wide" id="wGo">يلا نشتغل سوا</button><div class="wact" id="wAct" hidden><button class="btn" id="wDone">خلصت الخطوة</button><button class="btn ghost" id="wDrift">سرحت</button></div><button class="link" id="wStop" hidden>كفاية كده</button></div>
+  <div id="wCheck"></div><div id="wGuard"></div>
+  <div class="card"><div class="ch"><h3>صوت في الخلفية</h3><small>بيساعد الدماغ يركز</small></div><div class="sounds" id="wSnd">${[['brown','Brown noise'],['rain','مطر'],['forest','غابة'],['off','من غير']].map(([k,v])=>`<button data-s="${k}">${v}</button>`).join('')}</div></div>`;
+  $('wRing').style.strokeDasharray=RC;
+  $('wPre').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(W.t)return;W.mins=+b.dataset.m;drawWith()});
+  $('wGo').onclick=wStart;$('wStop').onclick=()=>wEnd(false);
+  $('wDone').onclick=()=>{const it=wItem();if(!it)return;const k=wStep(it);if(k>=0){it.steps[k].done=true;award(5);buzz(20);save();if(it.steps.every(s=>s.done))finish(it.id);else{toast(cheer());speak(cheer()+' الخطوة الجاية: '+it.steps[k+1].t)}}else finish(it.id);W.task=null;drawWith()};
+  $('wDrift').onclick=()=>wDrift();
+  $('wSnd').querySelectorAll('button').forEach(b=>b.onclick=()=>{setSound(b.dataset.s);drawWith()})}
+ $('wT').textContent=it?it.title:'مفيش حاجة مستنياك دلوقتي';const k=wStep(it);
+ $('wS').textContent=it?(k>=0?'الخطوة '+(k+1)+' من '+it.steps.length+': '+it.steps[k].t:'اشتغل عليها بس، وأنا هنا'):'دوس الميكروفون وقول اللي في دماغك';
+ const left=W.t?W.left:W.mins*60,tot=W.t?W.total:W.mins*60;$('wTime').textContent=Math.floor(left/60)+':'+pad(left%60);$('wRing').style.strokeDashoffset=RC*(1-left/tot);
+ $('wPre').querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.m===W.mins));$('wPre').hidden=!!W.t;
+ $('wGo').hidden=!!W.t;$('wGo').disabled=!it;$('wAct').hidden=!W.t;$('wStop').hidden=!W.t;
+ $('wSnd').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.s===(SND.cur||'off')));
+ $('wCheck').innerHTML=W.check?`<div class="check"><p>${esc(W.check)}</p>${W.check==='لسه معايا؟'?'<div class="acts"><button class="btn" id="wcY">أيوه، شغال</button><button class="btn ghost" id="wcN">سرحت</button></div>':''}</div>`:'';
+ const y=$('wcY');if(y){y.onclick=()=>{W.check='شاطر، كمّل.';W.lastCheck=nowMs();award(2);drawWith();setTimeout(()=>{if(W.check==='شاطر، كمّل.'){W.check='';drawWith()}},8000)};$('wcN').onclick=()=>wDrift()}
+ const n=nowMs(),A=nextAppt(3);const worked=W.start?Math.floor((n-W.start)/6e4):0;
+ $('wGuard').innerHTML=W.guard?`<div class="guard"><b>حارس التركيز</b><span>بقالك ${durAr(worked)} شغال. قوم اشرب مية وافرد ضهرك${A?'، وميعاد '+esc(A.i.title)+' بعد '+durAr((A.d-n)/6e4):''}.</span><button class="link" id="wgOk" style="align-self:flex-start">تمام</button></div>`:'';
+ const g=$('wgOk');if(g)g.onclick=()=>{W.guard=false;W.start=nowMs();store.set('bodyAt',nowMs());drawWith()}}
+function wStart(){const it=wItem();if(!it||W.t)return;W.total=W.mins*60;W.left=W.total;if(!W.start||nowMs()-W.start>4*36e5)W.start=nowMs();W.lastCheck=nowMs();W.check='';
+ if(SND.cur==='off'||!SND.cur)setSound(store.get('lastSnd','brown')==='off'?'brown':store.get('lastSnd','brown'));
+ speak('أنا قاعد جنبك. اشتغل على '+it.title+' بس، ولو سرحت دوس سرحت ومن غير زعل.');
+ W.t=setInterval(wTick,1000);drawWith()}
+function wTick(){W.left--;const n=nowMs();let ch=false;
+ if(!W.check&&n-W.lastCheck>=WCFG.every){W.check='لسه معايا؟';ch=true;buzz(30);if(prof.voice&&audUnlocked)speak('لسه معايا؟')}
+ if(!W.guard&&W.start&&n-W.start>=WCFG.guard){W.guard=true;ch=true;buzz([40,60,40]);speak('بقالك ساعة شغال. قوم اشرب مية وافرد ضهرك.')}
+ if(W.left<=0){wEnd(true);return}
+ if(!$('wRing'))return;if(ch)drawWith();else{$('wTime').textContent=Math.floor(W.left/60)+':'+pad(W.left%60);$('wRing').style.strokeDashoffset=RC*(1-W.left/W.total)}}
+function wEnd(full){clearInterval(W.t);W.t=null;W.check='';if(full){SND.chime();award(5);toast('خلصت جلسة. '+cheer()+' خد بريك 5 دقايق',4000);speak(cheer()+' خد بريك خمس دقايق واشرب مية.')}if($('wRing'))drawWith()}
+function wDrift(){W.drift++;W.lastCheck=nowMs();const it=wItem();W.check='ولا يهمك، ده بيحصل. ارجع لـ «'+(it?it.title:'الحاجة دي')+'» بس. خد نفس، وابدأ من أول سطر.';speak(W.check);drawWith();setTimeout(()=>{if(W.check.startsWith('ولا يهمك')){W.check='';if($('wRing'))drawWith()}},15000)}
+
+/* ---------- waiting mode: an appointment later today doesn't have to freeze the whole day ---------- */
+function estMin(i){if(i.steps&&i.steps.length){const s=i.steps.find(s=>!s.done);return s?(s.min||10):10}return{call:10,buy:15,bill:5}[i.type]||(i.big?25:15)}
+function drawWait(){const box=$('nowWait'),n=nowMs(),A=nextAppt(8);
+ if(!A){box.innerHTML=`<span class="badge2">مود الانتظار</span><div class="card"><div class="ch"><h3>مفيش ميعاد قريب</h3><small>لما يبقى عندك ميعاد بعد ساعة أو اتنين، المود ده يقولك تعمل إيه لحد ما تتحرك، وأنا اللي هقولك تقوم.</small></div><button class="btn" id="waAdd">ضيف ميعاد</button></div>`;
+  $('waAdd').onclick=()=>editItem(null,{type:'appt',sec:'health'});return}
+ const leave=A.d.getTime()-leaveMins(A.i)*6e4,free=Math.floor((leave-n)/6e4)-10;
+ const pool=items.filter(i=>!i.done&&i!==A.i&&!['idea','appt','med'].includes(i.type)&&!(i.snooze>n)&&(!i.due||parseL(i.due)<=new Date(leave))).map(i=>({i,s:score(i)>0?score(i)+energyAdj(i):5,m:estMin(i)})).sort((a,b)=>b.s-a.s);
+ const pick=[];let used=0;pool.forEach(x=>{if(used+x.m<=free&&pick.length<5){pick.push(x);used+=x.m}});
+ box.innerHTML=`<span class="badge2">مود الانتظار</span><div class="card"><h2 style="font-size:24px;line-height:1.4">عندك ${esc(A.i.title)} ${esc(fmtT(A.d))}</h2>
+  <p class="note" style="font-size:16px">${free>5?'قدامك '+durAr(free)+' قبل ما تجهّز نفسك. الوقت ده مش ضايع، دي حاجات تخلص قبلها، وأنا اللي هقولك تقوم.':'قرب وقت الخروج. سيب أي حاجة وجهّز نفسك.'}</p>
+  ${free>5?(pick.length?pick.map(x=>`<div class="wtask" data-id="${x.i.id}"><div class="tx"><b>${esc(x.i.title)}</b></div><span class="dur">${minsAr(x.m)}</span><button class="btn ghost" style="min-height:44px;padding:0 14px">ابدأ</button></div>`).join(''):'<p class="note">مفيش حاجات صغيرة مستنياك. استريح، أو اسمع حاجة بتحبها.</p>'):''}
+  ${pick.length&&free>5?'<button class="btn big big-wide" id="waGo">ابدأ بأول واحدة</button>':''}</div>
+  <div class="card"><b>قبل ما تتحرك</b><div class="lines2"><div><span>🎒 تنبيه: لمّ حاجتك</span><span>${esc(fmtT(new Date(leave-6e5)))}</span></div><div><span>⏰ رنّة: اتحرك دلوقتي</span><span>${esc(fmtT(new Date(leave)))}</span></div><div><span>خد معاك</span><span>${esc(prof.prep)}</span></div></div>
+  ${!pushOn()&&'PushManager' in window?'<button class="link" id="waPush" style="align-self:flex-start">شغّل المنبّه عشان يرن والتطبيق مقفول</button>':''}</div>`;
+ box.querySelectorAll('.wtask').forEach(r=>r.querySelector('button').onclick=()=>startTask(r.dataset.id));
+ const g=$('waGo');if(g)g.onclick=()=>startTask(pick[0].i.id);const p=$('waPush');if(p)p.onclick=()=>enablePush()}
+
+/* ---------- commercial layouts: blocks, the day as a line, or a chat ---------- */
+function drawLay(m){const box=$('nowLay');if(m==='blocks')drawBlocks(box);else if(m==='line')drawLine(box);else drawChat(box)}
+function drawBlocks(box){const open=items.filter(i=>!i.done&&i.type!=='idea');const by={};open.forEach(i=>(by[i.sec]=by[i.sec]||[]).push(i));const top=candidates()[0];
+ const ks=Object.keys(SEC).filter(k=>by[k]);const ideas=items.filter(i=>i.type==='idea'&&!i.done).length;
+ box.innerHTML=`<div id="nudgeL"></div>${top?`<div class="card"><small class="note">الحاجة الجاية</small><b style="font-size:20px">${esc(top.title)}</b><div class="acts" style="display:flex;gap:8px"><button class="btn" id="blGo">يلا نبدأ</button><button class="btn ghost" id="blDone">خلصت ✓</button></div></div>`:''}
+ <div class="blocks">${ks.map(k=>{const l=by[k].sort((a,b)=>(a.due||'9').localeCompare(b.due||'9'));return`<button class="blk ${top&&top.sec===k?'hot':''}" data-k="${k}"><i>${SEC[k][0]}</i><b>${SEC[k][1]}</b><small>${esc(l[0].title)}</small><span class="n">${l.length}</span></button>`}).join('')}
+ <button class="blk" data-k="money"><i>💰</i><b>فلوسي</b><small>تقدر تصرف ${money(availCalc().avail)} لحد المرتب</small></button>${ideas?`<button class="blk" data-k="ideas"><i>💡</i><b>الأفكار</b><small>${ideas} في الخزنة</small></button>`:''}</div>
+ ${ks.length?'':'<div class="card empty">مفيش حاجات لسه. دوس 🎙️ وقول كل اللي في دماغك.</div>'}`;
+ nudgeInto($('nudgeL'));
+ if(top){$('blGo').onclick=()=>startTask(top.id);$('blDone').onclick=()=>finish(top.id)}
+ box.querySelectorAll('.blk').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(k==='money'){show('money');return}show('all');if(k==='ideas'){setSeg('ideas');return}setSeg('tasks');const el=$('sec-'+k);if(el)el.scrollIntoView({block:'start'})})}
+function drawLine(box){const n=NOW(),k=dayKey();const today=items.filter(i=>i.due&&i.type!=='idea'&&(dayKey(parseL(i.due))===k||(!i.done&&parseL(i.due)<n))&&(!i.done||(i.doneAt&&dayKey(new Date(i.doneAt))===k))).sort((a,b)=>parseL(a.due)-parseL(b.due));
+ const rows=[];let marked=false;today.forEach(i=>{const d=parseL(i.due);if(!marked&&d>n){rows.push('<div class="nowm">دلوقتي '+esc(fmtT(n))+'</div>');marked=true}
+  rows.push(`<div class="row ${i.done?'past':d<=n?'cur':''}"><div class="tm">${esc(fmtT(d))}</div><div class="ln"></div><div class="bx">${itemRow(i)}</div></div>`)});
+ if(!marked)rows.push('<div class="nowm">دلوقتي '+esc(fmtT(n))+'</div>');
+ const und=candidates().filter(i=>!i.due).slice(0,5);
+ box.innerHTML=`<div id="nudgeL"></div><div class="card"><div class="ch"><h3>يومك</h3><small>${esc(DAYS[n.getDay()]+' '+n.getDate()+' '+MONTHS[n.getMonth()])}</small></div><div class="tl">${today.length?rows.join(''):'<p class="note">مفيش مواعيد النهارده.</p>'}</div></div>
+ <div class="card"><div class="ch"><h3>من غير ميعاد</h3><small>اعمل منهم اللي تلحقه</small></div>${und.length?und.map(itemRow).join(''):'<p class="note">مفيش.</p>'}</div>`;
+ nudgeInto($('nudgeL'));bindRows(box)}
+function chatLog(who,t){if(!t)return;const l=store.get('chat',[]);l.push({w:who,t:String(t).slice(0,600),d:nowMs()});store.set('chat',l.slice(-30))}
+function drawChat(box){if(!box.querySelector('#chIn')){box.innerHTML='<div class="chatf" id="chF"></div><div class="chatin"><input id="chIn" placeholder="قول لسندي أي حاجة..." aria-label="رسالة لسندي"><button class="btn" id="chGo">ابعت</button><button class="btn ghost micsm" id="chMic" aria-label="بالصوت">🎙️</button></div>';
+  const go=()=>{const v=$('chIn').value.trim();if(!v)return;$('chIn').value='';chatLog('u',v);openDump(v);setTimeout(()=>{const b=$('dDone');if(b)b.click()},50)};
+  $('chGo').onclick=go;$('chIn').onkeydown=e=>{if(e.key==='Enter')go()};$('chMic').onclick=()=>openDump()}
+ const n=NOW(),h=n.getHours();const log=store.get('chat',[]).filter(x=>nowMs()-x.d<2*864e5);const top=candidates()[0];const nu=nudges().slice(0,2);
+ const B=[];log.forEach(x=>B.push(`<div class="bub ${x.w==='u'?'u':'s'}">${esc(x.t)}</div>`));
+ B.push(`<div class="bub s">${esc((h<12?'صباح الخير':h<17?'أهلاً':'مساء الخير')+(prof.name?' يا '+prof.name:'')+'. '+(doneToday().length?'خلّصت '+doneToday().length+' حاجات النهارده 👏':'قولّي إيه اللي في دماغك.'))}</div>`);
+ nu.forEach((x,k)=>B.push(`<div class="bub s">${x.i} ${esc(x.p)}<div class="acts">${x.acts.map((a,j)=>`<button class="chip" data-n="${k}" data-j="${j}">${esc(a[0])}</button>`).join('')}</div></div>`));
+ if(top)B.push(`<div class="bub s">الحاجة الجاية: <b>${esc(top.title)}</b><div class="acts"><button class="chip" id="chGo1">يلا نبدأ</button><button class="chip" id="chDn">خلصت ✓</button></div></div>`);
+ $('chF').innerHTML=B.join('');
+ $('chF').querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{nu[+b.dataset.n].acts[+b.dataset.j][1]();render()});
+ if(top){$('chGo1').onclick=()=>startTask(top.id);$('chDn').onclick=()=>finish(top.id)}}
+function nudgeInto(el){const list=nudges();if(!list.length||!el)return;const x=list[0];
+ el.innerHTML=`<div class="nudge"><div class="nt"><i>${x.i}</i><p>${esc(x.p)}</p></div><div class="acts">${x.acts.map((a,k)=>`<button class="btn ${k?'ghost':''}" data-k="${k}">${esc(a[0])}</button>`).join('')}</div></div>`;
+ el.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{x.acts[+b.dataset.k][1]();render()})}
+
 /* ---------- screens & render ---------- */
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));document.querySelectorAll('.tabs [data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===id));window.scrollTo(0,0);render()}
 document.querySelectorAll('.tabs [data-t]').forEach(b=>b.onclick=()=>show(b.dataset.t));
@@ -717,7 +866,7 @@ function render(){const n=NOW();const h=n.getHours();const nm=prof.name?' يا '
  $('greet').textContent=(h<12?'صباح الخير':h<17?'أهلاً':'مساء الخير')+nm;$('today').textContent=DAYS[n.getDay()]+' '+n.getDate()+' '+MONTHS[n.getMonth()]+' · '+fmtT(n);
  $('hardBar').hidden=!isHard();$('qHard').classList.toggle('on',isHard());
  const on=document.querySelector('.screen.on');if(!on)return;
- if(on.id==='now'){drawNudge();drawNext();drawTop3();drawMini()}else if(on.id==='all')drawAll();else if(on.id==='money')drawMoney();else if(on.id==='focus')drawRing()}
+ if(on.id==='now')drawNow();else if(on.id==='all')drawAll();else if(on.id==='money')drawMoney();else if(on.id==='focus')drawRing()}
 function morning(){const k=dayKey();if(store.get('morning','')===k||NOW().getHours()>=13||DEMO)return;store.set('morning',k);const c=candidates();const n=items.filter(i=>!i.done&&i.due&&dayKey(parseL(i.due))===k).length;
  const msg=(prof.name?'صباح الخير يا '+prof.name+'. ':'صباح الخير. ')+(n?'النهارده عندك '+n+' حاجات. ':'')+(c[0]?'أول حاجة: '+c[0].title+'.':'يومك فاضي، استمتع بيه.');setTimeout(()=>{if(audUnlocked)speak(msg);else toast(msg,5000)},800)}
 setInterval(()=>{if(!$('sheet').hidden&&document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if($('sheet').hidden)render();else{const t=$('today');if(t)t.textContent=DAYS[NOW().getDay()]+' '+NOW().getDate()+' '+MONTHS[NOW().getMonth()]+' · '+fmtT(NOW())}},20000);

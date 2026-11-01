@@ -86,7 +86,7 @@ function removeItem(id){items=items.filter(i=>i.id!==id);save();render()}
 /* ---------- money math ---------- */
 function nextPayday(){const n=NOW();const day=Math.min(28,Math.max(1,M.pay||1));let d=new Date(n.getFullYear(),n.getMonth(),day,9);if(d<=n)d=new Date(n.getFullYear(),n.getMonth()+1,day,9);return d}
 function billsBefore(end){const n=NOW();const out=[];items.filter(i=>i.type==='bill'&&!i.done).forEach(b=>{let d=parseL(b.due)||n;let k=0;while(d<end&&k<6){out.push({t:b.title,a:b.amount||0,d:new Date(d)});if(!b.repeat)break;const x=new Date(d);if(b.repeat==='weekly')x.setDate(x.getDate()+7);else if(b.repeat==='daily')x.setDate(x.getDate()+1);else x.setMonth(x.getMonth()+1);d=x;k++}});return out}
-function availCalc(){const end=nextPayday();const days=Math.max(0,Math.ceil((end-NOW())/864e5));const bills=billsBefore(end);const bsum=bills.reduce((s,b)=>s+b.a,0);const living=(M.daily||0)*days;
+function availCalc(){const end=nextPayday();const days=Math.max(0,Math.ceil((end-NOW())/864e5));const bills=billsBefore(end);const bsum=bills.reduce((s,b)=>s+b.a,0);const tk=dayKey(),tl=(M.dayLog||{})[tk];const living=Math.max(0,(M.daily||0)*days-(tl!=null?Math.min(tl,M.daily||0):0));
  return{bal:M.bal||0,bills,bsum,days,living,buf:M.buf||0,avail:Math.round((M.bal||0)-bsum-living-(M.buf||0)),end}}
 function verdict(wants){const A=availCalc();const tot=wants.reduce((s,w)=>s+(w.price||0),0);let room=Math.max(0,A.avail);const now=[],later=[],wait=[];
  wants.slice().sort((a,b)=>a.price-b.price).forEach(w=>{if(w.price<=room){if(M.brake&&w.price>=M.brake){wait.push(w);room-=w.price}else{now.push(w);room-=w.price}}else later.push(w)});
@@ -188,7 +188,8 @@ function openDump(prefill,hint){openSheet(`<h2>فرّغ دماغك</h2><div clas
   $('dDone').disabled=true;$('dType').hidden=true;$('dState').hidden=false;$('dState').className='listening thinking';$('dState').innerHTML='<span class="dot"></span><span>بيرتب...</span>';
   if(CRISIS_RX.test(text)){closeSheet();showCrisis();return}
   const open=items.filter(i=>!i.done).slice(-50).map(i=>({id:i.id,type:i.type,sec:i.sec,title:i.title,due:i.due}));
-  let r=await brain('talk',{text,items:open});if(!r)r=localSort(text);
+  const fq=findQuestion(text);if(fq){const k=placeOf(fq);if(k){applyTalk({reply:'',add:[],update:[],find:fq},text);return}}
+  let r=await brain('talk',{text,items:open,places:Object.keys(places).slice(0,40)});if(!r)r=localSort(text);
   if(r.crisis){closeSheet();showCrisis();return}
   applyTalk(r,text)}}
 function applyTalk(r,text){const added=[];const lines=[];
@@ -201,11 +202,12 @@ function applyTalk(r,text){const added=[];const lines=[];
  (r.places||[]).forEach(p=>{places[p.thing]={w:p.where,d:nowMs()};lines.push('📍 '+p.thing+': '+p.where)});
  (r.docs||[]).forEach(dc=>{const it=docRenew(dc.name,dc.expires);if(!it)return;if(!added.includes(it)&&it.created>=nowMs()-5e3)added.push(it);lines.push('📄 '+dc.name+' بيخلص '+docDate(dc.expires)+'. هفكّرك تجدده قبلها بشهر')});
  save();
- let found='';if(r.find){const k=Object.keys(places).find(k=>k.includes(r.find)||r.find.includes(k));found=k?'📍 '+k+' في '+places[k].w:'مش فاكر إنك قلتلي مكان '+r.find+'. لما تلاقيه قولي "'+r.find+' في ..." وهفتكر.'}
+ let found='';if(r.find){const k=placeOf(r.find);found=k?'📍 '+k+' في '+places[k].w:'مش فاكر إنك قلتلي مكان '+r.find+'. لما تلاقيه قولي "'+r.find+' في ..." وهفتكر.'}
  const groups={};added.forEach(a=>{const k=a.type==='idea'?'idea':a.sec;(groups[k]=groups[k]||[]).push(a)});
  const gHTML=Object.keys(groups).map(k=>{const h=k==='idea'?['💡','خزنة الأفكار']:SEC[k]||['•',k];return`<div class="sec"><div class="sech">${h[0]} ${h[1]} <span>${groups[k].length}</span></div>${groups[k].map(a=>`<div class="item" data-id="${a.id}"><div class="tx"><b>${esc(a.title)}</b><small>${esc([TYPE[a.type],fmtWhen(a.due),a.where,a.amount?money(a.amount)+' جنيه':'',a.big?'هقسّمها لخطوات':''].filter(Boolean).join(' · '))}</small></div><button class="mini-b rm">✕</button></div>`).join('')}</div>`}).join('');
  let wantsHTML='';let V=null;if(r.wants&&r.wants.length){V=verdict(r.wants);wantsHTML=verdictHTML(V,r.wants)}
- const reply=r.reply||('رتبت '+added.length+' حاجات.');
+ const onlyFind=r.find&&!added.length&&!lines.length&&!(r.wants&&r.wants.length);
+ const reply=onlyFind?found:(r.reply||('رتبت '+added.length+' حاجات.'));if(onlyFind)found='';
  $('dState').hidden=true;$('dHeard').hidden=true;$('dText').hidden=true;$('dDone').closest('.acts').hidden=true;
  $('dRes').innerHTML=`<div class="stack"><div class="say">${esc(reply)}</div>${r.offline?'<p class="note">⚠️ رتبتهم من غير نت، راجعهم.</p>':''}${found?'<div class="say">'+esc(found)+'</div>':''}
   ${lines.length?'<div class="res">'+lines.map(l=>'<small class="note">'+esc(l)+'</small>').join('')+'</div>':''}<div class="res">${gHTML}</div>${wantsHTML}
@@ -214,6 +216,13 @@ function applyTalk(r,text){const added=[];const lines=[];
  if(V)bindVerdict(V,r.wants);
  $('dOk').onclick=closeSheet;$('dMore').onclick=()=>openDump();
  speak(reply+(found?' '+found.replace('📍',''):'')+(V?' '+V.say:''));render()}
+
+/* ---------- places: "where did I put X?" answered from what the user said, word for word ---------- */
+const arN=t=>String(t||'').replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/[؟?!.،,]/g,' ').replace(/\s+/g,' ').trim();
+const arKey=t=>arN(t).split(' ').map(w=>w.replace(/^(وال|بال|لل|ال)/,'')).filter(w=>w&&!/^(بتاعي|بتاعتي|بتوعي|بتاعه|بتاعها|بتاعتها|بتاعته|هو|هي|يا|سندي|حطيت|حاطط|حاطه|شايل|شايله|مكان)$/.test(w)).join(' ');
+function placeOf(q){const a=arKey(q);if(!a)return null;const ks=Object.keys(places);
+ return ks.find(k=>arKey(k)===a)||ks.find(k=>{const b=arKey(k);return b&&(b.includes(a)||a.includes(b))})||ks.find(k=>arKey(k).split(' ').some(w=>w.length>2&&a.split(' ').includes(w)))||null}
+function findQuestion(t){const x=arN(t);const m=x.match(/^(?:(?:هو|هي|يا سندي)\s+)*(?:فين|فبن|مكان)\s+(.{2,40})$/)||x.match(/^(?:انا\s+)?(?:حطيت|حاطط|شايل)\s+(.{2,40})\s+فين$/)||x.match(/^(.{2,40})\s+فين$/);return m?m[1].trim():null}
 
 /* ---------- purchase advisor ---------- */
 function verdictHTML(V,wants){const lab={g:'تقدر تشتري ✓',y:'اشتري بعضها',r:'استنى شوية'}[V.color];
@@ -367,6 +376,8 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
   const w0=wk[0]+wk[1]/60+1,s0=sp[0]+sp[1]/60-1,wrap=sp[0]*60+sp[1]<wk[0]*60+wk[1],awake=wrap?(hr>=w0||hr<s0):(hr>=w0&&hr<s0);let bAt=store.get('bodyAt',0);if(!bAt){bAt=t;store.set('bodyAt',t)}
   if(awake&&t-bAt>3*36e5){const slot=Math.floor(t/(3*36e5)),B=[['💧','اشرب كوباية مية دلوقتي. الدماغ بيركز أحسن وهو مش عطشان.','شربت ✓'],['🚶','قوم اتحرك دقيقتين: افرد ضهرك وامشي شوية.','اتحركت ✓'],['🍎','كلت حاجة من بدري؟ خد حاجة صغيرة تاكلها.','كلت ✓']][slot%3];
    out.push({id:'bd'+slot,pr:hard?50:15,i:B[0],p:B[1],acts:[[B[2],()=>{store.set('bodyAt',nowMs());award(2);render()}],['بعدين',()=>{store.set('bodyAt',nowMs()-2*36e5);render()}]]})}}
+ if(M.daily&&!DEMO){const y=new Date(n);y.setDate(y.getDate()-1);const yk=dayKey(y);const started=store.get('dayStart','');if(!started)store.set('dayStart',dayKey());
+  else if(started<=yk&&!dayLogged(yk))out.push({id:'dy'+yk,pr:hard?20:46,i:'🍽️',p:`امبارح صرفت كام على الأكل والمواصلات؟ (المحدد ${money(M.daily)})`,acts:[['ولا حاجة',()=>{logDay(yk,0);award(5);toast('وفرت '+money(M.daily)+' جنيه 👏');render()}],['زي العادة',()=>{logDay(yk,M.daily);render()}],['رقم تاني',()=>daySheet(yk)]]})}
  const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
  if(fresh.length>=2&&!DEMO&&!tgOn())out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
@@ -487,10 +498,25 @@ function tgSheet(){const on=store.get('tg',false);
   store.set('tgWait',nowMs());
   b.hidden=true;$('tgLink').innerHTML=`<a class="btn" style="display:block;text-align:center" href="${esc(j.url)}" target="_blank" rel="noopener">✈️ افتح تليجرام واضغط Start</a><p class="note">بعد ما تضغط Start ارجع هنا، وسندي هيتأكد لوحده.</p>`}}
 
+/* ---------- daily allowance: what was really spent on food & transport, day by day ---------- */
+function dayLogged(k){return (M.dayLog||{})[k]!=null}
+function logDay(k,a){M.dayLog=M.dayLog||{};const old=M.dayLog[k];if(old!=null)M.bal=(M.bal||0)+old;M.dayLog[k]=a;M.bal=(M.bal||0)-a;
+ const keep=Object.keys(M.dayLog).sort().slice(-62);M.dayLog=Object.fromEntries(keep.map(x=>[x,M.dayLog[x]]));save()}
+function dailySaved(){const mk=dayKey().slice(0,7),d=M.daily||0;return Object.entries(M.dayLog||{}).filter(([k])=>k.slice(0,7)===mk).reduce((s,[,a])=>s+(d-a),0)}
+function daySheet(k){const d=M.daily||0,y=k!==dayKey(),lab=y?'امبارح':'النهارده';
+ openSheet(`<h2>🍽️🚌 مصروف ${lab}</h2><div class="stack"><p>صرفت كام على الأكل والمواصلات ${lab}؟ <small>(المحدد ليك ${money(d)} جنيه في اليوم)</small></p>
+ <div class="acts"><button class="btn ghost" data-a="0">ولا حاجة، ما نزلتش</button><button class="btn ghost" data-a="${d}">زي العادة ${money(d)}</button></div>
+ <div class="form"><label>رقم تاني<input id="dyA" type="number" inputmode="numeric" placeholder="مثلاً 90"></label><button class="btn" id="dyOk">سجل</button></div>
+ <p class="note">اللي ما اتصرفش بيفضل في رصيدك، وبيبان لك كتوفير في صفحة الفلوس.</p></div>`);
+ const done=a=>{logDay(k,a);closeSheet();const sv=d-a;toast(sv>0?'تمام، وفرت '+money(sv)+' جنيه 👏':sv<0?'سجلت. صرفت '+money(-sv)+' زيادة، عادي يحصل':'سجلت ✓',3500);if(sv>0)award(5);render()};
+ document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>done(+b.dataset.a));$('dyOk').onclick=()=>{const a=+$('dyA').value;if(!(a>=0)||$('dyA').value===''){toast('اكتب المبلغ');return}done(Math.round(a))}}
+
 function drawMoney(){const A=availCalc();const col=A.avail<0?'var(--red)':A.avail<(M.week||500)?'var(--yel)':'var(--grn)';
  $('availCard').innerHTML=`<div class="ch"><h3>تقدر تصرف لحد المرتب</h3><small>المرتب الجاي ${A.end.getDate()} ${MONTHS[A.end.getMonth()]} · فاضل ${A.days} يوم</small></div><div class="big num" style="color:${col}">${money(A.avail)} <small style="font-size:18px">جنيه</small></div>
- <div class="lines"><div><span>الرصيد</span><span class="num">${money(A.bal)}</span></div><div><span>− فواتير وأقساط قبل المرتب (${A.bills.length})</span><span class="num">${money(A.bsum)}</span></div><div><span>− أكل ومواصلات (${A.days} يوم)</span><span class="num">${money(A.living)}</span></div><div><span>− مبلغ الطوارئ</span><span class="num">${money(A.buf)}</span></div></div>
+ <div class="lines"><div><span>الرصيد</span><span class="num">${money(A.bal)}</span></div><div><span>− فواتير وأقساط قبل المرتب (${A.bills.length})</span><span class="num">${money(A.bsum)}</span></div><div><span>− أكل ومواصلات (${A.days} يوم)</span><span class="num">${money(A.living)}</span></div>${M.daily?`<div><span>🍽️ مصروف النهارده ${dayLogged(dayKey())?'(صرفت '+money(M.dayLog[dayKey()])+')':''}</span><button class="mini-b" id="dyBtn">${dayLogged(dayKey())?'عدّل':'سجّل'}</button></div>`:''}<div><span>− مبلغ الطوارئ</span><span class="num">${money(A.buf)}</span></div></div>
+ ${dailySaved()>0?'<p class="note">👏 وفرت '+money(dailySaved())+' جنيه من مصروف الأكل والمواصلات الشهر ده.</p>':''}
  ${!M.bal&&!M.sal?'<p class="note">قول لسندي مرة واحدة: "معايا في البنك 12 ألف، ومرتبي 15 ألف بقبضه يوم 1" أو املا الإعدادات تحت.</p>':''}`;
+ if($('dyBtn'))$('dyBtn').onclick=()=>daySheet(dayKey());
  $('wishCard').innerHTML=`<div class="ch"><h3>🎁 قايمة الأمنيات</h3><small>الحاجات اللي اتأجلت. أول ما الفلوس تكفي هقولك.</small></div>${wish.length?wish.map(w=>{const fr=Math.max(0,Math.min(1,A.avail/w.price));return`<div class="item"><div class="tx"><b>${esc(w.name)} · <span class="num">${money(w.price)}</span> ج</b><small>${w.wait&&nowMs()<w.wait?'⏳ استنى لحد '+fmtWhen(toLocal(new Date(w.wait))):w.plan?'🗓️ الخطة: '+new Date(w.plan).getDate()+' '+MONTHS[new Date(w.plan).getMonth()]:''}</small><div class="bar"><i style="width:${fr*100}%"></i></div></div><button class="mini-b" data-w="${w.id}">✕</button></div>`}).join(''):'<p class="note">فاضية.</p>'}`;
  $('wishCard').querySelectorAll('[data-w]').forEach(x=>x.onclick=()=>{wish=wish.filter(w=>w.id!==x.dataset.w);save();drawMoney()});
  const bills=items.filter(i=>i.type==='bill'&&!i.done).sort((a,b)=>(a.due||'').localeCompare(b.due||''));

@@ -15,7 +15,7 @@ DEMO={t0:at(7,40),real0:Date.now(),dumpText:null,
    update:[],spend:[],wants:[],places:[{thing:'الباسبور',where:'الدولاب'}],find:''}},
  typeInto(el,text){let k=0;DEMO.dumpText=null;const st=document.getElementById('dState');const go=()=>{if(!document.body.contains(el))return;k+=2;el.textContent=text.slice(0,k);if(k<text.length)setTimeout(go,45);else if(st)st.innerHTML='<span>دوس "خلصت" لما تخلص.</span>'};go()}};
 document.body.classList.add('demo');
-function reset(){Object.keys(localStorage).filter(k=>k.startsWith('sndemo_')).forEach(k=>localStorage.removeItem(k));
+function reset(){Object.keys(localStorage).filter(k=>k.startsWith(PFX)).forEach(k=>localStorage.removeItem(k));
  prof={name:'محمد',sex:'m',voice:true,vg:'f',wake:'07:30',sleep:'23:30',travel:30,prep:'المفاتيح والبطاقة والشاحن'};
  M={bal:12350,sal:15000,pay:1,daily:150,buf:1500,week:1000,brake:3000,spends:[],saved:0};
  items=[];wish=[];places={};diary=[];nsn={};pts={p:180,days:{}};travel={'مدينة نصر':40};

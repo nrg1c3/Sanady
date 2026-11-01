@@ -247,7 +247,7 @@ function petForm(){openSheet(`<h2>حيوان جديد</h2><div class="form"><lab
   const mk=(t,h)=>{const d=hm(h,NOW());if(d<NOW())d.setDate(d.getDate()+1);const it=addItem({type:'task',sec:'me',title:t,due:toLocal(d),repeat:'daily'});it.pet=p.id};
   feed.forEach(h=>mk('أأكّل '+name+' '+PETS[type][0],h));if($('pW').checked)mk('أمشّي '+name+' 🐶','18:00');
   if(p.vac){const it=addItem({type:'appt',sec:'me',title:'تطعيم '+name,due:p.vac+'T10:00'});it.pet=p.id}
-  savePets();save();closeSheet();toast('هفكّرك بأكل '+name+(p.vac?' وتطعيمه':''));show('all');setSeg('me')}}
-$('qMe').onclick=()=>{show('all');setSeg('me')};
+  savePets();save();closeSheet();toast('هفكّرك بأكل '+name+(p.vac?' وتطعيمه':''));LIFE_SUB='me';show('all');setSeg('life')}}
+$('qMe').onclick=()=>{LIFE_SUB='';show('all');setSeg('life')};
 /* links opened while the app is already open only change the hash: reload so they are handled */
 window.addEventListener('hashchange',()=>{if(/^#(hw|kidsetup|add)=/.test(location.hash))location.reload()});

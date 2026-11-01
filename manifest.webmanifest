@@ -1,6 +1,6 @@
 {
  "id": "./",
- "name": "سندي · Sanady",
+ "name": "سندي ADHD",
  "short_name": "سندي",
  "description": "سندك اللي جواك: بيرتب دماغك ويفكّرك ويبدأ معاك",
  "lang": "ar",
@@ -9,8 +9,8 @@
  "scope": "./",
  "display": "standalone",
  "orientation": "portrait",
- "background_color": "#F5F2FB",
- "theme_color": "#2B2160",
+ "background_color": "#101326",
+ "theme_color": "#101326",
  "categories": [
   "productivity",
   "health",

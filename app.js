@@ -1,13 +1,16 @@
 /* ================= Sanady · سندي ================= */
 'use strict';
+/* two separate apps from one code: the page sets window.SANADY_ED ('main' = Sanady for everyone, at /app/); default is Sanady ADHD */
+const ED=window.SANADY_ED==='main'?'main':'adhd';
+const DK=ED==='main'?'sm_':'sn_'; // each app keeps its own data, device id and alarms
 const BRAIN_URL='https://2.31.109.72.sslip.io/webhook/sanady-brain';
 const TTS_URL='https://2.31.109.72.sslip.io/webhook/wasl-tts';
 /* every request to our server carries a signed device token (the voice service requires it) */
 (()=>{const BASE='https://2.31.109.72.sslip.io/webhook/',K='wasl-nrg-2026',_fetch=window.fetch.bind(window);
  const get=k=>{try{return localStorage.getItem(k)}catch(e){return null}},set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
- let dev=get('sn_dev');if(!dev||!/^[A-Za-z0-9_-]{8,64}$/.test(dev)){dev=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/[^A-Za-z0-9]/g,'').slice(0,32);set('sn_dev',dev)}
- let tok=get('sn_tok')||'',triedAt=+(get('sn_tok_at')||0),pending=null;
- const register=()=>pending||(pending=(async()=>{try{const r=await _fetch(BASE+'wasl-register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:K,d:dev})});const j=await r.json();tok=(j&&j.t)||'';set('sn_tok',tok)}catch(e){}triedAt=Date.now();set('sn_tok_at',String(triedAt));pending=null})());
+ let dev=get(DK+'dev');if(!dev||!/^[A-Za-z0-9_-]{8,64}$/.test(dev)){dev=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/[^A-Za-z0-9]/g,'').slice(0,32);set(DK+'dev',dev)}
+ let tok=get(DK+'tok')||'',triedAt=+(get(DK+'tok_at')||0),pending=null;
+ const register=()=>pending||(pending=(async()=>{try{const r=await _fetch(BASE+'wasl-register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:K,d:dev})});const j=await r.json();tok=(j&&j.t)||'';set(DK+'tok',tok)}catch(e){}triedAt=Date.now();set(DK+'tok_at',String(triedAt));pending=null})());
  window.fetch=async function(u,o){if(typeof u!=='string'||!u.startsWith(BASE)||u.endsWith('wasl-register')||!o||typeof o.body!=='string')return _fetch(u,o);
   let b;try{b=JSON.parse(o.body)}catch(e){return _fetch(u,o)}if(!b||b.k!==K)return _fetch(u,o);
   if(!tok&&Date.now()-triedAt>6*3600e3)await register();
@@ -16,10 +19,9 @@ const TTS_URL='https://2.31.109.72.sslip.io/webhook/wasl-tts';
 const $=id=>document.getElementById(id);
 const minsAr=m=>m==1?'دقيقة':m==2?'دقيقتين':m<=10?m+' دقايق':m+' دقيقة';
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const PFX=new URLSearchParams(location.search).has('demo')?'sndemo_':'sn_';
+const PFX=new URLSearchParams(location.search).has('demo')?(ED==='main'?'smdemo_':'sndemo_'):DK;
 const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(PFX+k));return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(PFX+k,JSON.stringify(v))}catch(e){}}};
 /* two editions from one code: 'adhd' (competition) and 'main' (commercial). ?ed=main or ?ed=adhd switches and remembers */
-const ED=(()=>{const q=new URLSearchParams(location.search).get('ed');if(q==='main'||q==='adhd')store.set('ed',q);return store.get('ed','adhd')})();
 const IS_ADHD=ED==='adhd';
 const START=IS_ADHD?2:5; // first push into a task: 2 minutes for ADHD
 const THEMES={night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
@@ -80,19 +82,19 @@ const doneToday=()=>items.filter(i=>i.done&&i.doneAt&&dayKey(new Date(i.doneAt))
 
 /* ---------- item actions ---------- */
 function addItem(x){const it={id:uid(),type:x.type||'task',sec:x.sec||'home',title:x.title,due:x.due||'',where:x.where||'',amount:x.amount||0,repeat:x.repeat||'',big:!!x.big,created:nowMs(),done:false,star:false,steps:x.steps||null,from:x.from||''};items.push(it);save();return it}
-function rollRepeat(it){const d=parseL(it.due)||NOW();if(it.repeat==='daily')d.setDate(d.getDate()+1);else if(it.repeat==='weekly')d.setDate(d.getDate()+7);else d.setMonth(d.getMonth()+1);it.due=toLocal(d);it.snooze=0;it.notified=0}
+function rollRepeat(it){const d=parseL(it.due)||NOW();if(it.repeat==='daily')d.setDate(d.getDate()+1);else if(it.repeat==='weekly')d.setDate(d.getDate()+7);else if(it.repeat==='yearly')d.setFullYear(d.getFullYear()+1);else d.setMonth(d.getMonth()+1);it.due=toLocal(d);it.snooze=0;it.notified=0}
 function finish(id,silent){const it=byId(id);if(!it)return;
  if(it.type==='bill'&&it.amount){M.bal=(M.bal||0)-it.amount;M.spends.push({a:it.amount,note:it.title,d:nowMs(),bill:1})}
  if(it.repeat){items.push({...it,id:uid(),done:true,doneAt:nowMs(),repeat:'',ghost:1});rollRepeat(it)}
  else{it.done=true;it.doneAt=nowMs()}
- award(it.big?20:10);save();if(!silent){buzz([20,40,20]);confetti();toast(cheer())}render()}
+ award(it.big?20:10);save();if(!silent){buzz([20,40,20]);confetti();toast(cheer())}if(window.afterFinish)afterFinish(it,silent);render()}
 function snooze(id,mins){const it=byId(id);if(!it)return;it.snooze=nowMs()+mins*6e4;it.touched=nowMs();save();render()}
 function toTomorrow(id){const it=byId(id);if(!it)return;const d=NOW();d.setDate(d.getDate()+1);d.setHours(10,0,0,0);it.due=toLocal(d);it.touched=nowMs();it.notified=0;save();render()}
 function removeItem(id){items=items.filter(i=>i.id!==id);save();render()}
 
 /* ---------- money math ---------- */
 function nextPayday(){const n=NOW();const day=Math.min(28,Math.max(1,M.pay||1));let d=new Date(n.getFullYear(),n.getMonth(),day,9);if(d<=n)d=new Date(n.getFullYear(),n.getMonth()+1,day,9);return d}
-function billsBefore(end){const n=NOW();const out=[];items.filter(i=>i.type==='bill'&&!i.done).forEach(b=>{let d=parseL(b.due)||n;let k=0;while(d<end&&k<6){out.push({t:b.title,a:b.amount||0,d:new Date(d)});if(!b.repeat)break;const x=new Date(d);if(b.repeat==='weekly')x.setDate(x.getDate()+7);else if(b.repeat==='daily')x.setDate(x.getDate()+1);else x.setMonth(x.getMonth()+1);d=x;k++}});return out}
+function billsBefore(end){const n=NOW();const out=[];items.filter(i=>i.type==='bill'&&!i.done).forEach(b=>{let d=parseL(b.due)||n;let k=0;while(d<end&&k<6){out.push({t:b.title,a:b.amount||0,d:new Date(d)});if(!b.repeat)break;const x=new Date(d);if(b.repeat==='weekly')x.setDate(x.getDate()+7);else if(b.repeat==='daily')x.setDate(x.getDate()+1);else if(b.repeat==='yearly')x.setFullYear(x.getFullYear()+1);else x.setMonth(x.getMonth()+1);d=x;k++}});return out}
 function availCalc(){const end=nextPayday();const days=Math.max(0,Math.ceil((end-NOW())/864e5));const bills=billsBefore(end);const bsum=bills.reduce((s,b)=>s+b.a,0);const tk=dayKey(),tl=(M.dayLog||{})[tk];const living=Math.max(0,(M.daily||0)*days-(tl!=null?Math.min(tl,M.daily||0):0));
  return{bal:M.bal||0,bills,bsum,days,living,buf:M.buf||0,avail:Math.round((M.bal||0)-bsum-living-(M.buf||0)),end}}
 function verdict(wants){const A=availCalc();const tot=wants.reduce((s,w)=>s+(w.price||0),0);let room=Math.max(0,A.avail);const now=[],later=[],wait=[];
@@ -340,7 +342,8 @@ function score(i){const n=nowMs();const d=parseL(i.due);let s=10;
  if(i.star)s+=45;if(i.urgent)s+=35;if(i.later)s-=25;if(i.type==='appt'){if(!d||(d-n)/6e4>leaveMins(i)+60)s=-1}if(d&&(i.type==='call'||i.type==='med')&&(d-n)/36e5>1)s=-1;if(d&&i.type==='task'&&(d-n)/36e5>3&&dayKey(d)===dayKey())s=40;if(i.type==='idea'||i.type==='bill')s=-1;
  return s}
 function energyAdj(i){const e=energy();if(!e)return 0;const quick=i.type==='call'||i.type==='buy'||(!i.big&&!(i.steps&&i.steps.length>2));if(e==='low')return i.big?-30:quick?12:0;if(e==='high')return i.big?22:0;return 0}
-function candidates(){const n=nowMs();return items.filter(i=>!i.done&&!(i.snooze>n)&&(!isHard()||essential(i))).map(i=>{const s=score(i);return{i,s:s>0?s+energyAdj(i):s}}).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i)}
+const energyAdjAll=i=>energyAdj(i)+(window.medBoost?medBoost(i):0);
+function candidates(){const n=nowMs();return items.filter(i=>!i.done&&!(i.snooze>n)&&(!isHard()||essential(i))).map(i=>{const s=score(i);return{i,s:s>0?s+energyAdjAll(i):s}}).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i)}
 function leaveMins(i){const t=(i.where&&travel[i.where])||prof.travel||30;return t+10}
 function ringSVG(it){const d=parseL(it.due);if(!d)return'';const mins=(d-nowMs())/6e4;if(mins<0||mins>240)return'';const frac=Math.max(0,Math.min(1,mins/240));const R=2*Math.PI*26;
  return`<svg class="tring" viewBox="0 0 64 64"><circle class="a" cx="32" cy="32" r="26"/><circle class="b" cx="32" cy="32" r="26" stroke-dasharray="${R}" stroke-dashoffset="${R*(1-frac)}"/><text x="32" y="33">${mins<60?Math.round(mins)+'د':Math.round(mins/60)+'س'}</text></svg>`}
@@ -397,7 +400,9 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
  const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
  if(fresh.length>=2&&!DEMO&&!tgOn()&&!pushOn())out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
+ NUDGE_EXTRA.forEach(f=>{try{f(t,hard).forEach(x=>out.push(x))}catch(e){}});
  return out.filter(x=>!(nsn[x.id]>t)).sort((a,b)=>(b.pr||50)-(a.pr||50))}
+const NUDGE_EXTRA=[]; // daily-life sections add their own nudges
 function learnTravel(i,late){const base=(i.where&&travel[i.where])||prof.travel||30;if(i.where){travel[i.where]=Math.round(base+late*.8)}i.done=true;i.doneAt=nowMs();save();
  toast(late?'اتعلمت: '+(i.where||'المشوار')+' بياخد حوالي '+travel[i.where]+' دقيقة. هحسبها كده المرة الجاية':'عاش! وصلت في ميعادك 👏',3500);if(!late)award(10);render()}
 function buyWish(w){M.bal-=w.price;M.spends.push({a:w.price,note:w.name,d:nowMs()});wish=wish.filter(x=>x!==w);save();confetti();toast('مبروك على '+w.name+' 🎁');render()}
@@ -415,7 +420,7 @@ function notify(x){if(spoken['n'+x.id])return;spoken['n'+x.id]=1;store.set('spok
 let SEG='tasks';
 function setSeg(v){SEG=v;$('allSeg').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));drawAll()}
 $('allSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setSeg(b.dataset.v));
-function itemRow(i){return`<div class="item ${i.done?'done':''}" data-id="${i.id}"><button class="ck ${i.done?'on':''}">${i.done?'✓':''}</button><div class="tx op"><b>${esc(i.title)}</b><small>${esc([fmtWhen(i.due),i.where,i.amount?money(i.amount)+' ج':'',i.repeat?{daily:'كل يوم',weekly:'كل أسبوع',monthly:'كل شهر'}[i.repeat]:'',i.steps?i.steps.filter(s=>s.done).length+'/'+i.steps.length+' خطوات':''].filter(Boolean).join(' · '))}</small></div><button class="star ${i.star?'on':''}" aria-label="من أهم 3">⭐</button></div>`}
+function itemRow(i){return`<div class="item ${i.done?'done':''}" data-id="${i.id}"><button class="ck ${i.done?'on':''}">${i.done?'✓':''}</button><div class="tx op"><b>${esc(i.title)}</b><small>${esc([fmtWhen(i.due),i.where,i.amount?money(i.amount)+' ج':'',i.repeat?{daily:'كل يوم',weekly:'كل أسبوع',monthly:'كل شهر',yearly:'كل سنة'}[i.repeat]:'',i.steps?i.steps.filter(s=>s.done).length+'/'+i.steps.length+' خطوات':''].filter(Boolean).join(' · '))}</small></div><button class="star ${i.star?'on':''}" aria-label="من أهم 3">⭐</button></div>`}
 function drawAll(){const b=$('allBody');
  if(SEG==='tasks'){const open=items.filter(i=>!i.done&&i.type!=='idea');const by={};open.forEach(i=>(by[i.sec]=by[i.sec]||[]).push(i));
   const order=Object.keys(SEC).filter(k=>by[k]);
@@ -436,7 +441,7 @@ function drawAll(){const b=$('allBody');
   <div class="card form"><input id="pN" placeholder="الاسم (ماما، أحمد...)"><input id="pE" type="number" inputmode="numeric" placeholder="فكّرني كل كام يوم؟ (30)"><input id="pB" placeholder="عيد الميلاد (اختياري، مثلاً 14/3)"><button class="btn" id="pGo">ضيف</button></div>`;
   b.querySelectorAll('[data-p]').forEach(r=>{const p=people.find(x=>x.id===r.dataset.p);r.querySelector('.ok').onclick=()=>{p.last=nowMs();save();award(5);toast(cheer());drawAll()};r.querySelector('.rm').onclick=()=>{people=people.filter(x=>x!==p);save();drawAll()};r.querySelector('.hi').onclick=()=>draftFor('hello',p.name,'سلام وطمأنينة على '+p.name,()=>{p.last=nowMs();save()})});
   $('pGo').onclick=()=>{const n=$('pN').value.trim();if(!n)return;people.push({id:uid(),name:n,every:+$('pE').value||30,bday:$('pB').value.trim(),last:nowMs()});save();drawAll()}}
- else if(SEG==='me')drawInterests(b);
+ else if(SEG==='me'||SEG==='life')drawLife(b);
  else{const ks=Object.keys(places);b.innerHTML=`<div class="card"><div class="ch"><h3>🔑 أماكن الحاجات</h3><small>قول "الباسبور في الدولاب" ولما تنسى اسأل "فين الباسبور؟"</small></div><input id="plS" placeholder="دوّر..."><div id="plL"></div></div>
   <div class="card form"><input id="plT" placeholder="الحاجة"><input id="plW" placeholder="مكانها"><button class="btn" id="plGo">احفظ</button></div>`;
   const drawL=()=>{const q=$('plS').value.trim();$('plL').innerHTML=ks.filter(k=>!q||k.includes(q)||places[k].w.includes(q)).map(k=>`<div class="item"><div class="tx"><b>${esc(k)}</b><small>${esc(places[k].w)} · من ${daysAgo(places[k].d)} يوم</small></div><button class="mini-b" data-k="${esc(k)}">✕</button></div>`).join('')||'<p class="note">مفيش.</p>';$('plL').querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{delete places[x.dataset.k];save();drawAll()})};
@@ -460,7 +465,7 @@ function editItem(it,tm){const isNew=!it;it=it||Object.assign({type:'task',sec:'
   if(isNew)addItem(v);else{Object.assign(it,v);it.notified=0;it.touched=nowMs();save()}closeSheet()};
  if(!isNew){$('eDel').onclick=()=>{removeItem(it.id);closeSheet()};$('eGo').onclick=()=>{closeSheet();startTask(it.id)};$('eCal').onclick=()=>ics(it)}}
 function icsEvent(it){const d=parseL(it.due)||new Date(nowMs()+36e5);const f=x=>x.toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');const e=new Date(d.getTime()+(it.type==='appt'?60:30)*6e4);
- const rr=it.repeat?'RRULE:FREQ='+{daily:'DAILY',weekly:'WEEKLY',monthly:'MONTHLY'}[it.repeat]+'\r\n':'';const pre=it.type==='appt'?leaveMins(it):10;
+ const rr=it.repeat?'RRULE:FREQ='+{daily:'DAILY',weekly:'WEEKLY',monthly:'MONTHLY',yearly:'YEARLY'}[it.repeat]+'\r\n':'';const pre=it.type==='appt'?leaveMins(it):10;
  return 'BEGIN:VEVENT\r\nUID:'+it.id+'@sanady\r\nDTSTAMP:'+f(new Date())+'\r\nDTSTART:'+f(d)+'\r\nDTEND:'+f(e)+'\r\n'+rr+'SUMMARY:'+it.title.replace(/[,;\r\n]/g,' ')+'\r\n'+(it.where?'LOCATION:'+it.where.replace(/[,;\r\n]/g,' ')+'\r\n':'')+'BEGIN:VALARM\r\nTRIGGER:-PT'+pre+'M\r\nACTION:DISPLAY\r\nDESCRIPTION:سندي\r\nEND:VALARM\r\nEND:VEVENT\r\n'}
 function icsSave(events,name){const s='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sanady//AR\r\n'+events.join('')+'END:VCALENDAR';
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/calendar'}));a.download=name;a.click()}
@@ -475,7 +480,7 @@ function icsAll(){const n=nowMs();const list=items.filter(i=>!i.done&&i.type!=='
 const REMIND_URL='https://2.31.109.72.sslip.io/webhook/sanady-remind';
 const TG_READY=false; // Telegram reminders are switched off until the Sanady bot exists
 function tgOn(){return TG_READY&&!DEMO&&store.get('tg',false)}
-async function tgCall(mode,extra){let dev='';try{dev=localStorage.getItem('sn_dev')||''}catch(e){}
+async function tgCall(mode,extra){let dev='';try{dev=localStorage.getItem(DK+'dev')||''}catch(e){}
  const r=await fetch(REMIND_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({k:'wasl-nrg-2026',d:dev,mode},extra||{}))});
  const j=await r.json().catch(()=>({}));if(!r.ok&&!j.error)j.error='http';return j}
 /* the message text: medicine names and bill amounts never leave the phone */
@@ -490,7 +495,7 @@ function tgList(){const n=nowMs(),end=n+14*864e5,out=[];
   while(d.getTime()<=end&&g++<40){let at=d.getTime()-(i.type==='appt'?leaveMins(i)*6e4:0);
    if(g===1&&i.snooze>n&&at<i.snooze)at=i.snooze;
    if(at>n+30e3)out.push({at,text:tgText(i)});
-   if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else d.setMonth(d.getMonth()+1)}});
+   if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else if(i.repeat==='yearly')d.setFullYear(d.getFullYear()+1);else d.setMonth(d.getMonth()+1)}});
  return out.sort((a,b)=>a.at-b.at).slice(0,120)}
 async function tgSync(force){if(!tgOn())return;const rem=tgList();const sig=JSON.stringify(rem);
  if(!force&&sig===store.get('tgSig','')&&nowMs()-store.get('tgAt',0)<6*36e5)return;
@@ -588,20 +593,20 @@ function alarmList(from){const n=nowMs(),end=n+14*864e5,out=[];from=from==null?n
    if(g===1&&i.snooze>at)at=i.snooze;
    if(at>=from)out.push({k:(i.id+'@'+at).replace(/[^A-Za-z0-9@._:-]/g,''),iid:i.id,at,text:alarmText(i,d)});
    if(i.type==='appt'&&!i.repeat&&at-6e5>=from)out.push({k:(i.id+'@'+at+'p').replace(/[^A-Za-z0-9@._:-]/g,''),iid:i.id,at:at-6e5,text:'🎒 كمان 10 دقايق تتحرك لـ '+i.title+'. لمّ حاجتك: '+prof.prep});
-   if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else d.setMonth(d.getMonth()+1)}});
+   if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else if(i.repeat==='yearly')d.setFullYear(d.getFullYear()+1);else d.setMonth(d.getMonth()+1)}});
  ALARM_EXTRA.forEach(f=>{try{f(from,end).forEach(a=>out.push(a))}catch(e){}});
  return out.sort((a,b)=>a.at-b.at).slice(0,200)}
 const ALARM_EXTRA=[]; // prayer times etc. register here
 /* tiny key-value store shared with the service worker */
-const KV={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{try{const r=indexedDB.open('sanady-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))},
+const KV={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{try{const r=indexedDB.open(IS_ADHD?'sanady-sw':'sanady-main-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))},
  async get(k){try{const db=await this.open();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}},
  async set(k,v){try{const db=await this.open();await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=res})}catch(e){}}};
 let rung=store.get('rung',{});
 function pushOn(){return !DEMO&&store.get('push',false)}
-async function pushCall(mode,extra){let dev='';try{dev=localStorage.getItem('sn_dev')||''}catch(e){}
+async function pushCall(mode,extra){let dev='';try{dev=localStorage.getItem(DK+'dev')||''}catch(e){}
  const r=await fetch(PUSH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({k:'wasl-nrg-2026',d:dev,mode},extra||{}))});return r.json().catch(()=>({}))}
 const u8=b=>{const s=atob(b.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((b.length+3)%4));return Uint8Array.from(s,c=>c.charCodeAt(0))};
-async function writeAlarms(){if(DEMO)return;let dev='',tok='';try{dev=localStorage.getItem('sn_dev')||'';tok=localStorage.getItem('sn_tok')||''}catch(e){}
+async function writeAlarms(){if(DEMO)return;let dev='',tok='';try{dev=localStorage.getItem(DK+'dev')||'';tok=localStorage.getItem(DK+'tok')||''}catch(e){}
  let sub=null;try{if(pushOn()&&'serviceWorker' in navigator){const r=await navigator.serviceWorker.ready;const s=await r.pushManager.getSubscription();sub=s&&s.toJSON()}}catch(e){}
  await KV.set('alarms',{list:alarmList(nowMs()-36e5).map(a=>({k:a.k,iid:a.iid,at:a.at,text:a.text})),dev,tok,sub,url:PUSH_URL})}
 async function pushSync(force){if(!pushOn())return;const times=alarmList().map(a=>({k:a.k,at:a.at}));const sig=JSON.stringify(times);
@@ -692,7 +697,6 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
  <label>ألوان الشاشة</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${document.body.dataset.th===k?'on':''}" style="background:${v[1]};color:${k==='night'?'#F3F4FB':'#1C1B1F'}"><span style="color:${v[2]}">●</span> ${v[0]}</button>`).join('')}</div>
- <label>النسخة<select id="sEd"><option value="adhd" ${IS_ADHD?'selected':''}>سندي ADHD</option><option value="main" ${IS_ADHD?'':'selected'}>سندي (للكل)</option></select></label>
  <button class="btn" id="sSave">احفظ</button>
  ${TG_READY?'<button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>':''}
  <button class="btn ghost" id="sDoc">📄 ورقي ومواعيد التجديد</button>
@@ -708,7 +712,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
  $('sCal').onclick=()=>icsAll();
  $('sTh').querySelectorAll('button').forEach(b=>b.onclick=()=>{store.set('theme',b.dataset.th);applyTheme(b.dataset.th);$('sTh').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
- $('sEd').onchange=()=>{store.set('ed',$('sEd').value);location.href=location.pathname};
+
  if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();
  $('sKid').onclick=()=>kidSetup();
@@ -780,7 +784,7 @@ function drawWith(){const box=$('nowWith'),it=wItem();
  if(!box.querySelector('#wRing')){box.innerHTML=`<span class="badge2">سندي جنبك</span><div class="card wwrap"><p class="wl">بتشتغل على</p><h2 id="wT"></h2><p class="note" id="wS"></p>
   <svg viewBox="0 0 200 200" class="ring" aria-hidden="true"><circle cx="100" cy="100" r="86" class="rbg"/><circle cx="100" cy="100" r="86" class="rfg" id="wRing"/></svg><div class="rtime" id="wTime"></div>
   <div class="presets" id="wPre">${[15,25,45].map(m=>`<button data-m="${m}">${m}</button>`).join('')}</div>
-  <button class="btn big big-wide" id="wGo">يلا نشتغل سوا</button><div class="wact" id="wAct" hidden><button class="btn" id="wDone">خلصت الخطوة</button><button class="btn ghost" id="wDrift">سرحت</button></div><button class="link" id="wStop" hidden>كفاية كده</button></div>
+  <button class="btn big big-wide" id="wGo">يلا نشتغل سوا</button><div class="wact" id="wAct" hidden><button class="btn" id="wDone">خلصت الخطوة</button><button class="btn ghost" id="wDrift">سرحت</button></div><button class="link" id="wStop" hidden>كفاية كده</button><div class="inrow" style="width:100%"><input id="wIdea" placeholder="💭 فكرة طارت في دماغك؟ اركنها هنا وكمّل"><button class="btn ghost" id="wIdeaGo">اركن</button></div></div>
   <div id="wCheck"></div><div id="wGuard"></div>
   <div class="card"><div class="ch"><h3>صوت في الخلفية</h3><small>بيساعد الدماغ يركز</small></div><div class="sounds" id="wSnd">${[['brown','Brown noise'],['rain','مطر'],['forest','غابة'],['off','من غير']].map(([k,v])=>`<button data-s="${k}">${v}</button>`).join('')}</div></div>`;
   $('wRing').style.strokeDasharray=RC;
@@ -788,6 +792,7 @@ function drawWith(){const box=$('nowWith'),it=wItem();
   $('wGo').onclick=wStart;$('wStop').onclick=()=>wEnd(false);
   $('wDone').onclick=()=>{const it=wItem();if(!it)return;const k=wStep(it);if(k>=0){it.steps[k].done=true;award(5);buzz(20);save();if(it.steps.every(s=>s.done))finish(it.id);else{toast(cheer());speak(cheer()+' الخطوة الجاية: '+it.steps[k+1].t)}}else finish(it.id);W.task=null;drawWith()};
   $('wDrift').onclick=()=>wDrift();
+  const park=()=>{const v=$('wIdea').value.trim();if(!v)return;addItem({type:/فكرة|مشروع/.test(v)?'idea':'task',sec:'me',title:v,from:'park'});$('wIdea').value='';toast('اتركنت 💭 ارجع لشغلك، هتلاقيها بعدين')};$('wIdeaGo').onclick=park;$('wIdea').onkeydown=e=>{if(e.key==='Enter')park()};
   $('wSnd').querySelectorAll('button').forEach(b=>b.onclick=()=>{setSound(b.dataset.s);drawWith()})}
  $('wT').textContent=it?it.title:'مفيش حاجة مستنياك دلوقتي';const k=wStep(it);
  $('wS').textContent=it?(k>=0?'الخطوة '+(k+1)+' من '+it.steps.length+': '+it.steps[k].t:'اشتغل عليها بس، وأنا هنا'):'دوس الميكروفون وقول اللي في دماغك';
@@ -825,7 +830,9 @@ function drawWait(){const box=$('nowWait'),n=nowMs(),A=nextAppt(8);
   ${free>5?(pick.length?pick.map(x=>`<div class="wtask" data-id="${x.i.id}"><div class="tx"><b>${esc(x.i.title)}</b></div><span class="dur">${minsAr(x.m)}</span><button class="btn ghost" style="min-height:44px;padding:0 14px">ابدأ</button></div>`).join(''):'<p class="note">مفيش حاجات صغيرة مستنياك. استريح، أو اسمع حاجة بتحبها.</p>'):''}
   ${pick.length&&free>5?'<button class="btn big big-wide" id="waGo">ابدأ بأول واحدة</button>':''}</div>
   <div class="card"><b>قبل ما تتحرك</b><div class="lines2"><div><span>🎒 تنبيه: لمّ حاجتك</span><span>${esc(fmtT(new Date(leave-6e5)))}</span></div><div><span>⏰ رنّة: اتحرك دلوقتي</span><span>${esc(fmtT(new Date(leave)))}</span></div><div><span>خد معاك</span><span>${esc(prof.prep)}</span></div></div>
+  <button class="btn ghost" id="waDoor">✅ قبل ما تنزل: شيّك على حاجتك</button>
   ${!pushOn()&&'PushManager' in window?'<button class="link" id="waPush" style="align-self:flex-start">شغّل المنبّه عشان يرن والتطبيق مقفول</button>':''}</div>`;
+ const wd=$('waDoor');if(wd)wd.onclick=()=>window.doorSheet&&doorSheet();
  box.querySelectorAll('.wtask').forEach(r=>r.querySelector('button').onclick=()=>startTask(r.dataset.id));
  const g=$('waGo');if(g)g.onclick=()=>startTask(pick[0].i.id);const p=$('waPush');if(p)p.onclick=()=>enablePush()}
 

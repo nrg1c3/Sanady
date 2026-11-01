@@ -37,7 +37,7 @@ const daysAgo=ms=>Math.floor((nowMs()-ms)/864e5);
 const nDays=n=>n===1?'يوم':n===2?'يومين':(n>=3&&n<=10)?n+' أيام':n+' يوم';
 
 /* ---------- state ---------- */
-const SEC={work:['💼','الشغل'],money:['💳','الفلوس'],people:['👨‍👩‍👧','العيلة والناس'],shop:['🛒','المشتريات'],home:['🏠','البيت'],health:['🩺','الصحة'],papers:['📄','الورق والمصالح'],study:['📚','الدراسة'],me:['🎨','اهتماماتي']};
+const SEC={work:['💼','الشغل'],money:['💳','الفلوس'],people:['👨‍👩‍👧','العيلة والناس'],shop:['🛒','المشتريات'],home:['🏠','البيت'],health:['🩺','الصحة'],papers:['📄','الورق والمصالح'],travel:['✈️','السفر'],study:['📚','الدراسة'],me:['🎨','اهتماماتي']};
 const TYPE={task:'مهمة',idea:'فكرة',buy:'مشتريات',bill:'فاتورة',appt:'ميعاد',med:'دوا',call:'تواصل'};
 let items=store.get('items',[]);
 let M=store.get('money',{bal:0,sal:0,pay:1,daily:150,buf:1000,week:500,brake:1500,spends:[],saved:0});
@@ -149,6 +149,7 @@ function localSort(text){const parts=text.split(/[،,.؛\n]+|\s+و(?=(?:أ|ا|إ
   else if(has(/فكرة|نفسي|حلم|مشروع/))type='idea',sec='me';
   else if(has(/شغل|مدير|تقرير|اجتماع|ايميل|إيميل/))sec='work';
   else if(has(/مذاكرة|امتحان|كلية|محاضرة/))sec='study';
+  else if(has(/سفر|سفرية|طيارة|تذكرة|تذاكر|حجز فندق|فيزا|شنطة/))sec='travel';
   else if(has(/بطاقة|رخصة|باسبور|جواز|توكيل/))sec='papers';
   const d=new Date(n);let set=false;if(has(/بكرة|بكره/)){d.setDate(d.getDate()+1);d.setHours(9,0,0,0);set=true}
   const hm=p.match(/الساعة\s*(\d{1,2})/);if(hm){let h=+hm[1];if(has(/بالليل|مساء/)&&h<12)h+=12;else if(!has(/الصبح|صباح/)&&h<8)h+=12;d.setHours(h,0,0,0);set=true}
@@ -358,6 +359,8 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
    else if(!w.wait&&A.avail>=w.price)out.push({id:'wa'+w.id,pr:45,i:'🎁',p:`دلوقتي تقدر تشتري ${w.name} من غير ما تأثر على الفواتير.`,speak:1,acts:[['اشتريتها',()=>buyWish(w)],['مش دلوقتي',()=>{nsn['wa'+w.id]=t+3*864e5;save();render()}]]})});
   if(A.avail<0&&(M.bal||M.sal))out.push({id:'lo',pr:60,i:'💳',p:'الفلوس لحد المرتب مش هتكفي الفواتير والمصاريف. خلّي بالك من الصرف الأيام دي، وقولي لو اتغير الرصيد.',acts:[['شوف التفاصيل',()=>show('money')]]});
   const ideas=items.filter(i=>i.type==='idea'&&!i.done);if(ideas.length>=5&&t-(store.get('ideaRev',0))>30*864e5)out.push({id:'ir',pr:20,i:'💡',p:`عندك ${ideas.length} أفكار في الخزنة. نختار واحدة تستاهل؟`,acts:[['يلا نختار',()=>{store.set('ideaRev',t);show('all');setSeg('ideas')}],['بعدين',()=>{nsn.ir=t+7*864e5;save();render()}]]})}
+ const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
+ if(fresh.length>=2&&!DEMO)out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
  return out.filter(x=>!(nsn[x.id]>t)).sort((a,b)=>(b.pr||50)-(a.pr||50))}
 function learnTravel(i,late){const base=(i.where&&travel[i.where])||prof.travel||30;if(i.where){travel[i.where]=Math.round(base+late*.8)}i.done=true;i.doneAt=nowMs();save();
@@ -420,10 +423,16 @@ function editItem(it,tm){const isNew=!it;it=it||Object.assign({type:'task',sec:'
  $('eSave').onclick=()=>{const v={title:$('eT').value.trim(),type:$('eY').value,sec:$('eS').value,due:$('eD').value,where:$('eW').value.trim(),amount:+$('eA').value||0,repeat:$('eR').value,big:$('eB').checked};if(!v.title)return;
   if(isNew)addItem(v);else{Object.assign(it,v);it.notified=0;it.touched=nowMs();save()}closeSheet()};
  if(!isNew){$('eDel').onclick=()=>{removeItem(it.id);closeSheet()};$('eGo').onclick=()=>{closeSheet();startTask(it.id)};$('eCal').onclick=()=>ics(it)}}
-function ics(it){const d=parseL(it.due)||new Date(nowMs()+36e5);const f=x=>x.toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');const e=new Date(d.getTime()+(it.type==='appt'?60:30)*6e4);
+function icsEvent(it){const d=parseL(it.due)||new Date(nowMs()+36e5);const f=x=>x.toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');const e=new Date(d.getTime()+(it.type==='appt'?60:30)*6e4);
  const rr=it.repeat?'RRULE:FREQ='+{daily:'DAILY',weekly:'WEEKLY',monthly:'MONTHLY'}[it.repeat]+'\r\n':'';const pre=it.type==='appt'?leaveMins(it):10;
- const s='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sanady//AR\r\nBEGIN:VEVENT\r\nUID:'+it.id+'@sanady\r\nDTSTAMP:'+f(new Date())+'\r\nDTSTART:'+f(d)+'\r\nDTEND:'+f(e)+'\r\n'+rr+'SUMMARY:'+it.title.replace(/[,;]/g,' ')+'\r\n'+(it.where?'LOCATION:'+it.where+'\r\n':'')+'BEGIN:VALARM\r\nTRIGGER:-PT'+pre+'M\r\nACTION:DISPLAY\r\nDESCRIPTION:سندي\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR';
- const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/calendar'}));a.download='sanady-'+it.id+'.ics';a.click();toast('افتح الملف عشان يتضاف للكالندر وينبّهك حتى لو التطبيق مقفول',4000)}
+ return 'BEGIN:VEVENT\r\nUID:'+it.id+'@sanady\r\nDTSTAMP:'+f(new Date())+'\r\nDTSTART:'+f(d)+'\r\nDTEND:'+f(e)+'\r\n'+rr+'SUMMARY:'+it.title.replace(/[,;\r\n]/g,' ')+'\r\n'+(it.where?'LOCATION:'+it.where.replace(/[,;\r\n]/g,' ')+'\r\n':'')+'BEGIN:VALARM\r\nTRIGGER:-PT'+pre+'M\r\nACTION:DISPLAY\r\nDESCRIPTION:سندي\r\nEND:VALARM\r\nEND:VEVENT\r\n'}
+function icsSave(events,name){const s='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sanady//AR\r\n'+events.join('')+'END:VCALENDAR';
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/calendar'}));a.download=name;a.click()}
+function ics(it){icsSave([icsEvent(it)],'sanady-'+it.id+'.ics');toast('افتح الملف عشان يتضاف للكالندر وينبّهك حتى لو التطبيق مقفول',4000)}
+/* every upcoming dated item in one calendar file, so the phone reminds even when Sanady is closed */
+function icsAll(){const n=nowMs();const list=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&(parseL(i.due)>n||i.repeat));
+ if(!list.length){toast('مفيش مواعيد جاية لسه. قول لسندي مواعيدك الأول');return}
+ icsSave(list.map(icsEvent),'sanady-all.ics');store.set('icsAt',nowMs());toast('افتح الملف وضيف '+list.length+' مواعيد للكالندر. لما تضيف مواعيد جديدة اعمل ده تاني',5000)}
 
 /* ---------- MONEY screen ---------- */
 function drawMoney(){const A=availCalc();const col=A.avail<0?'var(--red)':A.avail<(M.week||500)?'var(--yel)':'var(--grn)';
@@ -467,6 +476,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
  <button class="btn" id="sSave">احفظ</button>
+ <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">🔔 شغّل التنبيهات</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
@@ -474,6 +484,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sWipe" style="color:var(--red)">امسح كل بياناتي</button>
  <p class="note">سندي مش دكتور ولا علاج، وبيكمّل الدكتور مش بيبدله. مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
+ $('sCal').onclick=()=>icsAll();
  $('sNot').onclick=async()=>{try{const p=await Notification.requestPermission();toast(p==='granted'?'تمام، هنبهك والتطبيق مفتوح. للتنبيه وهو مقفول استخدم "ضيفها للكالندر"':'التنبيهات مقفولة من المتصفح',4500)}catch(e){toast('المتصفح ده مش بيدعم التنبيهات')}};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
   $('sheetBody').innerHTML=`<h2>تذكير من العيلة</h2><div class="stack"><p>ابعت اللينك ده لحد بتثق فيه. يكتب التذكير، ويبعتهولك، وإنت توافق عليه قبل ما يتضاف. مفيش حسابات ولا سيرفر.</p>${draftBox(txt)}

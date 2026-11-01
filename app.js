@@ -49,7 +49,7 @@ let pts=store.get('pts',{p:0,days:{}});
 let travel=store.get('travel',{});
 let diary=store.get('diary',[]);
 let nsn=store.get('nsn',{});
-const save=()=>{store.set('items',items);store.set('money',M);store.set('wish',wish);store.set('places',places);store.set('people',people);store.set('prof',prof);store.set('pts',pts);store.set('travel',travel);store.set('diary',diary);store.set('nsn',nsn)};
+const save=()=>{store.set('items',items);store.set('money',M);store.set('wish',wish);store.set('places',places);store.set('people',people);store.set('prof',prof);store.set('pts',pts);store.set('travel',travel);store.set('diary',diary);store.set('nsn',nsn);tgSoon()};
 const isOpen=i=>!i.done;
 const byId=id=>items.find(i=>i.id===id);
 
@@ -360,7 +360,7 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
   if(A.avail<0&&(M.bal||M.sal))out.push({id:'lo',pr:60,i:'💳',p:'الفلوس لحد المرتب مش هتكفي الفواتير والمصاريف. خلّي بالك من الصرف الأيام دي، وقولي لو اتغير الرصيد.',acts:[['شوف التفاصيل',()=>show('money')]]});
   const ideas=items.filter(i=>i.type==='idea'&&!i.done);if(ideas.length>=5&&t-(store.get('ideaRev',0))>30*864e5)out.push({id:'ir',pr:20,i:'💡',p:`عندك ${ideas.length} أفكار في الخزنة. نختار واحدة تستاهل؟`,acts:[['يلا نختار',()=>{store.set('ideaRev',t);show('all');setSeg('ideas')}],['بعدين',()=>{nsn.ir=t+7*864e5;save();render()}]]})}
  const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
- if(fresh.length>=2&&!DEMO)out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
+ if(fresh.length>=2&&!DEMO&&!store.get('tg',false))out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
  return out.filter(x=>!(nsn[x.id]>t)).sort((a,b)=>(b.pr||50)-(a.pr||50))}
 function learnTravel(i,late){const base=(i.where&&travel[i.where])||prof.travel||30;if(i.where){travel[i.where]=Math.round(base+late*.8)}i.done=true;i.doneAt=nowMs();save();
@@ -435,6 +435,49 @@ function icsAll(){const n=nowMs();const list=items.filter(i=>!i.done&&i.type!=='
  icsSave(list.map(icsEvent),'sanady-all.ics');store.set('icsAt',nowMs());toast('افتح الملف وضيف '+list.length+' مواعيد للكالندر. لما تضيف مواعيد جديدة اعمل ده تاني',5000)}
 
 /* ---------- MONEY screen ---------- */
+/* ---------- Telegram reminders: reach the phone even when Sanady is closed ---------- */
+const REMIND_URL='https://2.31.109.72.sslip.io/webhook/sanady-remind';
+function tgOn(){return !DEMO&&store.get('tg',false)}
+async function tgCall(mode,extra){let dev='';try{dev=localStorage.getItem('sn_dev')||''}catch(e){}
+ const r=await fetch(REMIND_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({k:'wasl-nrg-2026',d:dev,mode},extra||{}))});
+ const j=await r.json().catch(()=>({}));if(!r.ok&&!j.error)j.error='http';return j}
+/* the message text: medicine names and bill amounts never leave the phone */
+function tgText(i){const t=i.title;
+ if(i.type==='med')return'💊 ميعاد الدوا';
+ if(i.type==='appt')return'🚶 اتحرك دلوقتي عشان تلحق: '+t+(i.where?' ('+i.where+')':'');
+ if(i.type==='bill')return'💸 فاتورة النهارده: '+t;
+ if(i.type==='call')return'📞 '+t;if(i.type==='buy')return'🛒 '+t;return'✅ '+t}
+/* every dated, open item in the next 14 days (repeats expanded); appointments fire when it's time to leave */
+function tgList(){const n=nowMs(),end=n+14*864e5,out=[];
+ items.filter(i=>!i.done&&i.type!=='idea'&&i.due).forEach(i=>{let d=parseL(i.due);if(!d||isNaN(d))return;let g=0;
+  while(d.getTime()<=end&&g++<40){let at=d.getTime()-(i.type==='appt'?leaveMins(i)*6e4:0);
+   if(g===1&&i.snooze>n&&at<i.snooze)at=i.snooze;
+   if(at>n+30e3)out.push({at,text:tgText(i)});
+   if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else d.setMonth(d.getMonth()+1)}});
+ return out.sort((a,b)=>a.at-b.at).slice(0,120)}
+async function tgSync(force){if(!tgOn())return;const rem=tgList();const sig=JSON.stringify(rem);
+ if(!force&&sig===store.get('tgSig','')&&nowMs()-store.get('tgAt',0)<6*36e5)return;
+ try{const j=await tgCall('sync',{rem});if(j.error)return;
+  if(j.linked===false){store.set('tg',false);store.set('tgSig','');toast('تليجرام اتفصل عن سندي. تقدر تربطه تاني من الإعدادات',4500);return}
+  store.set('tgSig',sig);store.set('tgAt',nowMs())}catch(e){}}
+function tgSoon(){if(!tgOn())return;clearTimeout(window.__tgT);window.__tgT=setTimeout(()=>tgSync(),4000)}
+/* after the user pressed Start in Telegram and came back */
+async function tgCheck(){const w=store.get('tgWait',0);if(!w||DEMO)return;if(nowMs()-w>35*6e4){store.set('tgWait',0);return}
+ try{const j=await tgCall('status');if(j.linked){store.set('tgWait',0);store.set('tg',true);await tgSync(true);confetti();toast('✅ تليجرام اتربط. تذكيراتك هتوصلك هناك حتى لو سندي مقفول',5000);if(!$('sheet').hidden&&$('tgBox'))tgSheet()}}catch(e){}}
+function tgSheet(){const on=store.get('tg',false);
+ openSheet(`<h2>تذكير على تليجرام</h2><div class="stack" id="tgBox">${on?
+  `<p>✅ مربوط. أي ميعاد أو مهمة ليها وقت هتوصلك رسالة على تليجرام في وقتها، حتى لو التطبيق مقفول.</p><button class="btn ghost" id="tgNow">🔄 حدّث التذكيرات دلوقتي</button><button class="btn ghost" id="tgOff" style="color:var(--red)">افصل تليجرام</button>`:
+  `<p>سندي يبعتلك رسالة على تليجرام في وقت كل ميعاد أو مهمة، حتى لو التطبيق مقفول والموبايل في جيبك.</p><button class="btn" id="tgGo">📲 اربط تليجرام</button><div id="tgLink"></div>`}
+  <p class="note">علشان ده يشتغل، عناوين الحاجات اللي ليها وقت (للأسبوعين الجايين بس) ووقتها بتتحفظ على سيرفرنا لحد ما توصلك. اسم الدوا ومبالغ الفواتير ما بتتبعتش. لما تفصل، كل ده بيتمسح.</p></div>`);
+ if(on){$('tgNow').onclick=async()=>{await tgSync(true);toast('اتحدّثت')};
+  $('tgOff').onclick=async()=>{try{await tgCall('unlink')}catch(e){}store.set('tg',false);store.set('tgSig','');closeSheet();toast('اتفصل، ومسحنا تذكيراتك من السيرفر')};return}
+ $('tgGo').onclick=async()=>{const b=$('tgGo');b.disabled=true;b.textContent='لحظة...';let j={};try{j=await tgCall('link')}catch(e){j={error:'net'}}
+  b.disabled=false;b.textContent='📲 اربط تليجرام';
+  if(j.error==='nobot'){toast('الخدمة دي لسه بتتجهز، جرّب كمان شوية',4000);return}
+  if(!j.url||!/^https:\/\/t\.me\//.test(j.url)){toast('مفيش نت أو السيرفر مش بيرد. جرّب تاني',4000);return}
+  store.set('tgWait',nowMs());
+  b.hidden=true;$('tgLink').innerHTML=`<a class="btn" style="display:block;text-align:center" href="${esc(j.url)}" target="_blank" rel="noopener">✈️ افتح تليجرام واضغط Start</a><p class="note">بعد ما تضغط Start ارجع هنا، وسندي هيتأكد لوحده.</p>`}}
+
 function drawMoney(){const A=availCalc();const col=A.avail<0?'var(--red)':A.avail<(M.week||500)?'var(--yel)':'var(--grn)';
  $('availCard').innerHTML=`<div class="ch"><h3>تقدر تصرف لحد المرتب</h3><small>المرتب الجاي ${A.end.getDate()} ${MONTHS[A.end.getMonth()]} · فاضل ${A.days} يوم</small></div><div class="big num" style="color:${col}">${money(A.avail)} <small style="font-size:18px">جنيه</small></div>
  <div class="lines"><div><span>الرصيد</span><span class="num">${money(A.bal)}</span></div><div><span>− فواتير وأقساط قبل المرتب (${A.bills.length})</span><span class="num">${money(A.bsum)}</span></div><div><span>− أكل ومواصلات (${A.days} يوم)</span><span class="num">${money(A.living)}</span></div><div><span>− مبلغ الطوارئ</span><span class="num">${money(A.buf)}</span></div></div>
@@ -476,23 +519,25 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
  <button class="btn" id="sSave">احفظ</button>
+ <button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">🔔 شغّل التنبيهات</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
  <a class="btn ghost" href="privacy.html">🔒 الخصوصية والأمان</a>
  <button class="btn ghost" id="sWipe" style="color:var(--red)">امسح كل بياناتي</button>
- <p class="note">سندي مش دكتور ولا علاج، وبيكمّل الدكتور مش بيبدله. مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
+ <p class="note">سندي مش دكتور ولا علاج، وبيكمّل الدكتور مش بيبدله. مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك (إلا تذكيرات تليجرام لو شغّلتها)، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
  $('sCal').onclick=()=>icsAll();
- $('sNot').onclick=async()=>{try{const p=await Notification.requestPermission();toast(p==='granted'?'تمام، هنبهك والتطبيق مفتوح. للتنبيه وهو مقفول استخدم "ضيفها للكالندر"':'التنبيهات مقفولة من المتصفح',4500)}catch(e){toast('المتصفح ده مش بيدعم التنبيهات')}};
+ $('sTg').onclick=()=>tgSheet();
+ $('sNot').onclick=async()=>{try{const p=await Notification.requestPermission();toast(p==='granted'?'تمام، هنبهك والتطبيق مفتوح. للتنبيه وهو مقفول اربط تليجرام أو ضيفها للكالندر':'التنبيهات مقفولة من المتصفح',4500)}catch(e){toast('المتصفح ده مش بيدعم التنبيهات')}};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
   $('sheetBody').innerHTML=`<h2>تذكير من العيلة</h2><div class="stack"><p>ابعت اللينك ده لحد بتثق فيه. يكتب التذكير، ويبعتهولك، وإنت توافق عليه قبل ما يتضاف. مفيش حسابات ولا سيرفر.</p>${draftBox(txt)}
   <details><summary><b>شرح بسيط للعيلة عن الـ ADHD</b></summary>${draftBox('الـ ADHD مش كسل ولا قلة اهتمام. الدماغ بيلاقي صعوبة في البدء والتنظيم وحساب الوقت، مش في الذكاء. اللي بيساعد: تذكير هادي بدل اللوم، وطلب حاجة واحدة في المرة، ومساعدة في أول خطوة. شكراً إنك بتحاول تفهم 💜')}</details></div>`};
  $('sExp').onclick=()=>{const rows=[['التاريخ','نوم (ساعات)','تركيز','إحساس','دوا اتاخد']];const by={};diary.forEach(e=>{const r=by[e.d]=by[e.d]||{d:e.d,sleep:'',focus:'',feel:[],med:[]};if(e.sleep)r.sleep=e.sleep;if(e.focus)r.focus=e.focus;if(e.feel)r.feel.push(e.feel);if(e.med)r.med.push(e.med)});
   Object.values(by).sort((a,b)=>a.d.localeCompare(b.d)).forEach(r=>rows.push([r.d,r.sleep,r.focus,r.feel.join(' / '),r.med.join(' / ')]));
   const csv='﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='sanady-diary.csv';a.click()};
- $('sWipe').onclick=()=>{if(!confirm('متأكد؟ كل حاجة هتتمسح من الموبايل.'))return;Object.keys(localStorage).filter(k=>k.startsWith(PFX)).forEach(k=>localStorage.removeItem(k));location.reload()}};
+ $('sWipe').onclick=async()=>{if(!confirm('متأكد؟ كل حاجة هتتمسح من الموبايل.'))return;if(store.get('tg',false)){try{await tgCall('unlink')}catch(e){}}Object.keys(localStorage).filter(k=>k.startsWith(PFX)).forEach(k=>localStorage.removeItem(k));location.reload()}};
 
 /* ---------- family links ---------- */
 function b64e(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
@@ -515,11 +560,11 @@ function render(){const n=NOW();const h=n.getHours();const nm=prof.name?' يا '
 function morning(){const k=dayKey();if(store.get('morning','')===k||NOW().getHours()>=13||DEMO)return;store.set('morning',k);const c=candidates();const n=items.filter(i=>!i.done&&i.due&&dayKey(parseL(i.due))===k).length;
  const msg=(prof.name?'صباح الخير يا '+prof.name+'. ':'صباح الخير. ')+(n?'النهارده عندك '+n+' حاجات. ':'')+(c[0]?'أول حاجة: '+c[0].title+'.':'يومك فاضي، استمتع بيه.');setTimeout(()=>{if(audUnlocked)speak(msg);else toast(msg,5000)},800)}
 setInterval(()=>{if(!$('sheet').hidden&&document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if($('sheet').hidden)render();else{const t=$('today');if(t)t.textContent=DAYS[NOW().getDay()]+' '+NOW().getDate()+' '+MONTHS[NOW().getMonth()]+' · '+fmtT(NOW())}},20000);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')render()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){render();tgCheck();tgSync()}});
 
 /* ---------- boot ---------- */
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.addEventListener('DOMContentLoaded',()=>{if(familyFlows())return;render();if(store.get('seen',false))morning();
+window.addEventListener('DOMContentLoaded',()=>{if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync()},1500);if(store.get('seen',false))morning();
  const go=new URLSearchParams(location.search).get('go');if(go==='focus')show('focus');else if(go==='money')show('money');else if(go==='dump'&&store.get('seen',false))setTimeout(()=>openDump(),300);
  if(!store.get('seen',false)&&!DEMO){store.set('seen',true);openSheet(`<h2>أهلاً، أنا سندي 💜</h2><div class="stack"><div class="say">سندك اللي جواك. قولّي كل اللي في دماغك وأنا أرتبه، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.</div>
  <label class="form">اسمك إيه؟<input id="wN" placeholder="اسمك"></label><div class="acts"><button class="btn ghost" data-x="m">كلّمني بصيغة المذكر</button><button class="btn ghost" data-x="f">بصيغة المؤنث</button></div>

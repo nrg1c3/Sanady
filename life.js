@@ -130,7 +130,7 @@ if(IS_ADHD){
   $('dpAgain').onclick=dopaSheet;document.querySelectorAll('#sheetBody [data-i]').forEach(b=>b.onclick=()=>{const l=dopa();l.splice(+b.dataset.i,1);store.set('dopa',l);dopaSheet()});$('dpGo').onclick=()=>{const v=$('dpN').value.trim();if(!v)return;store.set('dopa',dopa().concat(v));dopaSheet()}};
  window.afterFinish=(it,silent)=>{if(silent||!it||!(it.big||it.star))return;const L=dopa();if(!L.length)return;setTimeout(()=>toast('🎁 تستاهل: '+L[Math.floor(Math.random()*L.length)],4500),2700)};
  /* focus window from the user's own medicine time (no doses, no medical advice) */
- window.medWin=()=>{const m=store.get('medwin',null);if(!m||!m.at)return null;const n=NOW();const s=hm(m.at,n);s.setTime(s.getTime()+(m.start||1)*36e5);const e=new Date(s.getTime()+(m.len||6)*36e5);return{s,e,on:n>=s&&n<e}};
+ window.medWin=()=>{const m=store.get('medwin',null);if(!m||!m.at)return null;const n=NOW();let best=null;for(const dd of[0,-1]){const d=new Date(n);d.setDate(d.getDate()+dd);const s=hm(m.at,d);s.setTime(s.getTime()+(m.start||1)*36e5);const e=new Date(s.getTime()+(m.len||6)*36e5);const w={s,e,on:n>=s&&n<e};if(w.on)return w;if(!best)best=w}return best}; // a dose late at night still counts after midnight
  window.medBoost=i=>{const w=medWin();return w&&w.on&&i.big?15:0};
  window.medSheet=()=>{const m=store.get('medwin',{at:'',start:1,len:6});
   openSheet(`<h2>💊 شباك التركيز</h2><div class="form"><p>لو بتاخد دوا تركيز، قولّي ميعاده والمفعول بيبدأ وبيستمر قد إيه حسب كلام دكتورك. هطلعلك الحاجات الصعبة في الوقت ده.</p>

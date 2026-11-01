@@ -1,3 +1,72 @@
-{"name":"سندي · Sanady","short_name":"سندي","description":"سندك اللي جواك: بيرتب دماغك ويفكّرك ويبدأ معاك","lang":"ar","dir":"rtl","start_url":"./","scope":"./","display":"standalone","background_color":"#F5F2FB","theme_color":"#2B2160",
-"icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icon-512.png","sizes":"512x512","type":"image/png"},{"src":"icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}],
-"shortcuts":[{"name":"فرّغ دماغك","url":"./?go=dump"},{"name":"تركيز","url":"./?go=focus"}]}
+{
+ "id": "./",
+ "name": "سندي · Sanady",
+ "short_name": "سندي",
+ "description": "سندك اللي جواك: بيرتب دماغك ويفكّرك ويبدأ معاك",
+ "lang": "ar",
+ "dir": "rtl",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#F5F2FB",
+ "theme_color": "#2B2160",
+ "categories": [
+  "productivity",
+  "health",
+  "lifestyle"
+ ],
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "فرّغ دماغك",
+   "short_name": "فرّغ دماغك",
+   "url": "./?go=dump",
+   "icons": [
+    {
+     "src": "icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "تركيز",
+   "short_name": "تركيز",
+   "url": "./?go=focus",
+   "icons": [
+    {
+     "src": "icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "الفلوس",
+   "short_name": "الفلوس",
+   "url": "./?go=money",
+   "icons": [
+    {
+     "src": "icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  }
+ ]
+}

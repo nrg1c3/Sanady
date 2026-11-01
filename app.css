@@ -139,3 +139,14 @@ body.demo #app{padding-top:48px}
 .wrow{display:flex;flex-direction:column;gap:6px;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .wrow .acts{display:flex;gap:6px;flex-wrap:wrap}
 #wPick{display:flex;gap:8px;flex-wrap:wrap}
+
+.alarm{position:fixed;inset:0;z-index:90;background:linear-gradient(160deg,#2B2160,#4B36C9);display:flex;align-items:center;justify-content:center;padding:24px;animation:aIn .25s ease}
+.alarm .abox{width:100%;max-width:420px;text-align:center;color:#fff;display:flex;flex-direction:column;gap:18px}
+.alarm .abell{font-size:84px;animation:shake 1s ease-in-out infinite}
+.alarm .atime{font-size:20px;opacity:.85}
+.alarm .atext{font-size:28px;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
+.alarm .aacts{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.alarm .btn{min-height:56px;font-size:19px}.alarm .btn.ghost{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(6deg)}}
+@keyframes aIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.alarm .abell,.alarm{animation:none}}

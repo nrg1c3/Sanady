@@ -14,9 +14,10 @@ A voice-first personal AI agent in Egyptian Arabic for adults with ADHD (and any
 - **Papers**: tell it "the passport expires in March" and it reminds you to renew a month before.
 - **Money advisor**: "can I buy this?" against balance, bills and payday; never decides for you.
 - **Hard-day mode, crisis safety, family reminders by link, doctor's diary export.**
-- **Reminders while closed**: every upcoming appointment exported to the phone calendar (.ics) with alerts.
+- **Alarms that ring**: full-screen ringing with sound and vibration inside the app; when the app is closed, a signed web push wakes the phone and it shows its own reminder (snooze 10 min from the notification). Calendar export (.ics) too.
+- **Calming sounds** made in the app: white, pink and brown noise, rain, waves, forest, fire, fan, with a sleep timer.
 - **Backup** to a file and restore on a new phone.
 
 ## How it runs
 - Static PWA (this repo) on GitHub Pages.
-- n8n on NRG's server: `Sanady - Brain` (Claude) and `Wasl - Egyptian Voice` (speech). Every request carries the app key and a signed device token.
+- n8n on NRG's server: `Sanady - Brain` (Claude), `Wasl - Egyptian Voice` (speech) and `Sanady - Push Alarms` (web push, VAPID signed in plain JS). Every request carries the app key and a signed device token.

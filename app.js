@@ -50,7 +50,7 @@ let travel=store.get('travel',{});
 let diary=store.get('diary',[]);
 let nsn=store.get('nsn',{});
 let docs=store.get('docs',{}); // document name -> expiry date (YYYY-MM-DD)
-const save=()=>{store.set('items',items);store.set('money',M);store.set('wish',wish);store.set('places',places);store.set('people',people);store.set('prof',prof);store.set('pts',pts);store.set('travel',travel);store.set('diary',diary);store.set('nsn',nsn);store.set('docs',docs);tgSoon()};
+const save=()=>{store.set('items',items);store.set('money',M);store.set('wish',wish);store.set('places',places);store.set('people',people);store.set('prof',prof);store.set('pts',pts);store.set('travel',travel);store.set('diary',diary);store.set('nsn',nsn);store.set('docs',docs);tgSoon();alarmsSoon()};
 const isOpen=i=>!i.done;
 const byId=id=>items.find(i=>i.id===id);
 
@@ -281,6 +281,9 @@ function endFocus(full){clearInterval(F.timer);F.timer=null;$('fGo').hidden=fals
 $('fGo').onclick=()=>{if(!F.task)$('fTask').textContent='جلسة تركيز';startFocus()};
 $('fStop').onclick=()=>endFocus(false);
 $('sounds').querySelectorAll('button').forEach(b=>b.onclick=()=>{SND.play(b.dataset.s);store.set('lastSnd',b.dataset.s);$('sounds').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
+$('sTimer').querySelectorAll('button').forEach(b=>b.onclick=()=>{const m=+b.dataset.m;$('sTimer').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+ if(!m){toast('الصوت هيفضل شغال لحد ما تقفله');return}if(SND.cur==='off')setSound(store.get('lastSnd','rain')==='off'?'rain':store.get('lastSnd','rain'));
+ SND.fadeOut(m,()=>{setSound('off');$('sTimer').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.m==='0'))});toast('الصوت هيهدى ويقفل لوحده بعد '+(m===60?'ساعة':m+' دقيقة'))});
 $('vol').oninput=()=>SND.setVol($('vol').value/100*.9);
 function setSound(s){const b=$('sounds').querySelector('[data-s="'+s+'"]');b&&b.click()}
 $('tSleep').onclick=()=>sleepMode();
@@ -378,8 +381,9 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
    out.push({id:'bd'+slot,pr:hard?50:15,i:B[0],p:B[1],acts:[[B[2],()=>{store.set('bodyAt',nowMs());award(2);render()}],['بعدين',()=>{store.set('bodyAt',nowMs()-2*36e5);render()}]]})}}
  if(M.daily&&!DEMO){const y=new Date(n);y.setDate(y.getDate()-1);const yk=dayKey(y);const started=store.get('dayStart','');if(!started)store.set('dayStart',dayKey());
   else if(started<=yk&&!dayLogged(yk))out.push({id:'dy'+yk,pr:hard?20:46,i:'🍽️',p:`امبارح صرفت كام على الأكل والمواصلات؟ (المحدد ${money(M.daily)})`,acts:[['ولا حاجة',()=>{logDay(yk,0);award(5);toast('وفرت '+money(M.daily)+' جنيه 👏');render()}],['زي العادة',()=>{logDay(yk,M.daily);render()}],['رقم تاني',()=>daySheet(yk)]]})}
+ if(!DEMO&&!pushOn()&&'PushManager' in window&&typeof Notification!=='undefined'&&Notification.permission!=='denied'&&alarmList().length)out.push({id:'push',pr:58,i:'🔔',p:'عشان أرن عليك وأهزّ الموبايل في ميعاد كل حاجة، حتى والتطبيق مقفول والموبايل في جيبك، شغّل المنبّه.',acts:[['شغّل المنبّه',()=>enablePush()],['بعدين',()=>{nsn.push=t+3*864e5;save();render()}]]});
  const calAt=store.get('icsAt',0);const fresh=items.filter(i=>!i.done&&i.type!=='idea'&&i.due&&parseL(i.due)>t&&(i.created||0)>calAt);
- if(fresh.length>=2&&!DEMO&&!tgOn())out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
+ if(fresh.length>=2&&!DEMO&&!tgOn()&&!pushOn())out.push({id:'cal',pr:22,i:'📅',p:`عندك ${fresh.length} مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.`,acts:[['ضيفهم',()=>{icsAll();render()}],['بعدين',()=>{nsn.cal=t+2*864e5;save();render()}]]});
  const [sh,sm]=(prof.sleep||'23:30').split(':').map(Number);const sl=new Date(n);sl.setHours(sh,sm,0,0);if(sl-n<60*6e4&&sl-n>-180*6e4)out.push({id:'sl'+dayKey(),pr:70,i:'🌙',p:'قرب ميعاد النوم. نشوف عملت إيه النهارده ونفرّغ دماغك لبكرة؟',speak:1,acts:[['ملخص اليوم',()=>nightSheet()],['وضع النوم',()=>sleepMode()]]});
  return out.filter(x=>!(nsn[x.id]>t)).sort((a,b)=>(b.pr||50)-(a.pr||50))}
 function learnTravel(i,late){const base=(i.where&&travel[i.where])||prof.travel||30;if(i.where){travel[i.where]=Math.round(base+late*.8)}i.done=true;i.doneAt=nowMs();save();
@@ -557,6 +561,65 @@ function docsSheet(){const n=nowMs();const list=Object.keys(docs).map(k=>({k,e:d
  document.querySelectorAll('.rm[data-k]').forEach(b=>b.onclick=()=>{const k=b.dataset.k;delete docs[k];items=items.filter(i=>!(i.doc===k&&!i.done));save();docsSheet()});
  $('dcAdd').onclick=()=>{const nm=$('dcN').value.trim().slice(0,40),e=$('dcE').value;if(!nm||!/^\d{4}-\d{2}-\d{2}$/.test(e)){toast('اكتب الاسم والتاريخ');return}docRenew(nm,e);toast('تمام، هفكّرك تجدد '+nm+' قبلها بشهر');render();docsSheet()}}
 
+/* ---------- alarms: ring inside the app, and through push when the app is closed ---------- */
+const PUSH_URL='https://2.31.109.72.sslip.io/webhook/sanady-push';
+const ALARM_TYPES=['task','call','appt','med','bill'];
+function alarmText(i,d){const t=i.title;
+ if(i.type==='appt')return'🚶 اتحرك دلوقتي عشان تلحق: '+t+(i.where?' في '+i.where:'')+' الساعة '+fmtT(d);
+ if(i.type==='med')return'💊 ميعاد الدوا: '+t;if(i.type==='bill')return'🧾 '+t+(i.amount?' · '+money(i.amount)+' جنيه':'');
+ if(i.type==='call')return'📞 '+t;return'⏰ '+t}
+/* every alarm from `from` to 14 days ahead; appointments ring when it's time to leave, repeats are expanded */
+function alarmList(from){const n=nowMs(),end=n+14*864e5,out=[];from=from==null?n+30e3:from;
+ items.filter(i=>!i.done&&i.due&&ALARM_TYPES.includes(i.type)).forEach(i=>{let d=parseL(i.due);if(!d||isNaN(d))return;let g=0;
+  while(d.getTime()<=end&&g++<40){let at=d.getTime()-(i.type==='appt'?leaveMins(i)*6e4:0);
+   if(g===1&&i.snooze>at)at=i.snooze;
+   if(at>=from)out.push({k:(i.id+'@'+at).replace(/[^A-Za-z0-9@._:-]/g,''),iid:i.id,at,text:alarmText(i,d)});
+   if(!i.repeat)break;d=new Date(d);if(i.repeat==='daily')d.setDate(d.getDate()+1);else if(i.repeat==='weekly')d.setDate(d.getDate()+7);else d.setMonth(d.getMonth()+1)}});
+ return out.sort((a,b)=>a.at-b.at).slice(0,200)}
+/* tiny key-value store shared with the service worker */
+const KV={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{try{const r=indexedDB.open('sanady-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))},
+ async get(k){try{const db=await this.open();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}},
+ async set(k,v){try{const db=await this.open();await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=res})}catch(e){}}};
+let rung=store.get('rung',{});
+function pushOn(){return !DEMO&&store.get('push',false)}
+async function pushCall(mode,extra){let dev='';try{dev=localStorage.getItem('sn_dev')||''}catch(e){}
+ const r=await fetch(PUSH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({k:'wasl-nrg-2026',d:dev,mode},extra||{}))});return r.json().catch(()=>({}))}
+const u8=b=>{const s=atob(b.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((b.length+3)%4));return Uint8Array.from(s,c=>c.charCodeAt(0))};
+async function writeAlarms(){if(DEMO)return;let dev='',tok='';try{dev=localStorage.getItem('sn_dev')||'';tok=localStorage.getItem('sn_tok')||''}catch(e){}
+ let sub=null;try{if(pushOn()&&'serviceWorker' in navigator){const r=await navigator.serviceWorker.ready;const s=await r.pushManager.getSubscription();sub=s&&s.toJSON()}}catch(e){}
+ await KV.set('alarms',{list:alarmList(nowMs()-36e5).map(a=>({k:a.k,iid:a.iid,at:a.at,text:a.text})),dev,tok,sub,url:PUSH_URL})}
+async function pushSync(force){if(!pushOn())return;const times=alarmList().map(a=>({k:a.k,at:a.at}));const sig=JSON.stringify(times);
+ if(!force&&sig===store.get('pushSig','')&&nowMs()-store.get('pushAt',0)<6*36e5)return;
+ try{const r=await navigator.serviceWorker.ready;let s=await r.pushManager.getSubscription();
+  if(!s){const j=await pushCall('key');if(!j.pub)return;s=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(j.pub)})}
+  const j=await pushCall('sync',{sub:s.toJSON(),times});if(j&&j.ok){store.set('pushSig',sig);store.set('pushAt',nowMs())}}catch(e){}}
+function alarmsSoon(){clearTimeout(window.__alT);window.__alT=setTimeout(()=>{writeAlarms();pushSync()},2500)}
+async function enablePush(){if(DEMO){toast('المنبّه بيشتغل في النسخة الحقيقية');return}
+ if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){toast('المتصفح ده مش بيدعم المنبّه والتطبيق مقفول. ضيف مواعيدك للكالندر بدل كده',5000);return}
+ let p='default';try{p=await Notification.requestPermission()}catch(e){}
+ if(p!=='granted'){toast('لازم توافق على الإشعارات عشان أرن عليك. افتح إعدادات الموبايل ← التطبيقات ← سندي ← الإشعارات',6000);return}
+ try{const j=await pushCall('key');if(!j.pub)throw 0;const r=await navigator.serviceWorker.ready;const s=(await r.pushManager.getSubscription())||await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(j.pub)});
+  store.set('push',true);store.set('pushSig','');await writeAlarms();await pushSync(true);confetti();toast('✅ المنبّه شغال. هرن عليك وأهزّ الموبايل في ميعاد كل حاجة، حتى والتطبيق مقفول',6000);render()}
+ catch(e){toast('مقدرتش أشغّل المنبّه دلوقتي. اتأكد من النت وجرب تاني',4500)}}
+async function disablePush(){try{await pushCall('off')}catch(e){}try{const r=await navigator.serviceWorker.ready;const s=await r.pushManager.getSubscription();s&&await s.unsubscribe()}catch(e){}store.set('push',false);store.set('pushSig','');toast('المنبّه اتقفل');render()}
+/* the ringing screen */
+let ringing=null;
+function stopRing(){if(!ringing)return;clearInterval(ringing.t);clearTimeout(ringing.end);try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}const el=$('alarm');if(el)el.remove();ringing=null}
+function ringAlarm(a){rung[a.k]=nowMs();store.set('rung',rung);KV.get('shown').then(sh=>{sh=sh||{};sh[a.k]=nowMs();KV.set('shown',sh)});
+ if(document.visibilityState!=='visible'){if(!pushOn())try{navigator.serviceWorker.ready.then(r=>r.showNotification('⏰ سندي بيفكّرك',{body:a.text,icon:'icon-192.png',badge:'icon-192.png',tag:a.k,renotify:true,requireInteraction:true,vibrate:[600,250,600,250,900],lang:'ar',dir:'rtl',data:{k:a.k,iid:a.iid}}))}catch(e){}return}
+ stopRing();const it=byId(a.iid);const el=document.createElement('div');el.id='alarm';el.className='alarm';
+ el.innerHTML=`<div class="abox"><div class="abell">⏰</div><div class="atime">${esc(fmtT(NOW()))}</div><div class="atext">${esc(a.text)}</div>
+ <div class="aacts"><button class="btn big" data-a="ok">تمام ✓</button>${it&&it.type!=='appt'?'<button class="btn ghost" data-a="done">خلصتها</button>':''}<button class="btn ghost" data-a="snz">فكّرني بعد 10 دقايق</button></div></div>`;
+ document.body.appendChild(el);const go=()=>{try{SND.ring()}catch(e){}try{navigator.vibrate&&navigator.vibrate([600,250,600,250,900])}catch(e){}};go();
+ ringing={t:setInterval(go,3000),end:setTimeout(stopRing,90000)};if(prof.voice&&audUnlocked)setTimeout(()=>speak(a.text.replace(/^\S+\s/,'')),1200);
+ el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const k=b.dataset.a;stopRing();hush();
+  if(k==='snz'&&it){snooze(it.id,10);toast('هرن عليك تاني بعد 10 دقايق')}else if(k==='done'&&it)finish(it.id);render()})}
+function checkAlarms(){if(DEMO)return;const n=nowMs();alarmList(n-10*6e4).filter(a=>a.at<=n&&!rung[a.k]).slice(0,1).forEach(ringAlarm);
+ const old=n-3*864e5;let ch=0;Object.keys(rung).forEach(k=>{if(rung[k]<old){delete rung[k];ch=1}});if(ch)store.set('rung',rung)}
+/* snoozes pressed on a notification while the app was closed */
+async function applyPending(){const q=await KV.get('pending');if(!q||!q.length)return;q.forEach(p=>{const it=byId(p.iid);if(it&&p.snooze>nowMs()){it.snooze=p.snooze;it.touched=nowMs()}});await KV.set('pending',[]);
+ const sh=await KV.get('shown')||{};Object.keys(sh).forEach(k=>{rung[k]=rung[k]||sh[k]});store.set('rung',rung);save();render()}
+
 /* ---------- weekly review: a calm 5-minute reset once a week ---------- */
 function nextWeek(id){const it=byId(id);if(!it)return;const d=NOW();d.setDate(d.getDate()+7);d.setHours(10,0,0,0);it.due=toLocal(d);it.touched=nowMs();it.notified=0;save();render()}
 function weekSheet(){const n=nowMs(),wk=7*864e5;
@@ -617,7 +680,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sDoc">📄 ورقي ومواعيد التجديد</button>
  <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
- <button class="btn ghost" id="sNot">🔔 شغّل التنبيهات</button>
+ <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
  <a class="btn ghost" href="privacy.html">🔒 الخصوصية والأمان</a>
@@ -628,7 +691,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();
  $('sDoc').onclick=()=>docsSheet();
- $('sNot').onclick=async()=>{try{const p=await Notification.requestPermission();toast(p==='granted'?'تمام، هنبهك والتطبيق مفتوح. للتنبيه وهو مقفول ضيف مواعيدك للكالندر':'التنبيهات مقفولة من المتصفح',4500)}catch(e){toast('المتصفح ده مش بيدعم التنبيهات')}};
+ $('sNot').onclick=()=>{closeSheet();store.get('push',false)?disablePush():enablePush()};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
   $('sheetBody').innerHTML=`<h2>تذكير من العيلة</h2><div class="stack"><p>ابعت اللينك ده لحد بتثق فيه. يكتب التذكير، ويبعتهولك، وإنت توافق عليه قبل ما يتضاف. مفيش حسابات ولا سيرفر.</p>${draftBox(txt)}
   <details><summary><b>شرح بسيط للعيلة عن الـ ADHD</b></summary>${draftBox('الـ ADHD مش كسل ولا قلة اهتمام. الدماغ بيلاقي صعوبة في البدء والتنظيم وحساب الوقت، مش في الذكاء. اللي بيساعد: تذكير هادي بدل اللوم، وطلب حاجة واحدة في المرة، ومساعدة في أول خطوة. شكراً إنك بتحاول تفهم 💜')}</details></div>`};
@@ -658,11 +721,13 @@ function render(){const n=NOW();const h=n.getHours();const nm=prof.name?' يا '
 function morning(){const k=dayKey();if(store.get('morning','')===k||NOW().getHours()>=13||DEMO)return;store.set('morning',k);const c=candidates();const n=items.filter(i=>!i.done&&i.due&&dayKey(parseL(i.due))===k).length;
  const msg=(prof.name?'صباح الخير يا '+prof.name+'. ':'صباح الخير. ')+(n?'النهارده عندك '+n+' حاجات. ':'')+(c[0]?'أول حاجة: '+c[0].title+'.':'يومك فاضي، استمتع بيه.');setTimeout(()=>{if(audUnlocked)speak(msg);else toast(msg,5000)},800)}
 setInterval(()=>{if(!$('sheet').hidden&&document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if($('sheet').hidden)render();else{const t=$('today');if(t)t.textContent=DAYS[NOW().getDay()]+' '+NOW().getDate()+' '+MONTHS[NOW().getMonth()]+' · '+fmtT(NOW())}},20000);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){render();tgCheck();tgSync()}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){render();tgCheck();tgSync();applyPending().then(checkAlarms);pushSync()}});
+setInterval(checkAlarms,15000);
+if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{};if(d.t==='alarm')checkAlarms();else if(d.t==='open'&&d.iid){const it=byId(d.iid);if(it)startTask(it.id)}});
 
 /* ---------- boot ---------- */
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.addEventListener('DOMContentLoaded',()=>{if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync()},1500);if(store.get('seen',false))morning();
+window.addEventListener('DOMContentLoaded',()=>{if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync();applyPending().then(()=>{checkAlarms();writeAlarms();pushSync()})},1500);if(store.get('seen',false))morning();
  const go=new URLSearchParams(location.search).get('go');if(go==='focus')show('focus');else if(go==='money')show('money');else if(go==='dump'&&store.get('seen',false))setTimeout(()=>openDump(),300);
  if(!store.get('seen',false)&&!DEMO){store.set('seen',true);openSheet(`<h2>أهلاً، أنا سندي 💜</h2><div class="stack"><div class="say">سندك اللي جواك. قولّي كل اللي في دماغك وأنا أرتبه، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.</div>
  <label class="form">اسمك إيه؟<input id="wN" placeholder="اسمك"></label><div class="acts"><button class="btn ghost" data-x="m">كلّمني بصيغة المذكر</button><button class="btn ghost" data-x="f">بصيغة المؤنث</button></div>

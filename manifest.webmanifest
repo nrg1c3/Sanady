@@ -2,7 +2,7 @@
  "id": "./",
  "name": "Sayvo",
  "short_name": "Sayvo",
- "description": "Say it once. Sayvo sorts it: tasks, appointments, bills and home, with reminders that ring at the right time.",
+ "description": "Say it once. Consider it done: tasks, appointments, bills and home, with reminders that ring at the right time.",
  "lang": "en",
  "dir": "auto",
  "start_url": "./",

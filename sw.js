@@ -1,6 +1,6 @@
 /* shared by both apps: Sanady ADHD (root) and Sanady for everyone (/app/, which imports this file) */
 const MAIN=/\/app\/$/.test(self.registration.scope),P=MAIN?'sanady-main-':'sanady-',UP=MAIN?'../':'';
-const SHELL=P+'shell-v17',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
+const SHELL=P+'shell-v18',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
 const FILES=['./','index.html','manifest.webmanifest'].concat(['app.css','app.js','family.js','life.js','sync.js','work.js','sounds.js','demo.js','privacy.html','icon-192.png','icon-512.png'].map(f=>UP+f));
 const ICON=UP+'icon-192.png';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});

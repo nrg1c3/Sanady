@@ -70,6 +70,7 @@ summary{cursor:pointer;list-style:none;min-height:30px}summary::-webkit-details-
 .empty{color:var(--mut);text-align:center;padding:22px 8px}
 .seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px;gap:4px;overflow-x:auto}
 .seg button{flex:1 0 auto;padding:10px 12px;border-radius:12px;font-size:15px;white-space:nowrap}.seg button.on{background:var(--pri);color:var(--onpri);font-weight:600}
+.seg.modes{flex-wrap:wrap}.seg.modes button{flex:1 1 28%;padding:9px 6px}
 
 /* money */
 .avail .big{font-size:40px;font-weight:700;line-height:1.1}

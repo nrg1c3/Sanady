@@ -611,6 +611,12 @@
 "es": "Abu Dabi",
 "fr": "Abou Dabi"
 },
+"أبيض": {
+"de": "Weiß",
+"en": "White",
+"es": "Blanco",
+"fr": "Blanc"
+},
 "أتمشى 20 دقيقة": {
 "de": "20 Minuten spazieren",
 "en": "Walk for 20 minutes",
@@ -664,6 +670,12 @@
 "en": "Green",
 "es": "Verde",
 "fr": "Vert"
+},
+"أخضر غامق": {
+"de": "Dunkelgrün",
+"en": "Dark green",
+"es": "Verde oscuro",
+"fr": "Vert foncé"
 },
 "أخويا، صاحبي، الكوتش": {
 "de": "Mein Bruder, mein Kumpel, mein Coach",
@@ -772,6 +784,12 @@
 "en": "Smallest possible step",
 "es": "El paso más pequeño posible",
 "fr": "Le plus petit pas possible"
+},
+"أصفر": {
+"de": "Gelb",
+"en": "Yellow",
+"es": "Amarillo",
+"fr": "Jaune"
 },
 "أصلّح الكهربا والتكييف": {
 "de": "Strom und Klimaanlage reparieren",
@@ -2502,6 +2520,12 @@
 "es": "El paso de",
 "fr": "L'étape de"
 },
+"الخلفية": {
+"de": "Hintergrund",
+"en": "Background",
+"es": "Fondo",
+"fr": "Fond"
+},
 "الخميس": {
 "de": "Donnerstag",
 "en": "Thursday",
@@ -3899,6 +3923,12 @@
 "en": "We only save the first name and age, on your phone.",
 "es": "Solo guardamos el primer nombre y la edad, en tu celular.",
 "fr": "On enregistre seulement le prénom et l'âge, sur ton téléphone."
+},
+"بنفسجي": {
+"de": "Lavendel",
+"en": "Lavender",
+"es": "Lavanda",
+"fr": "Lavande"
 },
 "بهديها...": {
 "de": "Ich formulier's sanfter...",
@@ -5826,6 +5856,12 @@
 "es": "Le presté 500 ¤ a Karim, me los devuelve a principio de mes, y el cumpleaños de Sara es el 14 de marzo y quiero regalarle un perfume, y la suscripción de Netflix es de 240 al mes, y se acabó el pan y la leche, y Yassin tiene dentista mañana a las 5.",
 "fr": "J'ai prêté 500 ¤ à Karim, il me les rend en début de mois, et l'anniversaire de Sara est le 14 mars, je veux lui offrir un parfum, et l'abonnement Netflix c'est 240 par mois, et il n'y a plus de pain ni de lait, et Yassin a rendez-vous chez le dentiste demain à 17 h."
 },
+"سماوي": {
+"de": "Himmelblau",
+"en": "Sky",
+"es": "Cielo",
+"fr": "Ciel"
+},
 "سمك": {
 "de": "Fisch",
 "en": "Fish",
@@ -6726,6 +6762,12 @@
 "es": "Seguro solo está ocupado. Mucha gente lee y se olvida de responder. Espera a mañana y, si sigue sin responder, mándale un saludo normal, sin reclamos.",
 "fr": "Il est sûrement juste occupé. Beaucoup de gens lisent et oublient de répondre. Attends demain, et si toujours rien, envoie-lui un simple coucou, sans reproche."
 },
+"غامق هادي": {
+"de": "Ruhiges Dunkel",
+"en": "Calm dark",
+"es": "Oscuro suave",
+"fr": "Sombre doux"
+},
 "غيرت ميعاد:": {
 "de": "Verlegt:",
 "en": "Rescheduled:",
@@ -6755,6 +6797,12 @@
 "en": "Light",
 "es": "Claro",
 "fr": "Clair"
+},
+"فاتح هادي": {
+"de": "Ruhiges Hell",
+"en": "Calm light",
+"es": "Claro suave",
+"fr": "Clair doux"
 },
 "فاتورة": {
 "de": "Rechnung",
@@ -7380,6 +7428,12 @@
 "es": "Es grande, la vamos a dividir",
 "fr": "C'est gros, on va découper"
 },
+"كحلي": {
+"de": "Marineblau",
+"en": "Navy",
+"es": "Azul marino",
+"fr": "Bleu nuit"
+},
 "كده تمام، واحدة واحدة": {
 "de": "Genau so, eins nach dem anderen",
 "en": "That's it, one at a time",
@@ -7962,6 +8016,18 @@
 "es": "Si no eliges un sonido, el aviso sonará normal.",
 "fr": "Si tu ne choisis pas de son, l'alerte sonnera normalement."
 },
+"لون الخلفية الأصلي": {
+"de": "Originalfarbe des Hintergrunds",
+"en": "Background's own colour",
+"es": "Color original del fondo",
+"fr": "Couleur d'origine du fond"
+},
+"لون اللمسات": {
+"de": "Akzentfarbe",
+"en": "Accent colour",
+"es": "Color de acento",
+"fr": "Couleur d'accent"
+},
 "لي وعليا": {
 "de": "Geliehen & verliehen",
 "en": "IOUs",
@@ -8303,6 +8369,12 @@
 "en": "Shopping",
 "es": "Compras",
 "fr": "Achats"
+},
+"مشمشي": {
+"de": "Aprikose",
+"en": "Apricot",
+"es": "Albaricoque",
+"fr": "Abricot"
 },
 "مصري": {
 "de": "Ägyptisch-Arabisch",
@@ -8976,6 +9048,12 @@
 "es": "limpieza",
 "fr": "ménage"
 },
+"نعناعي": {
+"de": "Minze",
+"en": "Mint",
+"es": "Menta",
+"fr": "Menthe"
+},
 "نفسه.": {
 "de": "selbst.",
 "en": "himself.",
@@ -9240,6 +9318,12 @@
 "en": "and vaccinations",
 "es": "y sus vacunas",
 "fr": "et ses vaccins"
+},
+"وردي": {
+"de": "Rosé",
+"en": "Rose",
+"es": "Rosa",
+"fr": "Rose"
 },
 "وزعت خطوات": {
 "de": "Schritte verteilt",

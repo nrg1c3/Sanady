@@ -28,10 +28,16 @@ const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(PFX+k));return
 if(new URLSearchParams(location.search).get('focus')==='1'&&store.get('focus',null)===null){store.set('focus',true);store.set('focusAt',Date.now())}
 const IS_ADHD=store.get('focus',false)===true;
 const START=IS_ADHD?2:5; // first push into a task: 2 minutes for ADHD
-const THEMES={auto:['تلقائي (زي الموبايل)','',''],day:['نهاري هادي','#F6F3EE','#EBA27A'],sayvo:['ليلي هادي','#1B1D33','#F0B088'],green:['أخضر','#0E2B2A','#F2B33D'],night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
+const THEMES={auto:['تلقائي (زي الموبايل)','',''],day:['فاتح هادي','#F6F3EE','#EBA27A'],sayvo:['غامق هادي','#1B1D33','#F0B088'],warm:['دافي','#FFF8EC','#FFC83D'],green:['أخضر غامق','#0E2B2A','#F2B33D'],night:['كحلي','#101326','#FFD24C'],light:['أبيض','#F6F5F0','#FFD24C']};
 // colours follow the phone (light by day, dark at night) unless the person picks one
 const darkPhone=()=>{try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return true}};
-function applyTheme(th){th=THEMES[th]?th:store.get('theme','auto');if(!THEMES[th])th='auto';const real=th==='auto'?(darkPhone()?'sayvo':'day'):th;document.body.dataset.th=real;document.documentElement.style.background=THEMES[real][1];const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[real][1]}
+// the person's own accent colour on top of any background: [colour on dark, text on it, colour on light, text on it, readable text on light]
+const ACCENTS={apricot:['مشمشي','#F0B088','#1B1D33','#EBA27A','#2A1A10','#A9592C'],mint:['نعناعي','#86D3BA','#10241E','#6FC4A8','#0E2A21','#2E8E70'],lavender:['بنفسجي','#B5ADF0','#1E1A40','#A79CEB','#1E1A40','#5B4FC0'],
+ rose:['وردي','#F2A3B3','#3A1620','#EE9AAB','#3A1620','#B2445C'],sky:['سماوي','#8EC5F0','#0F2333','#86BDE8','#0F2333','#2D6FA6'],sun:['أصفر','#F2CF6B','#2E2405','#F2C94C','#2E2405','#8A6A00']};
+const LIGHT_TH=['day','warm','light'];
+function applyAccent(real){const a=ACCENTS[store.get('accent','')],b=document.body.style;if(!a){['--pri','--onpri','--pritx'].forEach(v=>b.removeProperty(v));return}
+ const L=LIGHT_TH.includes(real);b.setProperty('--pri',L?a[3]:a[1]);b.setProperty('--onpri',L?a[4]:a[2]);b.setProperty('--pritx',L?a[5]:a[1])}
+function applyTheme(th){th=THEMES[th]?th:store.get('theme','auto');if(!THEMES[th])th='auto';const real=th==='auto'?(darkPhone()?'sayvo':'day'):th;document.body.dataset.th=real;applyAccent(real);document.documentElement.style.background=THEMES[real][1];const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[real][1]}
 try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(store.get('theme','auto')==='auto')applyTheme()})}catch(e){}
 /* the Focus+ mark: a target with a plus (the headphones belong to the focus timer) */
 const FP_ICON='<span class="fpi"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="11" cy="13" r="3" fill="currentColor"/><path d="M19.5 2.5v6M16.5 5.5h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>';
@@ -718,7 +724,8 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>بتنام الساعة كام؟<input id="sS" type="time" value="${esc(prof.sleep)}"></label>
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
- <label>ألوان الشاشة</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${store.get('theme','auto')===k?'on':''}" style="background:${k==='auto'?'linear-gradient(90deg,#F6F3EE 50%,#1B1D33 50%)':v[1]};color:${['night','green','sayvo'].includes(k)?'#F3F4FB':'#1C1B1F'}"><span style="color:${v[2]}">●</span> ${v[0]}</button>`).join('')}</div>
+ <label>الخلفية</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${store.get('theme','auto')===k?'on':''}" style="background:${k==='auto'?'var(--soft)':v[1]};color:${k==='auto'?'var(--ink)':['night','green','sayvo'].includes(k)?'#F3F4FB':'#1C1B1F'}">${k==='auto'?'◐ ':''}${v[0]}</button>`).join('')}</div>
+ <label>لون اللمسات</label><div class="dots2" id="sAc"><button data-ac="" class="${!store.get('accent','')?'on':''}" title="لون الخلفية الأصلي" aria-label="لون الخلفية الأصلي">✦</button>${Object.entries(ACCENTS).map(([k,a])=>`<button data-ac="${k}" class="${store.get('accent','')===k?'on':''}" style="background:${a[1]}" title="${a[0]}" aria-label="${a[0]}"></button>`).join('')}</div>
  <button class="btn" id="sSave">احفظ</button>
  ${TG_READY?'<button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>':''}
  <button class="btn ghost" id="sDoc">📄 ورقي ومواعيد التجديد</button>
@@ -738,6 +745,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
  $('sCal').onclick=()=>icsAll();
  $('sTh').querySelectorAll('button').forEach(b=>b.onclick=()=>{store.set('theme',b.dataset.th);applyTheme(b.dataset.th);$('sTh').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
+ $('sAc').querySelectorAll('button').forEach(b=>b.onclick=()=>{store.set('accent',b.dataset.ac);applyTheme();$('sAc').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
 
  if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();

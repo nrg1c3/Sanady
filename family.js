@@ -251,4 +251,4 @@ function petForm(){openSheet(`<h2>حيوان جديد</h2><div class="form"><lab
   savePets();save();closeSheet();toast('هفكّرك بأكل '+name+(p.vac?' وتطعيمه':''));LIFE_SUB='me';show('all');setSeg('life')}}
 $('qMe').onclick=()=>{LIFE_SUB='';show('all');setSeg('life')};
 /* links opened while the app is already open only change the hash: reload so they are handled */
-window.addEventListener('hashchange',()=>{if(/^#(hw|kidsetup|add|home)=/.test(location.hash))location.reload()});
+window.addEventListener('hashchange',()=>{if(/^#(hw|kidsetup|add|home|eldersetup|pay)=/.test(location.hash))location.reload()});

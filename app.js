@@ -380,7 +380,7 @@ function nudges(){const n=NOW(),t=nowMs(),out=[];const hard=isHard();
     acts:[['اتحركت ✓',()=>{i.left=t;save();toast('توصل بالسلامة 🚗');render()}],['هتأخر',()=>draftFor('late',i.title,'هتأخر عن '+i.title+' حوالي 15 دقيقة')],['فكّرني بعد 10',()=>snooze(i.id,10)]]});
    else if(mins<=-20&&mins>-720)out.push({id:'ar'+i.id,pr:40,i:'⏱️',p:`${i.title}: وصلت في ميعادك؟ عشان أتعلم مشوارك بياخد قد إيه.`,acts:[['في الميعاد',()=>learnTravel(i,0)],['اتأخرت 10',()=>learnTravel(i,10)],['اتأخرت 20+',()=>learnTravel(i,25)]]});}
   else if(i.type==='bill'&&d&&mins<2*1440){const low=(M.bal||0)<i.amount;out.push({id:'bl'+i.id,pr:mins<0?90:80,i:'🧾',p:`${i.title} ${i.amount?money(i.amount)+' جنيه ':''}${mins<0?'كانت مطلوبة '+fmtWhen(i.due):fmtWhen(i.due).split(' ')[0]}. ${low?'⚠️ رصيدك مش هيكفيها، ':''}أدفعها دلوقتي؟`,speak:1,
-    acts:[['دفعتها ✓',()=>finish(i.id)],['فكّرني بكرة',()=>snooze(i.id,1440)]]})}
+    acts:[['ادفعها 💳',()=>paySheet(i)],['دفعتها ✓',()=>finish(i.id)],['بكرة',()=>snooze(i.id,1440)]]})}
   else if(i.type==='med'&&d&&mins<=0&&mins>-240)out.push({id:'md'+i.id,pr:92,i:'💊',p:`ميعاد ${i.title}. خدته؟`,speak:1,acts:[['خدته ✓',()=>{if(!i.repeat)i.repeat='daily';diary.push({d:dayKey(),t,med:i.title});finish(i.id,true);toast('تمام 💊')}],['بعد ربع ساعة',()=>snooze(i.id,15)]]});
   else if(!hard&&d&&mins<=5&&mins>-30&&i.type!=='appt'){out.push({id:'du'+i.id,pr:88,i:W[0],p:mins>0?`كمان ${Math.ceil(mins)} دقايق: ${i.title}. ابدأ تقفل اللي في إيدك.`:`${fmtT(d)}: ${i.title}`,speak:1,
     acts:i.type==='call'?[['اكتبلي الرسالة',()=>draftFor('remind',i.title,i.title,()=>finish(i.id,true))],['خلصت ✓',()=>finish(i.id)],['بعد ساعة',()=>snooze(i.id,60)]]:[['يلا',()=>startTask(i.id)],['خلصت ✓',()=>finish(i.id)],['بعد ساعة',()=>snooze(i.id,60)]]})}
@@ -424,7 +424,7 @@ function notify(x){if(spoken['n'+x.id])return;spoken['n'+x.id]=1;store.set('spok
 let SEG='tasks';
 function setSeg(v){SEG=v;$('allSeg').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));drawAll()}
 $('allSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setSeg(b.dataset.v));
-function itemRow(i){return`<div class="item ${i.done?'done':''}" data-id="${i.id}"><button class="ck ${i.done?'on':''}">${i.done?'✓':''}</button><div class="tx op"><b>${esc(i.title)}</b><small>${esc([fmtWhen(i.due),i.where,i.amount?money(i.amount)+' ج':'',i.repeat?{daily:'كل يوم',weekly:'كل أسبوع',monthly:'كل شهر',yearly:'كل سنة'}[i.repeat]:'',i.steps?i.steps.filter(s=>s.done).length+'/'+i.steps.length+' خطوات':''].filter(Boolean).join(' · '))}</small></div><button class="star ${i.star?'on':''}" aria-label="من أهم 3">⭐</button></div>`}
+function itemRow(i){return`<div class="item ${i.done?'done':''}" data-id="${i.id}"><button class="ck ${i.done?'on':''}">${i.done?'✓':''}</button><div class="tx op"><b>${esc(i.title)}</b><small>${esc([fmtWhen(i.due),i.where,i.amount?money(i.amount)+' ج':'',i.repeat?{daily:'كل يوم',weekly:'كل أسبوع',monthly:'كل شهر',yearly:'كل سنة'}[i.repeat]:'',i.steps?i.steps.filter(s=>s.done).length+'/'+i.steps.length+' خطوات':''].filter(Boolean).join(' · '))}</small></div>${i.type==='bill'&&!i.done?'<button class="mini-b pay" aria-label="ادفعها">💳</button>':''}<button class="star ${i.star?'on':''}" aria-label="من أهم 3">⭐</button></div>`}
 function drawAll(){const b=$('allBody');
  if(SEG==='tasks'){const open=items.filter(i=>!i.done&&i.type!=='idea');const by={};open.forEach(i=>(by[i.sec]=by[i.sec]||[]).push(i));
   const order=Object.keys(SEC).filter(k=>by[k]);
@@ -453,7 +453,7 @@ function drawAll(){const b=$('allBody');
 function bindRows(root){root.querySelectorAll('.item[data-id]').forEach(r=>{const it=byId(r.dataset.id);if(!it)return;
  r.querySelector('.ck').onclick=()=>{if(it.done){it.done=false;save();render()}else finish(it.id)};
  r.querySelector('.star').onclick=()=>{if(!it.star&&items.filter(i=>i.star&&!i.done).length>=3){toast('3 بس كفاية. شيل نجمة الأول');return}it.star=!it.star;save();render()};
- r.querySelector('.op').onclick=()=>editItem(it)})}
+ r.querySelector('.op').onclick=()=>editItem(it);const pb=r.querySelector('.pay');if(pb)pb.onclick=()=>paySheet(it)})}
 function editItem(it,tm){const isNew=!it;it=it||Object.assign({type:'task',sec:'home',title:'',due:'',repeat:''},tm||{});
  openSheet(`<h2>${isNew?'حاجة جديدة':'تعديل'}</h2><div class="form">
  <label>إيه هي؟<input id="eT" value="${esc(it.title)}"></label>
@@ -462,10 +462,11 @@ function editItem(it,tm){const isNew=!it;it=it||Object.assign({type:'task',sec:'
  <label>الميعاد<input id="eD" type="datetime-local" value="${esc(it.due)}"></label>
  <label>المكان (للمواعيد)<input id="eW" value="${esc(it.where||'')}"></label>
  <label>المبلغ (للفواتير)<input id="eA" type="number" inputmode="numeric" value="${it.amount||''}"></label>
+ <label>رقم العداد أو الحساب (للفواتير)<input id="eF" value="${esc(it.ref||'')}"></label>
  <label>بيتكرر؟<select id="eR"><option value="">لأ</option><option value="daily" ${it.repeat==='daily'?'selected':''}>كل يوم</option><option value="weekly" ${it.repeat==='weekly'?'selected':''}>كل أسبوع</option><option value="monthly" ${it.repeat==='monthly'?'selected':''}>كل شهر</option></select></label>
  <label class="tog"><input type="checkbox" id="eB" ${it.big?'checked':''}> مهمة كبيرة (تتقسم لخطوات)</label>
  <div class="acts"><button class="btn" id="eSave">احفظ</button>${isNew?'':'<button class="btn ghost" id="eCal">📅 ضيفها للكالندر</button><button class="btn ghost" id="eGo">يلا نبدأ</button><button class="btn ghost" id="eDel">شيلها</button>'}</div></div>`);
- $('eSave').onclick=()=>{const v={title:$('eT').value.trim(),type:$('eY').value,sec:$('eS').value,due:$('eD').value,where:$('eW').value.trim(),amount:+$('eA').value||0,repeat:$('eR').value,big:$('eB').checked};if(!v.title)return;
+ $('eSave').onclick=()=>{const v={title:$('eT').value.trim(),type:$('eY').value,sec:$('eS').value,due:$('eD').value,where:$('eW').value.trim(),amount:+$('eA').value||0,ref:$('eF').value.trim().slice(0,40),repeat:$('eR').value,big:$('eB').checked};if(!v.title)return;
   if(isNew)addItem(v);else{Object.assign(it,v);it.notified=0;it.touched=nowMs();save()}closeSheet()};
  if(!isNew){$('eDel').onclick=()=>{removeItem(it.id);closeSheet()};$('eGo').onclick=()=>{closeSheet();startTask(it.id)};$('eCal').onclick=()=>ics(it)}}
 function icsEvent(it){const d=parseL(it.due)||new Date(nowMs()+36e5);const f=x=>x.toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');const e=new Date(d.getTime()+(it.type==='appt'?60:30)*6e4);
@@ -707,6 +708,8 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
+ ${IS_ADHD?'':'<button class="btn ghost" id="sPlan">⭐ الباقات والاشتراك</button>'}
+ <button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>
  <button class="btn ghost" id="sHome">🏠 البيت المشترك (قايمة واحدة لكل البيت)</button>
  <button class="btn ghost" id="sKid">👧 حوّل الموبايل ده لموبايل طفل</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
@@ -722,6 +725,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  $('sBk').onclick=()=>backupSheet();
  $('sKid').onclick=()=>kidSetup();
  $('sHome').onclick=()=>homeSheet();
+ $('sOld').onclick=()=>elderSetup();if($('sPlan'))$('sPlan').onclick=()=>plansSheet();
  $('sDoc').onclick=()=>docsSheet();
  $('sNot').onclick=()=>{closeSheet();store.get('push',false)?disablePush():enablePush()};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
@@ -743,7 +747,7 @@ function familyFlows(){const q=new URLSearchParams(location.search);
  return false}
 
 /* ---------- home modes: the user picks how the home screen works, nothing is forced ---------- */
-const MODES=IS_ADHD?[['one','حاجة واحدة'],['with','جنبك'],['wait','انتظار'],['mom','الأم']]:[['blocks','مربعات'],['line','خط اليوم'],['chat','كلام'],['one','حاجة واحدة'],['mom','الأم']];
+const MODES=IS_ADHD?[['one','حاجة واحدة'],['with','جنبك'],['wait','انتظار'],['mom','الأم']]:[['blocks','مربعات'],['line','خط اليوم'],['chat','كلام'],['one','حاجة واحدة'],['mom','الأم'],['biz','الشغل']];
 const curMode=()=>{const m=store.get(IS_ADHD?'mode':'lay',IS_ADHD?'one':'blocks');return MODES.some(x=>x[0]===m)?m:MODES[0][0]};
 function setMode(m){store.set(IS_ADHD?'mode':'lay',m);show('now')}
 const durAr=m=>{m=Math.max(0,Math.round(m));if(m<60)return minsAr(m);const h=Math.floor(m/60),r=m%60;const hs=h===1?'ساعة':h===2?'ساعتين':h+' ساعات';return r?hs+' و'+minsAr(r):hs};
@@ -752,9 +756,9 @@ function nextAppt(maxH){const n=nowMs();return items.filter(i=>!i.done&&i.type==
 function drawNow(){const m=curMode();
  $('modeSeg').innerHTML=MODES.map(([k,v])=>`<button data-m="${k}" role="tab" aria-selected="${k===m}" class="${k===m?'on':''}">${v}</button>`).join('');
  $('modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
- $('nowOne').hidden=m!=='one';$('nowWith').hidden=m!=='with';$('nowWait').hidden=m!=='wait';$('nowMom').hidden=m!=='mom';$('nowLay').hidden=!['blocks','line','chat'].includes(m);
+ $('nowOne').hidden=m!=='one';$('nowWith').hidden=m!=='with';$('nowWait').hidden=m!=='wait';$('nowMom').hidden=m!=='mom';$('nowBiz').hidden=m!=='biz';$('nowLay').hidden=!['blocks','line','chat'].includes(m);
  if(m==='one'){drawTBar();drawNudge();drawNext();drawEnergy();drawTop3();drawMini()}
- else if(m==='with')drawWith();else if(m==='wait')drawWait();else if(m==='mom')drawMom();else drawLay(m)}
+ else if(m==='with')drawWith();else if(m==='wait')drawWait();else if(m==='mom')drawMom();else if(m==='biz')drawBiz();else drawLay(m)}
 
 /* time made visible: "40 minutes left before you leave" instead of a clock time */
 function drawTBar(){const box=$('tBar'),n=nowMs();const A=nextAppt(4);
@@ -890,11 +894,11 @@ function morning(){const k=dayKey();if(store.get('morning','')===k||NOW().getHou
 setInterval(()=>{if(!$('sheet').hidden&&document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if($('sheet').hidden)render();else{const t=$('today');if(t)t.textContent=DAYS[NOW().getDay()]+' '+NOW().getDate()+' '+MONTHS[NOW().getMonth()]+' · '+fmtT(NOW())}},20000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){render();tgCheck();tgSync();applyPending().then(checkAlarms);pushSync()}});
 setInterval(checkAlarms,15000);
-if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{};if(d.t==='alarm')checkAlarms();else if(d.t==='open'&&d.iid){const it=byId(d.iid);if(it)startTask(it.id)}});
+if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{};if(d.t==='alarm')checkAlarms();else if(d.t==='open'&&d.iid){const it=byId(d.iid);if(it){if(it.type==='bill'&&!it.done)paySheet(it);else startTask(it.id)}}});
 
 /* ---------- boot ---------- */
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.addEventListener('DOMContentLoaded',()=>{if(window.kidBoot&&kidBoot())return;if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync();applyPending().then(()=>{checkAlarms();writeAlarms();pushSync()})},1500);if(store.get('seen',false))morning();
+window.addEventListener('DOMContentLoaded',()=>{if(window.kidBoot&&kidBoot())return;if(window.elderBoot&&elderBoot())return;if(window.workBoot)workBoot();if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync();applyPending().then(()=>{checkAlarms();writeAlarms();pushSync()})},1500);if(store.get('seen',false))morning();
  const go=new URLSearchParams(location.search).get('go');if(go==='focus')show('focus');else if(go==='money')show('money');else if(go==='dump'&&store.get('seen',false))setTimeout(()=>openDump(),300);
  if(!store.get('seen',false)&&!DEMO){store.set('seen',true);openSheet(`<h2>أهلاً، أنا سندي 💜</h2><div class="stack"><div class="say">سندك اللي جواك. قولّي كل اللي في دماغك وأنا أرتبه، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.</div>
  <label class="form">اسمك إيه؟<input id="wN" placeholder="اسمك"></label><div class="acts"><button class="btn ghost" data-x="m">كلّمني بصيغة المذكر</button><button class="btn ghost" data-x="f">بصيغة المؤنث</button></div>

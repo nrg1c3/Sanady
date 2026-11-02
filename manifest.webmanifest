@@ -67,6 +67,28 @@
      "sizes": "192x192"
     }
    ]
+  },
+  {
+   "name": "ناقص في البيت",
+   "short_name": "ناقص في البيت",
+   "url": "./?go=need",
+   "icons": [
+    {
+     "src": "icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "ادفع فاتورة",
+   "short_name": "ادفع فاتورة",
+   "url": "./?go=pay",
+   "icons": [
+    {
+     "src": "icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
   }
  ]
 }

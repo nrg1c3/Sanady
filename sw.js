@@ -1,7 +1,7 @@
 /* shared by both apps: Sanady ADHD (root) and Sanady for everyone (/app/, which imports this file) */
 const MAIN=/\/app\/$/.test(self.registration.scope),P=MAIN?'sanady-main-':'sanady-',UP=MAIN?'../':'';
-const SHELL=P+'shell-v14',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
-const FILES=['./','index.html','manifest.webmanifest'].concat(['app.css','app.js','family.js','life.js','sync.js','sounds.js','demo.js','privacy.html','icon-192.png','icon-512.png'].map(f=>UP+f));
+const SHELL=P+'shell-v17',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
+const FILES=['./','index.html','manifest.webmanifest'].concat(['app.css','app.js','family.js','life.js','sync.js','work.js','sounds.js','demo.js','privacy.html','icon-192.png','icon-512.png'].map(f=>UP+f));
 const ICON=UP+'icon-192.png';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith(P)&&!k.startsWith('sanady-main-')===!MAIN&&!KEEP.includes(k)).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
@@ -34,4 +34,4 @@ self.addEventListener('notificationclick',e=>{e.notification.close();const d=e.n
   return}
  if(e.action==='ok')return;
  const cs=await self.clients.matchAll({type:'window',includeUncontrolled:true});
- if(cs.length){await cs[0].focus();cs[0].postMessage({t:'open',iid:d.iid})}else await self.clients.openWindow('./')})())});
+ if(cs.length){await cs[0].focus();cs[0].postMessage({t:'open',iid:d.iid})}else await self.clients.openWindow('./'+(d.iid&&/^🧾/.test(d.text||'')?'#pay='+d.iid:''))})())});

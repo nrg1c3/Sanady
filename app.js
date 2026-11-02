@@ -2,7 +2,9 @@
 'use strict';
 /* two separate apps from one code: the page sets window.SANADY_ED ('main' = Sanady for everyone, at /app/); default is Sanady ADHD */
 const ED=window.SANADY_ED==='main'?'main':'adhd';
-const DK=ED==='main'?'sm_':'sn_'; // each app keeps its own data, device id and alarms
+const DK=ED==='main'?'sm_':'sn_';
+const BRAND=ED==='main'?'مُدبّر':'سندي';
+const brandify=s=>ED==='main'?String(s).replace(/سندي/g,BRAND):s; // each app keeps its own data, device id and alarms
 const BRAIN_URL='https://2.31.109.72.sslip.io/webhook/sanady-brain';
 const TTS_URL='https://2.31.109.72.sslip.io/webhook/wasl-tts';
 /* every request to our server carries a signed device token (the voice service requires it) */
@@ -24,8 +26,8 @@ const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(PFX+k));return
 /* two editions from one code: 'adhd' (competition) and 'main' (commercial). ?ed=main or ?ed=adhd switches and remembers */
 const IS_ADHD=ED==='adhd';
 const START=IS_ADHD?2:5; // first push into a task: 2 minutes for ADHD
-const THEMES={night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
-function applyTheme(th){th=THEMES[th]?th:store.get('theme','night');if(!THEMES[th])th='night';document.body.dataset.th=th;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[th][1]}
+const THEMES={...(ED==='main'?{green:['أخضر','#0E2B2A','#F2B33D']}:{}),night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
+function applyTheme(th){th=THEMES[th]?th:store.get('theme',ED==='main'?'green':'night');if(!THEMES[th])th=ED==='main'?'green':'night';document.body.dataset.th=th;document.documentElement.style.background=THEMES[th][1];const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[th][1]}
 applyTheme();
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let DEMO=null; // set by demo.js
@@ -119,7 +121,7 @@ async function ttsBlob(t,useCache,signal){const g=prof.vg==='m'?'m':'f';const ke
  if(useCache&&window.caches){try{c=await caches.open('sanady-demo-v1');const m=await c.match(key);if(m)return await m.blob()}catch(e){c=null}}
  const r=await fetch(TTS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:'wasl-nrg-2026',text:t,lang:'ar-EG',gender:g}),signal});
  if(!r.ok||!(r.headers.get('content-type')||'').includes('audio'))throw 0;const b=await r.blob();if(c){try{await c.put(key,new Response(b,{headers:{'Content-Type':'audio/mpeg'}}))}catch(e){}}return b}
-async function speak(t,done){t=String(t||'').trim();if(!t||!prof.voice){done&&done();return}
+async function speak(t,done){t=brandify(String(t||'').trim());if(!t||!prof.voice){done&&done();return}
  try{speechSynthesis.cancel()}catch(e){}try{AUD.pause()}catch(e){}const me={};speaking=me;
  const fin=()=>{if(speaking===me)speaking=null;done&&done()};
  try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),12000);const b=await ttsBlob(t,!!DEMO,ac.signal);clearTimeout(to);if(speaking!==me)return;
@@ -142,7 +144,7 @@ function stopRec(){recWant=false;try{rec&&rec.stop()}catch(e){}}
 /* ---------- brain (n8n + Claude), with offline fallback ---------- */
 function brainCtx(){return{profile:{name:prof.name,sex:prof.sex},now:toLocal(NOW())+' ('+DAYS[NOW().getDay()]+')'}}
 async function brain(mode,extra){if(DEMO&&DEMO.brain){const r=DEMO.brain(mode,extra);if(r){await new Promise(z=>setTimeout(z,900));return r}}
- const body={k:'wasl-nrg-2026',mode,...brainCtx(),...extra};
+ const body={k:'wasl-nrg-2026',mode,ed:ED,...brainCtx(),...extra};
  for(let k=0;k<2;k++){try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),22000);
   const r=await fetch(BRAIN_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ac.signal});clearTimeout(to);
   if(r.ok){const j=await r.json();if(!j.error)return j}}catch(e){}}
@@ -325,7 +327,7 @@ function feelSheet(after){openSheet(`<h2>${after?'حاسس بإيه دلوقتي
  $('fbBr').onclick=()=>breathe();$('fbHard').onclick=()=>{closeSheet();setHard(true)};$('fbCr').onclick=()=>{closeSheet();showCrisis()};
  $('fbCalm').onclick=async()=>{const t=$('fbMsg').value.trim();if(!t)return;$('fbOut').innerHTML='<p class="note">بهديها...</p>';const r=await brain('draft',{kind:'calm',text:t,to:''});const out=r&&r.text||t;$('fbOut').innerHTML=draftBox(out)};
  $('fbHold').onclick=()=>{const t=$('fbMsg').value.trim();if(!t)return;store.set('hold',{t,until:nowMs()+6e5});toast('هفكّرك بيها بعد 10 دقايق. لو لسه عايز تبعتها، ابعتها');closeSheet()}}
-function draftBox(text,phone){const wa='https://wa.me/'+(phone||'')+'?text='+encodeURIComponent(text);return`<div class="stack"><div class="say" dir="auto">${esc(text)}</div><div class="acts"><a class="btn" href="${wa}" target="_blank" rel="noopener">ابعتها واتساب</a><button class="btn ghost" onclick="navigator.clipboard&&navigator.clipboard.writeText(${esc(JSON.stringify(text))});toast('اتنسخت')">انسخ</button></div></div>`}
+function draftBox(text,phone){text=brandify(text);const wa='https://wa.me/'+(phone||'')+'?text='+encodeURIComponent(text);return`<div class="stack"><div class="say" dir="auto">${esc(text)}</div><div class="acts"><a class="btn" href="${wa}" target="_blank" rel="noopener">ابعتها واتساب</a><button class="btn ghost" onclick="navigator.clipboard&&navigator.clipboard.writeText(${esc(JSON.stringify(text))});toast('اتنسخت')">انسخ</button></div></div>`}
 async function draftFor(kind,to,about,cb){openSheet(`<h2>رسالة جاهزة</h2><div class="stack" id="drB"><div class="listening thinking"><span class="dot"></span><span>بكتبها...</span></div></div>`);
  const r=await brain('draft',{kind,to,text:about});const t=(r&&r.text)||(kind==='late'?'آسف جداً، هتأخر شوية، جاي في السكة.':kind==='hello'?'إزيك؟ وحشتني، قلت أطمن عليك.':'بفكّرك بـ '+about);
  const b=$('drB');if(b){b.innerHTML=draftBox(t)+'<p class="note">إنت اللي بتبعتها، سندي بس كتبها.</p>';b.querySelector('a.btn').addEventListener('click',()=>{cb&&cb();award(5)})}}
@@ -701,7 +703,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>بتنام الساعة كام؟<input id="sS" type="time" value="${esc(prof.sleep)}"></label>
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
- <label>ألوان الشاشة</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${document.body.dataset.th===k?'on':''}" style="background:${v[1]};color:${k==='night'?'#F3F4FB':'#1C1B1F'}"><span style="color:${v[2]}">●</span> ${v[0]}</button>`).join('')}</div>
+ <label>ألوان الشاشة</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${document.body.dataset.th===k?'on':''}" style="background:${v[1]};color:${k==='night'||k==='green'?'#F3F4FB':'#1C1B1F'}"><span style="color:${v[2]}">●</span> ${v[0]}</button>`).join('')}</div>
  <button class="btn" id="sSave">احفظ</button>
  ${TG_READY?'<button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>':''}
  <button class="btn ghost" id="sDoc">📄 ورقي ومواعيد التجديد</button>
@@ -905,3 +907,10 @@ window.addEventListener('DOMContentLoaded',()=>{if(window.kidBoot&&kidBoot())ret
  <button class="btn big" id="wGo">🎙️ يلا نفرّغ دماغك</button><p class="note">كل حاجة بتتحفظ على موبايلك بس. سندي مش علاج ولا تشخيص.</p></div>`);
   document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{prof.sex=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b))});
   $('wGo').onclick=()=>{prof.name=$('wN').value.trim();save();closeSheet();openDump()}}});
+// the everyone edition is called مُدبّر: swap the name everywhere it shows on screen
+if(ED==='main'){const fixT=t=>{if(t.nodeValue&&t.nodeValue.includes('سندي'))t.nodeValue=brandify(t.nodeValue)};
+ const fix=n=>{if(!n)return;if(n.nodeType===3)return fixT(n);if(n.nodeType!==1)return;if(n.placeholder&&n.placeholder.includes('سندي'))n.placeholder=brandify(n.placeholder);
+  if(n.getAttribute&&(n.getAttribute('aria-label')||'').includes('سندي'))n.setAttribute('aria-label',brandify(n.getAttribute('aria-label')));
+  const w=document.createTreeWalker(n,NodeFilter.SHOW_TEXT);let t;while((t=w.nextNode()))fixT(t);n.querySelectorAll&&n.querySelectorAll('[placeholder*="سندي"]').forEach(x=>x.placeholder=brandify(x.placeholder))};
+ new MutationObserver(ms=>ms.forEach(m=>{if(m.type==='characterData')fixT(m.target);else m.addedNodes.forEach(fix)})).observe(document.documentElement,{childList:true,subtree:true,characterData:true});
+ fix(document.body);document.title=BRAND}

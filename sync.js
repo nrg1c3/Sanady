@@ -68,7 +68,7 @@ function homeSheet(){
   <button class="btn" id="hsWa">ابعتي اللينك واتساب</button><button class="btn ghost" id="hsCp">انسخي اللينك</button>
   <button class="btn ghost" id="hsNow">حدّثي دلوقتي</button>${tag}${priv}
   <button class="btn ghost" id="hsOut" style="color:var(--red)">اخرجي من البيت المشترك</button>`);
- const msg='تعالى نشوف قايمة البيت مع بعض على سندي 🏠\n'+homeLink();
+ const msg='تعالى نشوف قايمة البيت مع بعض على '+BRAND+' 🏠\n'+homeLink();
  $('hsWa').onclick=()=>{const u='https://wa.me/?text='+encodeURIComponent(msg);if(!window.__noNav)window.open(u,'_blank');window.__lastWa=u};
  $('hsCp').onclick=()=>{try{navigator.clipboard.writeText(homeLink()).catch(()=>{});toast('اتنسخ')}catch(e){}};
  $('hsNow').onclick=async()=>{await homeSync();homeSheet()};

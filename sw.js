@@ -1,8 +1,8 @@
-/* shared by both apps: Sanady ADHD (root) and Sanady for everyone (/app/, which imports this file) */
-const MAIN=/\/app\/$/.test(self.registration.scope),P=MAIN?'sanady-main-':'sanady-',UP=MAIN?'../':'';
-const SHELL=P+'shell-v18',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
-const FILES=['./','index.html','manifest.webmanifest'].concat(['app.css','app.js','family.js','life.js','sync.js','work.js','sounds.js','demo.js','privacy.html','icon-192.png','icon-512.png'].map(f=>UP+f));
-const ICON=UP+'icon-192.png';
+/* shared by both apps: Sanady ADHD (/Sanady/) and Mudabbir for everyone (/mudabbir/, a generated copy) */
+const SC=self.registration.scope,MUD=/\/mudabbir\/$/.test(SC),MAIN=MUD||/\/app\/$/.test(SC),P=MUD?'mudabbir-':MAIN?'sanady-main-':'sanady-',UP=MUD?'/Sanady/':MAIN?'../':'',IUP=MUD?'':UP,BRAND=MAIN?'مُدبّر':'سندي';
+const SHELL=P+'shell-v20',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
+const FILES=['./','index.html','manifest.webmanifest'].concat(['app.css','app.js','family.js','life.js','sync.js','work.js','sounds.js','demo.js','privacy.html'].map(f=>UP+f)).concat(['icon-192.png','icon-512.png'].map(f=>IUP+f));
+const ICON=IUP+'icon-192.png';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith(P)&&!k.startsWith('sanady-main-')===!MAIN&&!KEEP.includes(k)).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);
@@ -16,14 +16,14 @@ function idb(){return new Promise((res,rej)=>{const r=indexedDB.open(MAIN?'sanad
 async function kvGet(k){try{const db=await idb();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}}
 async function kvSet(k,v){try{const db=await idb();await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=res})}catch(e){}}
 const VIB=[600,250,600,250,900,400,600,250,600];
-function ringNote(a){return self.registration.showNotification('⏰ سندي بيفكّرك',{body:a.text,icon:ICON,badge:ICON,tag:a.k,renotify:true,requireInteraction:true,vibrate:VIB,lang:'ar',dir:'rtl',timestamp:a.at,data:{k:a.k,iid:a.iid,text:a.text},
+function ringNote(a){return self.registration.showNotification('⏰ '+BRAND+' بيفكّرك',{body:a.text,icon:ICON,badge:ICON,tag:a.k,renotify:true,requireInteraction:true,vibrate:VIB,lang:'ar',dir:'rtl',timestamp:a.at,data:{k:a.k,iid:a.iid,text:a.text},
  actions:[{action:'snooze',title:'فكّرني بعد 10 دقايق'},{action:'ok',title:'تمام ✓'}]})}
 self.addEventListener('push',e=>{e.waitUntil((async()=>{
  const data=(await kvGet('alarms'))||{},list=data.list||[],shown=(await kvGet('shown'))||{},now=Date.now();
  const due=list.filter(a=>a.at<=now+90e3&&a.at>now-3*3600e3&&!shown[a.k]);
  const cs=await self.clients.matchAll({type:'window',includeUncontrolled:true});
  if(due.length&&cs.some(c=>c.visibilityState==='visible')){cs.forEach(c=>c.postMessage({t:'alarm'}));return}
- if(!due.length){await self.registration.showNotification('سندي',{body:'عندك تذكير دلوقتي. افتح سندي تشوفه',icon:ICON,badge:ICON,tag:'sanady-check',vibrate:VIB,lang:'ar',dir:'rtl'});return}
+ if(!due.length){await self.registration.showNotification(BRAND,{body:'عندك تذكير دلوقتي. افتح '+BRAND+' تشوفه',icon:ICON,badge:ICON,tag:'sanady-check',vibrate:VIB,lang:'ar',dir:'rtl'});return}
  for(const a of due.slice(0,4)){shown[a.k]=now;await ringNote(a)}
  Object.keys(shown).forEach(k=>{if(now-shown[k]>3*864e5)delete shown[k]});await kvSet('shown',shown)})())});
 self.addEventListener('notificationclick',e=>{e.notification.close();const d=e.notification.data||{};e.waitUntil((async()=>{

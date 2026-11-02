@@ -144,11 +144,19 @@ function hush(){speaking=null;try{AUD.pause()}catch(e){}try{speechSynthesis.canc
 
 /* ---------- voice in ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,recWant=false,recFinal='';
+/* the whole text of a listening session, rebuilt from all results each time. Chrome on Android repeats earlier words
+   inside later results ("انا" → "انا عايز" → "انا عايز اروح"), so a result that starts with the previous one replaces it */
+function srText(e){const segs=[];let int='';const norm=x=>x.replace(/\s+/g,' ').trim();
+ const add=t=>{t=norm(t);if(!t)return;const last=segs[segs.length-1];if(last&&t.startsWith(last))segs[segs.length-1]=t;else if(last&&last.endsWith(t))return;else segs.push(t)};
+ for(let i=0;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)add(r[0].transcript);else int+=' '+r[0].transcript}
+ const fin=segs.join(' ');int=norm(int);const last=segs[segs.length-1]||'';if(last&&int.startsWith(last))int=norm(int.slice(last.length));
+ return{fin,int}}
 function startRec(onUpd,onState){if(!SR){onState&&onState('nosr');return false}hush();recWant=true;recFinal='';
  try{rec&&rec.abort()}catch(e){}rec=null;let fails=0,t0=0;
  const go=()=>{const me=new SR();rec=me;me.lang=({gulf:'ar-AE',en:'en-US',fr:'fr-FR',es:'es-ES',de:'de-DE'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=true;t0=Date.now();
   me.onstart=()=>{if(rec===me)onState&&onState('on')};
-  me.onresult=e=>{if(rec!==me)return;let int='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)recFinal+=(recFinal?' ':'')+r[0].transcript.trim();else int+=r[0].transcript}onUpd&&onUpd(recFinal,int)};
+  const base=recFinal;
+  me.onresult=e=>{if(rec!==me)return;const r=srText(e);recFinal=(base+' '+r.fin).trim();onUpd&&onUpd(recFinal,r.int)};
   me.onerror=ev=>{if(rec!==me)return;if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){recWant=false;onState&&onState('blocked')}};
   me.onend=()=>{if(rec!==me)return;rec=null;if(Date.now()-t0<1500)fails++;if(recWant&&fails<6)setTimeout(()=>{if(recWant&&!rec)try{go()}catch(e){}},fails?400*fails:200);else{recWant=false;onState&&onState('off')}};
   try{me.start()}catch(e){}};go();return true}

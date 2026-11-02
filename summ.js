@@ -35,7 +35,7 @@ async function lecStart(title){Object.assign(LEC,{on:true,txt:'',t0:Date.now(),p
  LEC.iv=setInterval(()=>{const s=Math.floor((Date.now()-LEC.t0)/1000),e=$('lcTm');if(e)e.textContent=pad(Math.floor(s/60))+':'+pad(s%60);const n=$('lcN');if(n)n.textContent=LEC.paused?'⏸ واقف':'🎙️ بسمع… '+LEC.txt.split(/\s+/).filter(Boolean).length+' كلمة'},1000);
  lecListen()}
 function lecListen(){if(!LEC.on)return;let me;try{me=new SR()}catch(e){return}LEC.rec=me;me.lang=({gulf:'ar-AE',en:'en-US',fr:'fr-FR',es:'es-ES',de:'de-DE'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=false;
- me.onresult=e=>{if(LEC.paused)return;for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)LEC.txt+=' '+e.results[i][0].transcript.trim();const x=$('lcX');if(x)x.textContent=LEC.txt.slice(-500)};
+ const base=LEC.txt;me.onresult=e=>{if(LEC.paused)return;LEC.txt=(base+' '+srText(e).fin).trim();const x=$('lcX');if(x)x.textContent=LEC.txt.slice(-500)};
  me.onend=()=>{if(LEC.on&&LEC.rec===me)setTimeout(lecListen,200)};try{me.start()}catch(e){}}
 function lecStop(){LEC.on=false;clearInterval(LEC.iv);try{LEC.rec&&LEC.rec.stop()}catch(e){}LEC.rec=null;try{LEC.wl&&LEC.wl.release()}catch(e){}}
 

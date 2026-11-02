@@ -39,7 +39,7 @@ with sync_playwright() as p:
             check(f'{lang} {app} ui lang', pg.evaluate('window.UI_LANG') == lang)
             check(f'{lang} {app} prof.lang saved', pg.evaluate('prof.lang') == lang)
             if app == 'Sanady/' : pg.screenshot(path=os.path.join(OUT, f'i18n_{lang}_welcome.png'))
-            pg.evaluate("closeSheet()"); pg.wait_for_timeout(200)
+            pg.evaluate("closeSheet()"); pg.wait_for_timeout(200); left |= set(pg.evaluate(LEFT)); pg.evaluate("IS_ADHD&&setSimple(false)"); pg.wait_for_timeout(200)
             left |= set(pg.evaluate(LEFT))
             if app == 'Sanady/': pg.screenshot(path=os.path.join(OUT, f'i18n_{lang}_now.png'))
             for t in ['all', 'money', 'focus', 'now']:

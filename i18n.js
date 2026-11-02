@@ -28,6 +28,10 @@ const REG=(nav.split('-')[1]||'').toUpperCase();
 const EUR='AT BE CY DE EE ES FI FR GR HR IE IT LT LU LV MT NL PT SI SK'.split(' ');
 const CUR=prof0.cur||(REG==='US'?'$':REG==='GB'?'£':REG==='CA'?'C$':REG==='AU'?'A$':REG==='IN'?'₹':EUR.includes(REG)?'€':REG==='EG'?'EGP':REG==='AE'?'AED':REG==='SA'?'SAR':L==='en'?'$':L==='es'&&!REG?'$':'€');
 const pre=/^[$£€₹]|^[A-Z]\$$/.test(CUR);
+const UNITS=({en:{'يوم':['day','days'],'دقيقة':['minute','minutes'],'ساعة':['hour','hours'],'حاجة':['thing','things'],'مرة':['time','times'],'خطوة':['step','steps'],'أسبوع':['week','weeks'],'شهر':['month','months']},
+ fr:{'يوم':['jour','jours'],'دقيقة':['minute','minutes'],'ساعة':['heure','heures'],'حاجة':['chose','choses'],'مرة':['fois','fois'],'خطوة':['étape','étapes'],'أسبوع':['semaine','semaines'],'شهر':['mois','mois']},
+ es:{'يوم':['día','días'],'دقيقة':['minuto','minutos'],'ساعة':['hora','horas'],'حاجة':['cosa','cosas'],'مرة':['vez','veces'],'خطوة':['paso','pasos'],'أسبوع':['semana','semanas'],'شهر':['mes','meses']},
+ de:{'يوم':['Tag','Tage'],'دقيقة':['Minute','Minuten'],'ساعة':['Stunde','Stunden'],'حاجة':['Sache','Sachen'],'مرة':['Mal','Mal'],'خطوة':['Schritt','Schritte'],'أسبوع':['Woche','Wochen'],'شهر':['Monat','Monate']}})[L];
 const AMPM={'الصبح':'AM','الضهر':'PM','بالليل':'PM'};
 const H24=L!=='en'; // French, Spanish and German read 24-hour time
 const AR=/[؀-ۿ]/;
@@ -35,14 +39,24 @@ let D=null,RX=null,miss=new Set();const cache=new Map();
 function ready(){if(D)return true;if(!window.I18N_DICT)return false;D=window.I18N_DICT;
  const ks=Object.keys(D).filter(k=>D[k]&&k.length>1).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
  RX=new RegExp('(?<![\\u0600-\\u06FF])(?:'+ks.join('|')+')(?![\\u0600-\\u06FF])','g');return true}
+const MORE={en:(n,u)=>n+' more '+u,fr:(n,u)=>n+' autre'+(+n>1?'s ':' ')+u,es:(n,u)=>n+' '+u+' más',de:(n,u)=>n+' weitere '+u}[L];
+const BASE={'أيام':'يوم','دقايق':'دقيقة','ساعات':'ساعة','حاجات':'حاجة','مرات':'مرة','خطوات':'خطوة','أسابيع':'أسبوع','شهور':'شهر'};
+const unit=(n,u)=>{const U=UNITS[BASE[u]||u];return U?U[+n===1?0:1]:null};
 function core(s){
- // times like "5:30 بالليل"
+ const t0=s.trim();if(D[t0])return s.replace(t0,D[t0]);
+ // numbers with words around them are rebuilt first and kept aside, so the word list doesn't split them
+ const keep=[];const K=v=>{keep.push(v);return ''+(keep.length-1)+''};
  s=s.replace(/(\d{1,2})(?::(\d\d))?\s*(الصبح|الضهر|بالليل)/g,(m,h,mm,ap)=>{h=+h;mm=mm||'00';
-  if(!H24)return h+(mm!=='00'?':'+mm:'')+' '+AMPM[ap];const H=ap==='الصبح'?h%12:(h===12?12:h+12);return H+':'+mm});
- // one-letter units right after a number: 500 ج, 25 د, 2 س
- s=s.replace(/(\d[\d,.]*)\s*(ج|جنيه)(?![\u0600-\u06FF])/g,'$1 ¤').replace(/(\d+)\s*د(?![\u0600-\u06FF])/g,'$1 '+(L==='de'?'Min.':'min')).replace(/(\d+)\s*س(?![\u0600-\u06FF])/g,'$1 '+(L==='de'?'Std.':'h'));
+  if(!H24)return K(h+(mm!=='00'?':'+mm:'')+' '+AMPM[ap]);const H=ap==='الصبح'?h%12:(h===12?12:h+12);return K(H+':'+mm)});
+ s=s.replace(/(?<![\d؀-ۿ])(ساعة|ساعتين) و(?=\d)/g,(m,h)=>(h==='ساعة'?'1':'2')+' ساعة ');
+ s=s.replace(/(?<![؀-ۿ])(يومين|ساعتين|دقيقتين|مرتين|أسبوعين|شهرين)(?![؀-ۿ])/g,(m,w)=>K('2 '+unit(2,{'يومين':'يوم','ساعتين':'ساعة','دقيقتين':'دقيقة','مرتين':'مرة','أسبوعين':'أسبوع','شهرين':'شهر'}[w])));
+ const UW='يوم|أيام|دقيقة|دقايق|ساعة|ساعات|حاجة|حاجات|مرة|مرات|خطوة|خطوات|أسبوع|أسابيع|شهر|شهور';
+ s=s.replace(new RegExp('(\\d+)\\s+(حاجة|حاجات) (تانية|تانيين|كمان)(?![\\u0600-\\u06FF])','g'),(m,n,u)=>K(MORE(n,unit(n,u))));
+ s=s.replace(new RegExp('(\\d+)\\s+('+UW+')(?![\\u0600-\\u06FF])','g'),(m,n,u)=>{const w=unit(n,u);return w?K(n+' '+w):m});
+ s=s.replace(/(\d[\d,.]*)\s*(ج|جنيه)(?![؀-ۿ])/g,(m,n)=>K(n+' ¤')).replace(/(\d+)\s*د(?![؀-ۿ])/g,(m,n)=>K(n+' '+(L==='de'?'Min.':'min'))).replace(/(\d+)\s*س(?![؀-ۿ])/g,(m,n)=>K(n+' '+(L==='de'?'Std.':'h')));
  const t=s.trim();if(D[t])s=s.replace(t,D[t]);else s=s.replace(RX,k=>D[k]||k);
- return s}
+ s=s.replace(/(^|\s)و(?=|\d)/g,'$1'+({en:'and ',fr:'et ',es:'y ',de:'und '}[L]));
+ return s.replace(/(\d+)/g,(m,i)=>keep[+i])}
 function tr(s){if(s==null)return s;s=String(s);if(!AR.test(s)||!ready())return s;
  if(cache.has(s))return cache.get(s);
  let x=s.replace(/مُدبّر|مدبّر/g,'سندي');x=core(x);

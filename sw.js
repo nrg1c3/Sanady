@@ -1,7 +1,7 @@
 /* Sayvo (سايفو): the app shell offline, and alarms that ring while the app is closed */
 const P='sayvo-',MAIN=true,BRAND='سايفو';
-const SHELL=P+'shell-v1',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
-const FILES=['./','index.html','manifest.webmanifest','app.css','i18n.js','i18n-en.js','i18n-fr.js','i18n-es.js','i18n-de.js','app.js','family.js','life.js','sync.js','work.js','agent.js','adhd.js','trust.js','sounds.js','demo.js','privacy.html','icon-192.png','icon-512.png'];
+const SHELL=P+'shell-v2',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
+const FILES=['./','index.html','manifest.webmanifest','app.css','i18n.js','i18n-en.js','i18n-fr.js','i18n-es.js','i18n-de.js','app.js','family.js','life.js','sync.js','work.js','agent.js','adhd.js','trust.js','doit.js','coach.js','sounds.js','demo.js','privacy.html','icon-192.png','icon-512.png'];
 const ICON='icon-192.png';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>(k.startsWith(P)||k.startsWith('sanady-')||k.startsWith('mudabbir-'))&&!KEEP.includes(k)).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});

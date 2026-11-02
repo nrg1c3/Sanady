@@ -246,3 +246,6 @@ body.simple .tabs .mic{transform:scale(1.15)}.more-tools{align-self:center;margi
 .dots2{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 8px}
 .dots2 button{width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:var(--soft);color:var(--ink);font-size:16px}
 .dots2 button.on{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--ink)}
+/* Sayvo does it, and the whisper coach */
+.dqo{width:100%;min-height:180px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:12px;font:inherit;font-size:16px;line-height:1.65;resize:vertical}
+.say.coach{font-size:22px;line-height:1.55;min-height:110px;display:flex;align-items:center}

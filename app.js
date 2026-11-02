@@ -160,10 +160,11 @@ function brainCtx(){return{profile:{name:prof.name,sex:prof.sex},now:toLocal(NOW
 function maskPII(text,keep){return String(text||'').replace(/[\w.+-]+@[\w-]+\.[\w.]+|(?:\+|00)?\d[\d\s-]{9,}\d/g,m=>{const d=m.replace(/\D/g,'');if(!/@/.test(m)&&d.length<10)return m;keep.push(m);return '⟦'+keep.length+'⟧'})}
 function unmaskPII(v,keep){if(!keep.length)return v;if(typeof v==='string')return v.replace(/⟦(\d+)⟧/g,(m,i)=>keep[+i-1]||m);if(Array.isArray(v))return v.map(x=>unmaskPII(x,keep));if(v&&typeof v==='object'){const o={};for(const k in v)o[k]=unmaskPII(v[k],keep);return o}return v}
 async function brain(mode,extra){if(DEMO&&DEMO.brain){const r=DEMO.brain(mode,extra);if(r){await new Promise(z=>setTimeout(z,900));return r}}
- const keep=[];extra=Object.assign({},extra);['text','note','to'].forEach(k=>{if(typeof extra[k]==='string')extra[k]=maskPII(extra[k],keep)});
+ const keep=[];extra=Object.assign({},extra);const wait=extra._wait||22000;delete extra._wait;['text','note','to','transcript','goal','notes','extra'].forEach(k=>{if(typeof extra[k]==='string')extra[k]=maskPII(extra[k],keep)});
+ if(extra.task)extra.task=Object.assign({},extra.task,{title:maskPII(extra.task.title,keep),steps:(extra.task.steps||[]).map(s=>({t:maskPII(s.t,keep),done:!!s.done}))});
  if(Array.isArray(extra.items))extra.items=extra.items.map(i=>Object.assign({},i,{title:maskPII(i.title,keep)}));
  const body={k:'wasl-nrg-2026',mode,ed:ED,lang:prof.lang||'eg',...brainCtx(),...extra};
- for(let k=0;k<2;k++){try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),22000);
+ for(let k=0;k<2;k++){try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),wait);
   const r=await fetch(BRAIN_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ac.signal});clearTimeout(to);
   if(r.ok){const j=await r.json();if(!j.error)return unmaskPII(j,keep)}}catch(e){}}
  return null}

@@ -12,6 +12,7 @@ function agentUndo(id){const e=ALOG.find(x=>x.id===id);if(!e||!e.undo)return;
  (e.undo.due||[]).forEach(([iid,old])=>{const it=byId(iid);if(it){it.due=old;it.notified=0;it.amoved=Math.max(0,(it.amoved||1)-1)}});
  (e.undo.steps||[]).forEach(iid=>{const it=byId(iid);if(it&&it.steps){it.steps.forEach(s=>{delete s.due});it.splan=0;it.splanOff=1}});
  (e.undo.fu||[]).forEach(fid=>{AFU=AFU.filter(f=>f.id!==fid)});
+ if(e.undo.plan){const it=byId(e.undo.plan[0]);if(it)it.steps=e.undo.plan[1]}
  e.undo=null;e.undone=1;save();saveAgent();toast('رجّعتها زي ما كانت');render()}
 const dayEnd=()=>{const [h,m]=(prof.sleep||'23:30').split(':').map(Number);const d=NOW();d.setHours(h||23,m||0,0,0);if(d<NOW())d.setDate(d.getDate()+1);return d};
 const dayStart=d=>{const [h,m]=(prof.wake||'07:30').split(':').map(Number);const x=new Date(d);x.setHours(h||7,m||30,0,0);return x};

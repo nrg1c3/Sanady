@@ -21,7 +21,7 @@ with sync_playwright() as p:
     b = p.chromium.launch(); ctx = b.new_context(viewport={'width':400,'height':860}); pg = ctx.new_page(); errs=[]
     pg.on('pageerror', lambda e: errs.append(str(e))); ctx.route('https://api.nrg-egypt.com/**', route)
     U='http://127.0.0.1:8774/index.html'
-    pg.goto(U); pg.evaluate("localStorage.clear();localStorage.setItem('sn_seen','true');localStorage.setItem('sn_morning','\"x\"');localStorage.setItem('sn_prof',JSON.stringify({name:'منى',sex:'f',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}))")
+    pg.goto(U); pg.evaluate("localStorage.clear();localStorage.setItem('sy_seen','true');localStorage.setItem('sy_morning','\"x\"');localStorage.setItem('sy_prof',JSON.stringify({name:'منى',sex:'f',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}))")
     pg.reload(); pg.wait_for_timeout(600)
     pg.evaluate("openDump('سلفت كريم 500 ...')"); pg.click('#dDone'); pg.wait_for_timeout(2000)
     t = pg.inner_text('#sheetBody')

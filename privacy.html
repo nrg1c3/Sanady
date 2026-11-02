@@ -1,39 +1,41 @@
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>سندي · الخصوصية والأمان</title><link rel="icon" href="icon-192.png">
-<style>body{font-family:'Readex Pro',Tahoma,sans-serif;background:#F5F2FB;color:#1E1A3D;max-width:720px;margin:0 auto;padding:24px 18px 60px;line-height:1.8}h1{font-size:26px}h2{font-size:19px;margin-top:26px}a{color:#4B36C9}.en{direction:ltr;text-align:left;border-top:1px solid #ddd;margin-top:36px;padding-top:12px}small{color:#5E5A7A}
-@media (prefers-color-scheme:dark){body{background:#14112B;color:#F1EEFF}a{color:#8C7BFF}}</style></head><body>
-<p><a href="./">‹ رجوع لسندي</a></p>
-<h1>سندي: الخصوصية والأمان</h1><small>آخر تحديث: نوفمبر 2026</small>
-<h2>بياناتك على موبايلك</h2><p>مفيش حساب ولا تسجيل. مهامك وأفكارك وأرقام الفلوس والناس وأماكن حاجاتك ويومياتك كلها محفوظة على موبايلك بس، وتقدر تمسحها كلها من الإعدادات بلمسة.</p>
+<title>Sayvo · سايفو · Privacy</title><link rel="icon" href="icon-192.png">
+<style>body{font-family:Tahoma,system-ui,sans-serif;background:#F3F6F5;color:#10302E;max-width:720px;margin:0 auto;padding:24px 18px 60px;line-height:1.8}h1{font-size:26px}h2{font-size:19px;margin-top:26px}a{color:#0F5552}.en{direction:ltr;text-align:left;border-top:1px solid #ccd;margin-top:36px;padding-top:12px}small{color:#5A6B69}
+@media (prefers-color-scheme:dark){body{background:#0E2B2A;color:#EEF5F4}a{color:#F2B33D}small{color:#A9BDBA}}</style></head><body>
+<p><a href="./">‹ رجوع لسايفو · Back to Sayvo</a> · <a href="#en">English</a></p>
+<h1>سايفو: الخصوصية والأمان</h1><small>آخر تحديث: نوفمبر 2026 · سايفو من NRG</small>
+<h2>من غير حساب، وبياناتك محفوظة على موبايلك</h2><p>مفيش حساب ولا تسجيل. مهامك وأفكارك وأرقام الفلوس والناس وأماكن حاجاتك ويومياتك محفوظة على موبايلك، وتقدر تمسحها كلها من الإعدادات بلمسة. فيه حاجات بتتبعت لسيرفرنا عشان تشتغل، ودي مكتوبة تحت بالظبط.</p>
 <h2>اللي بيتبعت بره الموبايل</h2><ul>
-<li><b>الكلام اللي بتفرّغه:</b> النص بيتبعت لـ Claude من Anthropic عن طريق سيرفر n8n بتاعنا عشان يترتب، ومعاه قايمة مختصرة بالحاجات المفتوحة واسمك عشان الرد يبقى مظبوط. السيرفر مضبوط إنه ما يحفظش أي بيانات تشغيل.</li>
-<li><b>صوت سندي:</b> الجملة اللي سندي هيقولها بتتبعت لخدمة تحويل نص لصوت (ElevenLabs) عن طريق نفس السيرفر.</li>
+<li><b>الكلام اللي بتقوله أو بتكتبه:</b> التعرّف على الصوت بيتم بخاصية الموبايل أو المتصفح نفسه، والنص بس هو اللي بيتبعت لسيرفرنا (n8n) ومنه لـ Claude من Anthropic عشان يترتب، ومعاه قايمة مختصرة بالحاجات المفتوحة واسمك الأول. السيرفر مضبوط إنه ما يحفظش بيانات التشغيل.</li>
+<li><b>صوت سايفو:</b> الجملة اللي سايفو هيقولها بالعامية المصرية بتتبعت لخدمة تحويل نص لصوت (ElevenLabs) عن طريق نفس السيرفر. باقي اللغات بتستخدم صوت الموبايل نفسه.</li>
 <li><b>الأرقام الشخصية:</b> أرقام التليفونات والإيميلات وأرقام الكروت والبطايق بتتشال من الكلام على الموبايل قبل ما يطلع، وبترجع مكانها بعد الترتيب. السيرفر مبيشوفهاش.</li>
-<li><b>كود الجهاز:</b> التطبيق بيعمل كود عشوائي للموبايل (مش رقمك ولا اسمك)، وبيبعته مع كل طلب عشان نحدد عدد الطلبات لكل جهاز ونمنع الاستخدام الغلط.</li>
-<li><b>التعرّف على كلامك:</b> بيستخدم خاصية المتصفح نفسه (زي Chrome)، وده بيخضع لسياسة الشركة صاحبة المتصفح.</li>
-<li><b>المنبّه (اختياري):</b> لو شغّلته، سيرفرنا بيحفظ مواعيد الرنّ بس (الوقت ورقم داخلي) وعنوان الإشعارات بتاع موبايلك، عشان يصحّي الموبايل في الميعاد. نص التذكير نفسه ما بيخرجش من موبايلك، الموبايل هو اللي بيعرضه. لما تقفل المنبّه كل ده بيتمسح.</li>
-<li>أرقام الفلوس ما بتتبعتش. حساب "تقدر تشتري؟" بيتعمل على الموبايل.</li>
-<li><b>القرآن (اختياري):</b> لما تختار سورة، الموبايل بيطلب التلاوة والنص من خدمة alquran.cloud العامة. مواقيت الصلاة بتتحسب على الموبايل من غير نت، وصوت الأذان اللي بتختاره بيفضل على موبايلك.</li></ul>
-<h2>حدود سندي</h2><ul>
-<li>سندي مش دكتور ولا علاج ولا تشخيص، وبيكمّل الدكتور مش بيبدله.</li>
-<li>مواعيد الدوا تذكير بس، من غير جرعات أو نصايح طبية.</li>
-<li>مستشار المشتريات بينظّم الصرف بس، ومش بينصح باستثمار ولا قروض. القرار دايماً ليك.</li>
-<li>لو كتبت أو قلت كلام فيه خطر على نفسك، سندي بيوقف ويوريك أرقام دعم حقيقية: مصر 08008880700 أو 0220816831، الإمارات 800HOPE (800 4673)، والإسعاف في مصر 123 والطوارئ في الإمارات 999.</li></ul>
-<h2>تذكيرات العيلة</h2><p>لما حد من عيلتك يبعتلك تذكير، التذكير بيكون جوه اللينك نفسه ومش بيتحفظ على أي سيرفر، وإنت اللي بتوافق قبل ما يتضاف.</p>
-<h2>موبايل الطفل</h2><p>شاشة الطفل بيجهزها الأب أو الأم على موبايل الطفل نفسه، وبيقفلوها برقم سري. مفيش تتبع مكان، ولا تسجيل صوت أو صور، ولا كلام حر مع الذكاء الاصطناعي. لما الطفل يدوس «وصلت» أو «أنا كويس»، الرسالة بتروح من موبايله للأهل على واتساب أو SMS على طول، ومش بتعدّي على سيرفرنا. بنحفظ الاسم الأول والسن بس، على الموبايل.</p>
-<h2>البيت المشترك (اختياري)</h2><p>لما تعمل بيت مشترك، قايمة الناقص والنضافة والولاد بتتقفل على موبايلك بكود البيت قبل ما تطلع، والسيرفر بيشيلها مقفولة ومبيقدرش يقراها. اللي معاه لينك البيت بس يقدر يفتحها. مهامك وفلوسك ويومياتك مش بيتشاركوا.</p>
+<li><b>كود الجهاز:</b> التطبيق بيعمل كود عشوائي للموبايل (مش رقمك ولا اسمك) وتوكن موقّع، وبيبعتهم مع كل طلب عشان نحدد عدد الطلبات لكل جهاز ونمنع الاستخدام الغلط.</li>
+<li><b>المنبّه (اختياري):</b> سيرفرنا بيحفظ مواعيد الرنّ بس (الوقت ورقم داخلي) وعنوان الإشعارات بتاع موبايلك. نص التذكير نفسه ما بيخرجش من موبايلك. لما تقفل المنبّه كل ده بيتمسح.</li>
+<li><b>النسخة الاحتياطية (اختياري):</b> بتتقفل على موبايلك بكود إنت بس اللي معاك قبل ما تطلع، والسيرفر بيشيلها مقفولة ومبيقدرش يقراها.</li>
+<li><b>البيت المشترك (اختياري):</b> قايمة الناقص والنضافة والولاد بتتقفل بكود البيت قبل ما تطلع. اللي معاه لينك البيت بس يقدر يفتحها. مهامك وفلوسك ويومياتك مش بيتشاركوا.</li>
+<li><b>التجربة (اختياري):</b> لو انضميت لتجربة بكود، بيتبعت أرقام مجمعة بس (عدد الحاجات اللي خلصت وتقييمك الأسبوعي)، من غير نصوص.</li>
+<li>أرقام الفلوس ما بتتبعتش. حساب «تقدر تشتري؟» بيتعمل على الموبايل.</li>
+<li><b>القرآن (اختياري):</b> الموبايل بيطلب التلاوة من خدمة alquran.cloud العامة.</li></ul>
+<h2>لمين سايفو</h2><p>سايفو للكبار من 18 سنة. شاشة الطفل وموبايل كبير السن بيجهزهم وبيتحكم فيهم الكبير المسؤول، بيقفلهم برقم سري. مفيش تتبع مكان ولا تسجيل صوت أو صور، والرسايل بتروح من الموبايل للأهل على طول من غير ما تعدّي على سيرفرنا.</p>
 <h2>دفع الفواتير</h2><p>زرار «ادفعها» بيفتح تطبيق بساطة أو فوري ويحط رقم العداد في الحافظة. الدفع بيتم جوه تطبيق الشركة نفسه، وإحنا مبنشوفش فلوسك ولا بيانات كارتك.</p>
-<h2>موبايل كبير السن</h2><p>زي موبايل الطفل: بتجهزه إنت على موبايل بابا أو ماما وبتقفله برقم سري. الرسايل بتروح منه ليك على طول، ومفيش تتبع مكان ولا تسجيل.</p>
-<h2>تواصل معانا</h2><p>Mohamed Sobhy</p>
-<div class="en"><h1>Sanady: Privacy &amp; Safety</h1>
-<p><b>Your data stays on your phone.</b> No account. Tasks, ideas, money figures, people, item locations and diary are stored only on the device and can be wiped in one tap.</p>
-<p><b>What leaves the phone:</b> the text of a brain dump (plus a short list of open items and your first name) goes to Claude by Anthropic through our n8n server, which is set to keep no execution data. Sentences Sanady speaks go to a text-to-speech service (ElevenLabs) through the same server. Each request also carries a random device code (not your number or name) used only for rate limits. Speech recognition uses the browser's own service. Money figures are never sent; the "can I buy this?" maths runs on the phone.</p>
-<p><b>Alarms (optional):</b> when turned on, our server keeps only alarm times (time plus an internal id) and the phone's push address, to wake the phone on time. The reminder text never leaves the phone; the phone shows it. Turning the alarm off deletes all of this.</p>
+<h2>حدود سايفو</h2><ul>
+<li>سايفو و«فوكس+» مش دكتور ولا علاج ولا تشخيص.</li>
+<li>مواعيد الدوا تذكير بس، من غير جرعات أو نصايح طبية.</li>
+<li>مستشار المشتريات بينظّم الصرف بس، ومش بينصح باستثمار ولا قروض.</li>
+<li>لو كتبت أو قلت كلام فيه خطر على نفسك، سايفو بيوقف ويوريك أرقام دعم: مصر 08008880700، الإمارات 800 4673، أو رقم الطوارئ في بلدك.</li></ul>
+<h2>مسح بياناتك</h2><p>الإعدادات ← «امسح كل بياناتي» بيمسح كل حاجة من الموبايل. لو شغّلت المنبّه أو النسخة الاحتياطية، قفلهم الأول عشان يتمسحوا من السيرفر كمان.</p>
+<h2>تواصل معانا</h2><p>NRG · Mohamed Sobhy</p>
+<div class="en" id="en"><h1>Sayvo: Privacy &amp; Safety</h1><small>Last updated November 2026 · Sayvo by NRG</small>
+<p><b>No account, and your data is kept on your phone.</b> Tasks, ideas, money figures, people, item locations and diary are stored on the device and can be wiped in one tap. A few things are sent to our server so the app can work; they are listed here.</p>
+<p><b>What leaves the phone:</b> speech is recognised by the phone or browser itself; only the text is sent to our server (n8n) and from there to Claude by Anthropic to be sorted, with a short list of open items and your first name. The server is set to keep no execution data. In Egyptian Arabic, the sentences Sayvo speaks go to a text-to-speech service (ElevenLabs) through the same server; other languages use the phone's own voice.</p>
 <p><b>Personal numbers:</b> phone numbers, emails, card and ID numbers are removed from the text on the phone before it is sent, and put back after sorting. The server never sees them.</p>
-<p><b>Security:</b> every request is limited to the app's own address, carries a signed device token and is rate-limited; the page only talks to our server (api.nrg-egypt.com) and the public Quran service.</p>
-<p><b>Shared home (optional):</b> the shared lists (needs, chores, kids) are encrypted on the phone with the household code before upload; the server stores them encrypted and cannot read them. Personal tasks, money and diary are never shared.</p>
-<p><b>Bill payment:</b> the pay button opens the Basata or Fawry app and copies the meter number; payment happens inside their app and we never see money or card details.</p>
-<p><b>Limits:</b> Sanady is not a doctor, therapy or diagnosis. Medication reminders only, never dosing. The purchase advisor organises spending only and never recommends investments or loans. If a user expresses risk of self-harm, Sanady stops and shows real support lines (Egypt 08008880700 / 0220816831, UAE 800 4673, emergency 123 Egypt / 999 UAE).</p>
-<p>Contact: Mohamed Sobhy</p></div>
-<script>if(/[?&]b=m\b/.test(location.search)){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let t;while((t=w.nextNode())){t.nodeValue=t.nodeValue.replace(/سندي/g,'مُدبّر').replace(/Sanady/g,'Mudabbir')}document.title=document.title.replace(/سندي/g,'مُدبّر').replace(/Sanady/g,'Mudabbir')}</script>
+<p><b>Device code:</b> the app creates a random device code (not your number or name) and a signed token, sent with each request for rate limits and abuse prevention.</p>
+<p><b>Alarms (optional):</b> our server keeps only alarm times (time plus an internal id) and the phone's push address. The reminder text never leaves the phone. Turning alarms off deletes this.</p>
+<p><b>Backup and shared home (optional):</b> encrypted on the phone with a code only you (or your household) hold before upload; the server stores them encrypted and cannot read them.</p>
+<p><b>Study (optional):</b> if you join a study with a code, only totals are sent (how many things you finished, your weekly rating), never your text.</p>
+<p><b>Who it's for:</b> adults 18+. The child screen and the senior phone are set up and locked by the responsible adult; no location tracking, no recording, and messages go from the phone to the family directly, not through our server.</p>
+<p><b>Bill payment:</b> the pay button opens the Basata or Fawry app; payment happens inside their app and we never see money or card details.</p>
+<p><b>Limits:</b> Sayvo and Focus+ are not a doctor, therapy or diagnosis. Medication reminders only, never dosing. If a user expresses risk of self-harm, Sayvo stops and shows support lines (Egypt 08008880700, UAE 800 4673) or your local emergency number.</p>
+<p><b>Deleting your data:</b> Settings → "Wipe all my data". If you turned on alarms or backup, turn them off first so they are deleted from the server too.</p>
+<p>Contact: NRG · Mohamed Sobhy</p></div>
 </body></html>

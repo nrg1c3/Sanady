@@ -27,9 +27,9 @@ with sync_playwright() as p:
     pg.on('pageerror', lambda e: errs.append(str(e)))
     ctx.route('https://api.nrg-egypt.com/**', handle)
     pg.goto('http://127.0.0.1:8769/index.html')
-    pg.evaluate("""()=>{localStorage.setItem('sn_seen','true');localStorage.setItem('sn_dev','devTEST1234');localStorage.setItem('sn_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}));
+    pg.evaluate("""()=>{localStorage.setItem('sy_seen','true');localStorage.setItem('sy_dev','devTEST1234');localStorage.setItem('sy_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}));
      const pad=n=>String(n).padStart(2,'0'),L=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());const n=Date.now();
-     localStorage.setItem('sn_items',JSON.stringify([
+     localStorage.setItem('sy_items',JSON.stringify([
       {id:'t1',type:'task',sec:'work',title:'أبعت التقرير',due:L(new Date(n-60e3)),done:false,created:n},
       {id:'a1',type:'appt',sec:'health',title:'كشف الدكتور',due:L(new Date(n+5*36e5)),where:'المعادي',done:false,created:n},
       {id:'m1',type:'med',sec:'health',title:'كونسرتا',due:L(new Date(n+2*36e5)),repeat:'daily',done:false,created:n},
@@ -39,7 +39,7 @@ with sync_playwright() as p:
     check('alarm shows the task text', 'أبعت التقرير' in (pg.inner_text('#alarm') if pg.is_visible('#alarm') else ''))
     pg.screenshot(path=os.path.join(OUT, 'alarm.png'))
     pg.click('#alarm [data-a="snz"]'); pg.wait_for_timeout(300)
-    st = pg.evaluate("()=>({gone:!document.getElementById('alarm'),snooze:JSON.parse(localStorage.getItem('sn_items')).find(i=>i.id==='t1').snooze})")
+    st = pg.evaluate("()=>({gone:!document.getElementById('alarm'),snooze:JSON.parse(localStorage.getItem('sy_items')).find(i=>i.id==='t1').snooze})")
     check('snooze closes and pushes 10 min', st['gone'] and abs(st['snooze'] - time.time() * 1000 - 600000) < 30000, st)
     pg.evaluate("()=>checkAlarms()"); check('does not ring twice', not pg.is_visible('#alarm'))
     al = pg.evaluate("()=>alarmList().map(a=>({iid:a.iid,at:a.at,text:a.text}))")

@@ -4,8 +4,8 @@
    The brain, the microphone and the voice follow the same setting (prof.lang). */
 (function(){
 'use strict';
-const ED=window.SANADY_ED==='main'?'main':'adhd',DK=ED==='main'?'sm_':'sn_';
-const PFX=new URLSearchParams(location.search).has('demo')?(ED==='main'?'smdemo_':'sndemo_'):DK;
+const DK='sy_';
+const PFX=new URLSearchParams(location.search).has('demo')?'sydemo_':DK;
 const UI=['en','fr','es','de'];
 const rd=k=>{try{return JSON.parse(localStorage.getItem(PFX+k))}catch(e){return null}};
 const prof0=rd('prof')||{};
@@ -59,9 +59,9 @@ function core(s){
  return s.replace(/(\d+)/g,(m,i)=>keep[+i])}
 function tr(s){if(s==null)return s;s=String(s);if(!AR.test(s)||!ready())return s;
  if(cache.has(s))return cache.get(s);
- let x=s.replace(/مُدبّر|مدبّر/g,'سندي');x=core(x);
+ let x=s.replace(/مُدبّر|مدبّر|سايفو/g,'سندي');x=core(x);
  x=x.replace(/(\d[\d,.]*)\s*¤/g,(m,n)=>pre?CUR+n:n+' '+CUR).replace(/¤/g,CUR).replace(/ {2,}/g,' ');
- if(ED==='main')x=x.replace(/Sanady/g,'Mudabbir');
+ x=x.replace(/Sanady|Mudabbir/g,'Sayvo');
  if(AR.test(x)&&miss.size<500)miss.add(s);
  if(cache.size>4000)cache.clear();cache.set(s,x);return x}
 window.tr=tr;window.__i18nMiss=miss;

@@ -1,5 +1,5 @@
-/* ---------- ADHD: the simple screen, and Barkley's "point of performance" tools ----------
-   Simple screen (default in سندي ADHD): the time left made visible, one thing now, one big mic, what the agent did.
+/* ---------- Focus+ (the add-on for focus and ADHD): the simple screen, and Barkley's "point of performance" tools ----------
+   Simple screen (default with Focus+): the time left made visible, one thing now, one big mic, what the agent did.
    Everything else sits behind "كل الأدوات".
    Accountability partner: once a week Sanady drafts a short progress message to someone you trust. */
 // new users start on the simple screen; people already using the app keep what they had
@@ -38,4 +38,11 @@ function adhdSettings(){const box=document.querySelector('#sheetBody .form');if(
 new MutationObserver(()=>{if($('sSave')&&!$('sAgent'))adhdSettings()}).observe(document.getElementById('sheetBody'),{childList:true});
 const _render=render;render=function(){applySimple();_render()};
 applySimple();
-Object.assign(window,{setSimple,buddySheet,buddyDraft,weekStats});
+/* Focus+: what it adds, and turning it on or off (sold through Google Play once the store app is out; free to try now) */
+function focusSheet(){const on=IS_ADHD;
+ openSheet(`<h2>🎯 فوكس+</h2><div class="stack"><p>أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.</p>
+ <ul class="note" style="line-height:1.9;padding-inline-start:18px"><li>الشاشة البسيطة: حاجة واحدة دلوقتي وزرار صوت كبير</li><li>وضع «جنبك»: حد معاك وإنت بتشتغل</li><li>وضع الانتظار قبل المواعيد، وأنا اللي أقولك تقوم</li><li>البداية بدقيقتين بس، وتقسيم الحاجة الكبيرة لخطوات</li><li>شريك متابعة كل أسبوع</li><li>اختيار الحاجة حسب طاقتك</li></ul>
+ <p class="note">${on?'فوكس+ شغال على الموبايل ده.':'تقدر تجربه دلوقتي ببلاش. الاشتراك هيبقى من جوجل بلاي.'}</p>
+ <button class="btn big" id="fcGo">${on?'اقفل فوكس+':'🎯 جرّب فوكس+'}</button></div>`);
+ $('fcGo').onclick=()=>{store.set('focus',!on);if(!on){store.set('focusAt',Date.now());store.set('simple',true)}location.reload()}}
+Object.assign(window,{focusSheet,setSimple,buddySheet,buddyDraft,weekStats});

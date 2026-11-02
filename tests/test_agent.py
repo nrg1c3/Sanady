@@ -16,7 +16,7 @@ def server(route):
     req = route.request; url = req.url; H = {'Access-Control-Allow-Origin': '*'}
     b = json.loads(req.post_data or '{}'); SENT.append((url.split('/')[-1], b))
     def J(o, st=200): return route.fulfill(status=st, content_type='application/json', body=json.dumps(o, ensure_ascii=False), headers=H)
-    if url.endswith('wasl-register'): return J({'t': ''})
+    if url.endswith('sayvo-register'): return J({'t': ''})
     if url.endswith('sanady-brain'):
         if b.get('mode') == 'breakdown': return J({'steps': [{'t': 'افتح الملف', 'min': 3}, {'t': 'اكتب المقدمة', 'min': 10}, {'t': 'راجع', 'min': 5}], 'go': 'يلا'})
         if b.get('mode') == 'draft': return J({'text': 'أهلاً، بتابع معاك بخصوص الموضوع 🙏'})
@@ -26,10 +26,10 @@ def server(route):
         return J({'ok': True, 'data': STORE.get(b['b'], ''), 'at': 1})
     if url.endswith('sanady-pilot'): return J({'ok': True})
     return J({'ok': True})
-SEED = """()=>{localStorage.clear();localStorage.setItem('sn_seen','true');localStorage.setItem('sn_simple','true');localStorage.setItem('sn_morning','"x"');
- localStorage.setItem('sn_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'m',wake:'08:00',sleep:'23:59',travel:30,prep:'x'}));
+SEED = """()=>{localStorage.clear();localStorage.setItem('sy_seen','true');localStorage.setItem('sy_simple','true');localStorage.setItem('sy_morning','"x"');
+ localStorage.setItem('sy_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'m',wake:'08:00',sleep:'23:59',travel:30,prep:'x'}));
  const pad=n=>String(n).padStart(2,'0'),L=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());const n=Date.now();
- localStorage.setItem('sn_items',JSON.stringify([
+ localStorage.setItem('sy_items',JSON.stringify([
   {id:'t1',type:'task',sec:'work',title:'أرد على إيميل المدير',due:L(new Date(n-3*36e5)),done:false,created:n},
   {id:'t2',type:'task',sec:'home',title:'أرتب الدولاب',due:L(new Date(n-2*36e5)),done:false,created:n},
   {id:'m1',type:'med',sec:'health',title:'دوا التركيز',due:L(new Date(n-2*36e5)),repeat:'daily',done:false,created:n},
@@ -82,12 +82,12 @@ with sync_playwright() as p:
     pg.evaluate("store.set('atest',0);rung={};stopRing();closeSheet();backupCloudSheet()"); pg.wait_for_timeout(300)
     print('DBG', pg.evaluate("(()=>{const e=document.getElementById('bcOn');const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height,getComputedStyle(e).visibility,document.getElementById('sheet').hidden, e.closest('[hidden]')&&e.closest('[hidden]').id]})()"))
     pg.click('#bcOn'); pg.wait_for_timeout(2500)
-    code = pg.evaluate("localStorage.getItem('sn_bk_code')")
+    code = pg.evaluate("localStorage.getItem('sy_bk_code')")
     check('backup code shown', code and code in pg.inner_text('#sheetBody'))
     check('server got only locked data', len(STORE) == 1 and 'أرتب' not in list(STORE.values())[0])
-    pg.evaluate("localStorage.removeItem('sn_items')")
+    pg.evaluate("localStorage.removeItem('sy_items')")
     pg.evaluate(f"backupRestore('{code}')"); pg.wait_for_timeout(2500)
-    check('restore brings items back', 'أرتب الدولاب' in (pg.evaluate("localStorage.getItem('sn_items')") or ''))
+    check('restore brings items back', 'أرتب الدولاب' in (pg.evaluate("localStorage.getItem('sy_items')") or ''))
     # pilot
     pg.evaluate("closeSheet();pilotSheet()"); pg.fill('#plCode', 'sanady26'); pg.click('#plJoin'); pg.wait_for_timeout(1500)
     ps = [x[1] for x in SENT if x[0] == 'sanady-pilot']

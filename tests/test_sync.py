@@ -16,7 +16,7 @@ DB = {}; SEEN = []
 def server(route):
     req = route.request; url = req.url
     H = {'Access-Control-Allow-Origin': '*'}
-    if url.endswith('wasl-register'):
+    if url.endswith('sayvo-register'):
         return route.fulfill(status=200, content_type='application/json', body='{"t":""}', headers=H)
     if url.endswith('sanady-home'):
         b = json.loads(req.post_data); SEEN.append(b)
@@ -30,9 +30,9 @@ def server(route):
         return route.fulfill(status=200, content_type='application/json', body=json.dumps({'ok': True, 'at': 1, 'data': out}), headers=H)
     return route.fulfill(status=200, content_type='application/json', body='{}', headers=H)
 def seed(name, items):
-    return """()=>{localStorage.clear();localStorage.setItem('sn_seen','true');localStorage.setItem('sn_morning','"x"');localStorage.setItem('sn_mode','"mom"');
- localStorage.setItem('sn_prof',JSON.stringify({name:'%s',sex:'f',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}));
- localStorage.setItem('sn_items',JSON.stringify(%s))}""" % (name, json.dumps(items, ensure_ascii=False))
+    return """()=>{localStorage.clear();localStorage.setItem('sy_seen','true');localStorage.setItem('sy_morning','"x"');localStorage.setItem('sy_mode','"mom"');
+ localStorage.setItem('sy_prof',JSON.stringify({name:'%s',sex:'f',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}));
+ localStorage.setItem('sy_items',JSON.stringify(%s))}""" % (name, json.dumps(items, ensure_ascii=False))
 with sync_playwright() as p:
     b = p.chromium.launch(); errs = []
     U = 'http://127.0.0.1:8781/index.html'
@@ -80,7 +80,7 @@ with sync_playwright() as p:
     check('requests carry key and device', all(s.get('k') == 'wasl-nrg-2026' and len(s.get('d', '')) >= 8 for s in SEEN))
     # leave
     A.evaluate("homeLeave()")
-    check('leave clears code', A.evaluate("!HS.key && !localStorage.getItem('sn_home_code')"))
+    check('leave clears code', A.evaluate("!HS.key && !localStorage.getItem('sy_home_code')"))
     check('lists stay after leaving', A.evaluate("items.some(i=>i.title==='سكر')"))
     # settings entry
     A.evaluate("closeSheet()");

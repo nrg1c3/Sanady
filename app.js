@@ -1,19 +1,20 @@
 /* ================= Sanady · سندي ================= */
 'use strict';
-/* two separate apps from one code: the page sets window.SANADY_ED ('main' = Sanady for everyone, at /app/); default is Sanady ADHD */
-const ED=window.SANADY_ED==='main'?'main':'adhd';
-const DK=ED==='main'?'sm_':'sn_';
-const BRAND=ED==='main'?'مُدبّر':'سندي';
-const brandify=s=>ED==='main'?String(s).replace(/سندي/g,BRAND):s; // each app keeps its own data, device id and alarms
+/* Sayvo (سايفو): one app for everyone. The focus tools (once the separate Sanady ADHD app) are the paid add-on Focus+.
+   The texts still say سندي in places: the name is swapped on screen. */
+const ED='main';
+const DK='sy_';
+const BRAND='سايفو';
+const brandify=s=>String(s).replace(/سندي|مُدبّر/g,BRAND);
 const BRAIN_URL='https://api.nrg-egypt.com/webhook/sanady-brain';
-const TTS_URL='https://api.nrg-egypt.com/webhook/wasl-tts';
+const TTS_URL='https://api.nrg-egypt.com/webhook/sayvo-tts';
 /* every request to our server carries a signed device token (the voice service requires it) */
 (()=>{const BASE='https://api.nrg-egypt.com/webhook/',K='wasl-nrg-2026',_fetch=window.fetch.bind(window);
  const get=k=>{try{return localStorage.getItem(k)}catch(e){return null}},set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
  let dev=get(DK+'dev');if(!dev||!/^[A-Za-z0-9_-]{8,64}$/.test(dev)){dev=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/[^A-Za-z0-9]/g,'').slice(0,32);set(DK+'dev',dev)}
  let tok=get(DK+'tok')||'',triedAt=+(get(DK+'tok_at')||0),pending=null;
- const register=()=>pending||(pending=(async()=>{try{const r=await _fetch(BASE+'wasl-register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:K,d:dev})});const j=await r.json();tok=(j&&j.t)||'';set(DK+'tok',tok)}catch(e){}triedAt=Date.now();set(DK+'tok_at',String(triedAt));pending=null})());
- window.fetch=async function(u,o){if(typeof u!=='string'||!u.startsWith(BASE)||u.endsWith('wasl-register')||!o||typeof o.body!=='string')return _fetch(u,o);
+ const register=()=>pending||(pending=(async()=>{try{const r=await _fetch(BASE+'sayvo-register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:K,d:dev})});const j=await r.json();tok=(j&&j.t)||'';set(DK+'tok',tok)}catch(e){}triedAt=Date.now();set(DK+'tok_at',String(triedAt));pending=null})());
+ window.fetch=async function(u,o){if(typeof u!=='string'||!u.startsWith(BASE)||u.endsWith('sayvo-register')||!o||typeof o.body!=='string')return _fetch(u,o);
   let b;try{b=JSON.parse(o.body)}catch(e){return _fetch(u,o)}if(!b||b.k!==K)return _fetch(u,o);
   if(!tok&&Date.now()-triedAt>6*3600e3)await register();
   const send=()=>_fetch(u,Object.assign({},o,{body:JSON.stringify(Object.assign(b,{t:tok}))}));let r=await send();
@@ -21,13 +22,14 @@ const TTS_URL='https://api.nrg-egypt.com/webhook/wasl-tts';
 const $=id=>document.getElementById(id);
 const minsAr=m=>m==1?'دقيقة':m==2?'دقيقتين':m<=10?m+' دقايق':m+' دقيقة';
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const PFX=new URLSearchParams(location.search).has('demo')?(ED==='main'?'smdemo_':'sndemo_'):DK;
+const PFX=new URLSearchParams(location.search).has('demo')?'sydemo_':DK;
 const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(PFX+k));return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(PFX+k,JSON.stringify(v))}catch(e){}}};
-/* two editions from one code: 'adhd' (competition) and 'main' (commercial). ?ed=main or ?ed=adhd switches and remembers */
-const IS_ADHD=ED==='adhd';
+/* Focus+ (the focus and ADHD tools): on when the person turned it on, or came from a Focus+ link (?focus=1) */
+if(new URLSearchParams(location.search).get('focus')==='1'&&store.get('focus',null)===null){store.set('focus',true);store.set('focusAt',Date.now())}
+const IS_ADHD=store.get('focus',false)===true;
 const START=IS_ADHD?2:5; // first push into a task: 2 minutes for ADHD
-const THEMES={...(ED==='main'?{green:['أخضر','#0E2B2A','#F2B33D']}:{}),night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
-function applyTheme(th){th=THEMES[th]?th:store.get('theme',ED==='main'?'green':'night');if(!THEMES[th])th=ED==='main'?'green':'night';document.body.dataset.th=th;document.documentElement.style.background=THEMES[th][1];const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[th][1]}
+const THEMES={sayvo:['سايفو','#1C1F45','#FFB57A'],green:['أخضر','#0E2B2A','#F2B33D'],night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
+function applyTheme(th){th=THEMES[th]?th:store.get('theme','sayvo');if(!THEMES[th])th='sayvo';document.body.dataset.th=th;document.documentElement.style.background=THEMES[th][1];const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[th][1]}
 applyTheme();
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let DEMO=null; // set by demo.js
@@ -613,7 +615,7 @@ function alarmList(from){const n=nowMs(),end=n+14*864e5,out=[];from=from==null?n
  return out.sort((a,b)=>a.at-b.at).slice(0,200)}
 const ALARM_EXTRA=[]; // prayer times etc. register here
 /* tiny key-value store shared with the service worker */
-const KV={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{try{const r=indexedDB.open(IS_ADHD?'sanady-sw':'sanady-main-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))},
+const KV={db:null,open(){return this.db||(this.db=new Promise((res,rej)=>{try{const r=indexedDB.open('sayvo-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))},
  async get(k){try{const db=await this.open();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}},
  async set(k,v){try{const db=await this.open();await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=res})}catch(e){}}};
 let rung=store.get('rung',{});
@@ -718,8 +720,9 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
- ${IS_ADHD?'':'<button class="btn ghost" id="sPlan">⭐ الباقات والاشتراك</button>'}
- ${IS_ADHD?'':'<button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>'}
+ <button class="btn ghost" id="sFocus">🎯 فوكس+ ${IS_ADHD?'✓':''}</button>
+ <button class="btn ghost" id="sPlan">⭐ الباقات والاشتراك</button>
+ <button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>
  <button class="btn ghost" id="sHome">🏠 البيت المشترك (قايمة واحدة لكل البيت)</button>
  <button class="btn ghost" id="sKid">👧 حوّل الموبايل ده لموبايل طفل</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
@@ -735,7 +738,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  $('sBk').onclick=()=>backupSheet();
  $('sKid').onclick=()=>kidSetup();
  $('sHome').onclick=()=>homeSheet();
- if($('sOld'))$('sOld').onclick=()=>elderSetup();if($('sPlan'))$('sPlan').onclick=()=>plansSheet();
+ if($('sFocus'))$('sFocus').onclick=()=>focusSheet();if($('sOld'))$('sOld').onclick=()=>elderSetup();if($('sPlan'))$('sPlan').onclick=()=>plansSheet();
  $('sDoc').onclick=()=>docsSheet();
  $('sNot').onclick=()=>{closeSheet();store.get('push',false)?disablePush():enablePush()};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;
@@ -912,11 +915,11 @@ window.addEventListener('DOMContentLoaded',()=>{if(window.kidBoot&&kidBoot())ret
  const go=new URLSearchParams(location.search).get('go');if(go==='focus')show('focus');else if(go==='money')show('money');else if(go==='dump'&&store.get('seen',false))setTimeout(()=>openDump(),300);
  if(!store.get('seen',false)&&!DEMO){store.set('seen',true);openSheet(`<h2>أهلاً، أنا سندي 💜</h2><div class="stack"><div class="say">سندك اللي جواك. قولّي كل اللي في دماغك وأنا أرتبه، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.</div>
  <label class="form">اسمك إيه؟<input id="wN" placeholder="اسمك"></label><div class="acts"><button class="btn ghost" data-x="m">كلّمني بصيغة المذكر</button><button class="btn ghost" data-x="f">بصيغة المؤنث</button></div>
- <button class="btn big" id="wGo">🎙️ يلا نفرّغ دماغك</button><p class="note">كل حاجة بتتحفظ على موبايلك بس. سندي مش علاج ولا تشخيص.</p></div>`);
+ <button class="btn big" id="wGo">🎙️ يلا نفرّغ دماغك</button><p class="note">من غير حساب، وبياناتك محفوظة على موبايلك. سندي مش علاج ولا تشخيص.</p></div>`);
   document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{prof.sex=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b))});
   $('wGo').onclick=()=>{prof.name=$('wN').value.trim();save();closeSheet();openDump()}}});
-// the everyone edition is called مُدبّر: swap the name everywhere it shows on screen
-if(ED==='main'){const fixT=t=>{if(t.nodeValue&&t.nodeValue.includes('سندي'))t.nodeValue=brandify(t.nodeValue)};
+// the texts were written for سندي and مُدبّر: show the app's name everywhere
+if(ED==='main'){const fixT=t=>{if(t.nodeValue&&/سندي|مُدبّر/.test(t.nodeValue))t.nodeValue=brandify(t.nodeValue)};
  const fix=n=>{if(!n)return;if(n.nodeType===3)return fixT(n);if(n.nodeType!==1)return;if(n.placeholder&&n.placeholder.includes('سندي'))n.placeholder=brandify(n.placeholder);
   if(n.getAttribute&&(n.getAttribute('aria-label')||'').includes('سندي'))n.setAttribute('aria-label',brandify(n.getAttribute('aria-label')));
   const w=document.createTreeWalker(n,NodeFilter.SHOW_TEXT);let t;while((t=w.nextNode()))fixT(t);n.querySelectorAll&&n.querySelectorAll('[placeholder*="سندي"]').forEach(x=>x.placeholder=brandify(x.placeholder))};

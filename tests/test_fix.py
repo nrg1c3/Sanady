@@ -23,7 +23,7 @@ with sync_playwright() as p:
     pg.on('pageerror', lambda e: errs.append(str(e)))
     pg.route('https://api.nrg-egypt.com/**', handle)
     pg.goto('http://127.0.0.1:8768/index.html')
-    pg.evaluate("()=>{localStorage.setItem('sn_seen','true');localStorage.setItem('sn_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'07:00',sleep:'23:30',travel:30,prep:'x'}));localStorage.setItem('sn_places',JSON.stringify({'الباسبور':{w:'في الدولاب الرف التاني',d:Date.now()},'مفاتيح العربية':{w:'على الترابيزة جنب الباب',d:Date.now()}}))}")
+    pg.evaluate("()=>{localStorage.setItem('sy_seen','true');localStorage.setItem('sy_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'07:00',sleep:'23:30',travel:30,prep:'x'}));localStorage.setItem('sy_places',JSON.stringify({'الباسبور':{w:'في الدولاب الرف التاني',d:Date.now()},'مفاتيح العربية':{w:'على الترابيزة جنب الباب',d:Date.now()}}))}")
     pg.reload(); pg.wait_for_timeout(700)
     def ask(t):
         pg.evaluate("()=>closeSheet()"); pg.evaluate("t=>{openDump();}", t); pg.wait_for_timeout(200)
@@ -53,7 +53,7 @@ with sync_playwright() as p:
     t = ask('فين الشاحن')
     check('unknown thing -> honest "you did not tell me"', 'مش فاكر إنك قلتلي مكان الشاحن' in t, t[:200])
     # ---- daily allowance
-    pg.evaluate("()=>{closeSheet();M.bal=10000;M.daily=150;M.pay=1;save();localStorage.setItem('sn_dayStart',JSON.stringify('2020-01-01'))}")
+    pg.evaluate("()=>{closeSheet();M.bal=10000;M.daily=150;M.pay=1;save();localStorage.setItem('sy_dayStart',JSON.stringify('2020-01-01'))}")
     pg.reload(); pg.wait_for_timeout(600)
     nud = pg.evaluate("()=>nudges().filter(x=>x.id.startsWith('dy')).map(x=>x.p)")
     check('morning asks about yesterday', len(nud) == 1 and 'امبارح' in nud[0], nud)

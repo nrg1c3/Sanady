@@ -1,10 +1,10 @@
-/* shared by both apps: Sanady ADHD (/Sanady/) and Mudabbir for everyone (/mudabbir/, a generated copy) */
-const SC=self.registration.scope,MUD=/\/mudabbir\/$/.test(SC),MAIN=MUD||/\/app\/$/.test(SC),P=MUD?'mudabbir-':MAIN?'sanady-main-':'sanady-',UP=MUD?'/Sanady/':MAIN?'../':'',IUP=MUD?'':UP,BRAND=MAIN?'مُدبّر':'سندي';
-const SHELL=P+'shell-v25',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
-const FILES=['./','index.html','manifest.webmanifest'].concat(['app.css','i18n.js','i18n-en.js','i18n-fr.js','i18n-es.js','i18n-de.js','app.js','family.js','life.js','sync.js','work.js','agent.js','adhd.js','trust.js','sounds.js','demo.js','privacy.html'].map(f=>UP+f)).concat(['icon-192.png','icon-512.png'].map(f=>IUP+f));
-const ICON=IUP+'icon-192.png';
+/* Sayvo (سايفو): the app shell offline, and alarms that ring while the app is closed */
+const P='sayvo-',MAIN=true,BRAND='سايفو';
+const SHELL=P+'shell-v1',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
+const FILES=['./','index.html','manifest.webmanifest','app.css','i18n.js','i18n-en.js','i18n-fr.js','i18n-es.js','i18n-de.js','app.js','family.js','life.js','sync.js','work.js','agent.js','adhd.js','trust.js','sounds.js','demo.js','privacy.html','icon-192.png','icon-512.png'];
+const ICON='icon-192.png';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith(P)&&!k.startsWith('sanady-main-')===!MAIN&&!KEEP.includes(k)).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith(P)&&!KEEP.includes(k)).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);
  if(u.origin===location.origin){e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(SHELL).then(x=>x.put(r,c));return res}).catch(()=>caches.match(r,{ignoreSearch:true}).then(m=>m||caches.match('index.html'))));return}
  if(/fonts\.(googleapis|gstatic)\.com/.test(u.host)){e.respondWith(caches.match(r).then(m=>m||fetch(r).then(res=>{const c=res.clone();caches.open(RT).then(x=>x.put(r,c));return res})))}});
@@ -12,7 +12,7 @@ self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;c
 /* ---------- alarms while the app is closed ----------
    The server sends an empty push at the alarm time. The reminder text never leaves the phone:
    the app keeps the alarm list here (IndexedDB) and the worker shows it. */
-function idb(){return new Promise((res,rej)=>{const r=indexedDB.open(MAIN?'sanady-main-sw':'sanady-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open('sayvo-sw',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
 async function kvGet(k){try{const db=await idb();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}}
 async function kvSet(k,v){try{const db=await idb();await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=res})}catch(e){}}
 /* the alarm words in the person's language (the page saves it as 'lang') */
@@ -21,7 +21,7 @@ const SWT={en:{r:' is reminding you',c:'You have a reminder now. Open {b} to see
  es:{r:' te recuerda',c:'Tienes un recordatorio ahora. Abre {b} para verlo',s:'Recuérdamelo en 10 minutos',o:'Listo ✓'},
  de:{r:' erinnert dich',c:'Du hast jetzt eine Erinnerung. Öffne {b}, um sie zu sehen',s:'In 10 Minuten erinnern',o:'Okay ✓'}};
 let LG=null;const lg=async()=>{if(LG==null)LG=(await kvGet('lang'))||'ar';return LG};
-const BR=l=>l==='ar'?BRAND:(MAIN?'Mudabbir':'Sanady');
+const BR=l=>l==='ar'?BRAND:'Sayvo';
 const VIB=[600,250,600,250,900,400,600,250,600];
 async function ringNote(a){const l=await lg(),W=SWT[l];return self.registration.showNotification('⏰ '+BR(l)+(W?W.r:' بيفكّرك'),{body:a.text,icon:ICON,badge:ICON,tag:a.k,renotify:true,requireInteraction:true,vibrate:VIB,lang:W?l:'ar',dir:W?'ltr':'rtl',timestamp:a.at,data:{k:a.k,iid:a.iid,text:a.text},
  actions:[{action:'snooze',title:W?W.s:'فكّرني بعد 10 دقايق'},{action:'ok',title:W?W.o:'تمام ✓'}]})}

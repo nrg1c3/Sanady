@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # Runs every browser test against a local copy of both apps.
 # Needs: python3, playwright (pip install playwright && playwright install chromium), xvfb-run for test_alarm.
-# The مُدبّر page lives in the nrg1c3.github.io repo, cloned next to this one (or set SITE_REPO).
 set -u
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
-SITE="${SITE_REPO:-$HERE/../nrg1c3.github.io}"
-python3 "$HERE/tools/build-app.py" >/dev/null || exit 1
 W="$(mktemp -d)"; trap 'rm -rf "$W"' EXIT
-for f in "$HERE"/*; do ln -s "$f" "$W/$(basename "$f")"; done
-rm -f "$W/app"; ln -s "$SITE/mudabbir" "$W/app"; ln -s "$HERE" "$W/Sanady"
+# one app (Sayvo). The page at / has Focus+ on (the focus tests), /app/ has it off; same files.
+mk(){ d="$1"; flag="$2"; mkdir -p "$d"; for f in "$HERE"/*; do n=$(basename "$f"); [ "$n" = index.html ] || ln -s "$f" "$d/$n"; done
+  sed "s|<head>|<head><script>try{if(localStorage.getItem('sy_focus')===null)localStorage.setItem('sy_focus','$flag')}catch(e){}</script>|" "$HERE/index.html" > "$d/index.html"; }
+mk "$W" true; rm -rf "$W/app"; mk "$W/app" false; ln -s "$HERE" "$W/Sanady"
 export PYTHONPATH="$HERE/tests/_ar${PYTHONPATH:+:$PYTHONPATH}"
 fail=0
 for t in "$HERE"/tests/test_*.py; do

@@ -21,7 +21,7 @@ def handle(route):
     u = route.request.url
     if u.endswith('/sanady-brain'): return route.fulfill(status=200, content_type='application/json', body=json.dumps(BRAIN))
     if u.endswith('/sanady-remind'): errs.append('called reminders server')
-    if u.endswith('/wasl-register'): return route.fulfill(status=200, content_type='application/json', body='{"t":""}')
+    if u.endswith('/sayvo-register'): return route.fulfill(status=200, content_type='application/json', body='{"t":""}')
     return route.fulfill(status=200, content_type='application/json', body='{}')
 with sync_playwright() as p:
     b = p.chromium.launch()
@@ -30,11 +30,11 @@ with sync_playwright() as p:
     pg.on('console', lambda m: errs.append('console: ' + m.text) if m.type == 'error' and 'Failed to load resource' not in m.text else None)
     pg.route('https://api.nrg-egypt.com/**', handle)
     pg.goto('http://127.0.0.1:8767/index.html')
-    pg.evaluate("()=>{localStorage.setItem('sn_seen','true');localStorage.setItem('sn_simple','false');localStorage.setItem('sn_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'المفاتيح'}))}")
+    pg.evaluate("()=>{localStorage.setItem('sy_seen','true');localStorage.setItem('sy_simple','false');localStorage.setItem('sy_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'المفاتيح'}))}")
     pg.reload(); pg.wait_for_timeout(800)
     # docs through the brain
     pg.evaluate("async()=>{openDump();const r=await brain('talk',{text:'x'});applyTalk(r,'x')}"); pg.wait_for_timeout(600)
-    st = pg.evaluate("()=>({items:JSON.parse(localStorage.getItem('sn_items')),docs:JSON.parse(localStorage.getItem('sn_docs'))})")
+    st = pg.evaluate("()=>({items:JSON.parse(localStorage.getItem('sy_items')),docs:JSON.parse(localStorage.getItem('sy_docs'))})")
     ren = [i for i in st['items'] if i.get('doc')]
     check('two renewal tasks in papers', len(ren) == 2 and all(i['sec'] == 'papers' for i in ren), ren)
     r1 = next(i for i in ren if i['doc'] == 'رخصة العربية'); r2 = next(i for i in ren if i['doc'] == 'الباسبور')
@@ -45,7 +45,7 @@ with sync_playwright() as p:
     # same doc again -> updates, no duplicate
     BRAIN['docs'] = [{'name': 'رخصة العربية', 'expires': (today + dt.timedelta(days=400)).isoformat()}]; BRAIN['add'] = []
     pg.evaluate("async()=>{closeSheet();openDump();const r=await brain('talk',{text:'x'});applyTalk(r,'x')}"); pg.wait_for_timeout(500)
-    ren2 = [i for i in pg.evaluate("()=>JSON.parse(localStorage.getItem('sn_items'))") if i.get('doc') == 'رخصة العربية' and not i['done']]
+    ren2 = [i for i in pg.evaluate("()=>JSON.parse(localStorage.getItem('sy_items'))") if i.get('doc') == 'رخصة العربية' and not i['done']]
     check('re-telling a document updates instead of duplicating', len(ren2) == 1 and ren2[0]['due'].startswith((today + dt.timedelta(days=370)).isoformat()), ren2)
     # docs sheet: add by hand and delete
     pg.evaluate("()=>closeSheet()"); pg.click('#btnSet'); pg.click('#sDoc'); pg.wait_for_timeout(200)
@@ -54,15 +54,15 @@ with sync_playwright() as p:
     check('docs sheet lists all three, soonest first', body.index('الباسبور') < body.index('البطاقة'), body[:300])
     pg.screenshot(path=os.path.join(OUT, 'docs.png'))
     pg.click('.rm[data-k="البطاقة"]'); pg.wait_for_timeout(200)
-    st3 = pg.evaluate("()=>({d:JSON.parse(localStorage.getItem('sn_docs')),n:JSON.parse(localStorage.getItem('sn_items')).filter(i=>i.doc==='البطاقة'&&!i.done).length})")
+    st3 = pg.evaluate("()=>({d:JSON.parse(localStorage.getItem('sy_docs')),n:JSON.parse(localStorage.getItem('sy_items')).filter(i=>i.doc==='البطاقة'&&!i.done).length})")
     check('deleting a document removes its renewal task', 'البطاقة' not in st3['d'] and st3['n'] == 0, st3)
     # body nudges
-    pg.evaluate("()=>{closeSheet();localStorage.setItem('sn_bodyAt',JSON.stringify(Date.now()-4*36e5))}")
+    pg.evaluate("()=>{closeSheet();localStorage.setItem('sy_bodyAt',JSON.stringify(Date.now()-4*36e5))}")
     nud = pg.evaluate("()=>nudges().filter(x=>x.id.startsWith('bd')).map(x=>x.p)")
     check('body nudge after 3 waking hours', len(nud) == 1, nud)
     pg.evaluate("()=>{const x=nudges().find(x=>x.id.startsWith('bd'));x.acts[0][1]()}")
     check('body nudge gone after answering', not pg.evaluate("()=>nudges().some(x=>x.id.startsWith('bd'))"))
-    pg.evaluate("()=>{prof.wake='07:00';prof.sleep='08:00';localStorage.setItem('sn_bodyAt',JSON.stringify(Date.now()-4*36e5))}")
+    pg.evaluate("()=>{prof.wake='07:00';prof.sleep='08:00';localStorage.setItem('sy_bodyAt',JSON.stringify(Date.now()-4*36e5))}")
     h = dt.datetime.now().hour
     check('no body nudge outside waking hours', h in (7,) or not pg.evaluate("()=>nudges().some(x=>x.id.startsWith('bd'))"))
     pg.evaluate("()=>{prof.wake='00:00';prof.sleep='23:59';save()}")

@@ -22,7 +22,7 @@ with sync_playwright() as p:
     pg.on('pageerror', lambda e: errs.append(str(e)))
     ctx.route('https://api.nrg-egypt.com/**', srvr)
     U = 'http://127.0.0.1:8773/index.html'; A = 'http://127.0.0.1:8773/app/index.html'
-    pg.goto(U); pg.evaluate("localStorage.clear()"); pg.evaluate(SEED, 'sn_'); pg.evaluate(SEED, 'sm_')
+    pg.goto(U); pg.evaluate("localStorage.clear()"); pg.evaluate(SEED, 'sy_'); pg.evaluate(SEED, 'sy_')
     pg.reload(); pg.wait_for_timeout(800)
     # ---- life hub
     pg.click('.tabs [data-t=all]'); pg.click('#allSeg [data-v=life]'); pg.wait_for_timeout(200)
@@ -75,16 +75,15 @@ with sync_playwright() as p:
     pg.fill('#wIdea', 'فكرة: بودكاست'); pg.click('#wIdeaGo'); pg.wait_for_timeout(100)
     check('idea parked from body double', pg.evaluate("items.some(i=>i.from==='park'&&i.type==='idea')"))
     pg.click('#modeSeg [data-m=one]')
-    # ---- the everyone app is separate
-    pg.goto(A); pg.wait_for_timeout(900)
-    check('everyone app title', pg.title() == 'مُدبّر')
-    check('everyone app has no ADHD tools', not pg.is_visible('#qDopa') and pg.is_hidden('#energy') and 'جنبك' not in pg.inner_text('#modeSeg'))
-    check('separate data', not pg.evaluate("items.some(i=>i.from==='park')") and pg.evaluate("LIFE.habits.length") == 0)
-    check('separate device id', pg.evaluate("localStorage.getItem('sm_dev')!==localStorage.getItem('sn_dev')"))
-    check('everyone app has daily-life hub', pg.evaluate("show('all');setSeg('life');document.querySelectorAll('#allBody [data-l]').length") == 9)
-    check('everyone app uses its own alarm store', pg.evaluate("indexedDB.databases().then(l=>l.map(x=>x.name))") is not None)
+    # ---- without Focus+ the focus tools are hidden; everything else is the same app
+    pg.evaluate("localStorage.setItem('sy_focus','false')"); pg.goto(A); pg.wait_for_timeout(900)
+    check('app title', pg.title() == 'Sayvo · سايفو', pg.title())
+    check('no focus tools without Focus+', not pg.is_visible('#qDopa') and pg.is_hidden('#energy') and 'جنبك' not in pg.inner_text('#modeSeg'))
+    check('daily-life hub without Focus+', pg.evaluate("show('all');setSeg('life');document.querySelectorAll('#allBody [data-l]').length") == 9)
     man = pg.evaluate("fetch('manifest.webmanifest').then(r=>r.json())")
-    check('everyone app manifest', man['name'] == 'مُدبّر' and man['start_url'] == '/mudabbir/')
+    check('manifest', man['name'] == 'Sayvo' and man['start_url'] == './')
+    pg.evaluate("focusSheet()"); pg.wait_for_timeout(100)
+    check('Focus+ sheet offers a trial', 'فوكس+' in pg.inner_text('#sheetBody'))
     pg.screenshot(path=os.path.join(OUT, 'l_main.png'))
     check('no page errors', not errs, errs)
     b.close()

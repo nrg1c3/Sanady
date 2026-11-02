@@ -15,10 +15,10 @@ def srvr(route): return route.fulfill(status=200, content_type='application/json
 def quran(route):
     body = {'data': {'name': 'سورة الإخلاص', 'ayahs': [{'numberInSurah': 1, 'text': 'TEXT1', 'audio': 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='}]}}
     return route.fulfill(status=200, content_type='application/json', body=json.dumps(body), headers={'Access-Control-Allow-Origin': '*'})
-SEED = """()=>{localStorage.clear();localStorage.setItem('sn_seen','true');localStorage.setItem('sn_morning','"x"');localStorage.setItem('sn_mode','"mom"');
- localStorage.setItem('sn_prof',JSON.stringify({name:'منى',sex:'f',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}));
+SEED = """()=>{localStorage.clear();localStorage.setItem('sy_seen','true');localStorage.setItem('sy_morning','"x"');localStorage.setItem('sy_mode','"mom"');
+ localStorage.setItem('sy_prof',JSON.stringify({name:'منى',sex:'f',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}));
  const pad=n=>String(n).padStart(2,'0'),L=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());const n=Date.now();const e=new Date();e.setHours(23,50,0,0);
- localStorage.setItem('sn_items',JSON.stringify([{id:'a1',type:'appt',sec:'health',title:'كشف الأسنان',due:L(e),done:false,created:n}]))}"""
+ localStorage.setItem('sy_items',JSON.stringify([{id:'a1',type:'appt',sec:'health',title:'كشف الأسنان',due:L(e),done:false,created:n}]))}"""
 with sync_playwright() as p:
     b = p.chromium.launch()
     ctx = b.new_context(viewport={'width': 400, 'height': 860})
@@ -88,13 +88,13 @@ with sync_playwright() as p:
     check('custom interest reminder', pg.evaluate("items.some(i=>i.title==='رياضة'&&i.repeat==='daily')"))
     pg.screenshot(path=os.path.join(OUT, 'f_pets.png'), full_page=True)
     # ---- commercial edition also has mom mode
-    pg.evaluate("Object.keys(localStorage).filter(k=>k.startsWith('sn_')).forEach(k=>localStorage.setItem('sm_'+k.slice(3),localStorage.getItem(k)))"); pg.goto(U.replace('index.html','app/index.html')); pg.wait_for_timeout(500)
+    pg.evaluate("Object.keys(localStorage).filter(k=>k.startsWith('sy_')).forEach(k=>localStorage.setItem('sy_'+k.slice(3),localStorage.getItem(k)))"); pg.goto(U.replace('index.html','app/index.html')); pg.wait_for_timeout(500)
     check('mom mode in everyone edition', 'الأم' in pg.inner_text('#modeSeg'))
     pg.goto(U); pg.wait_for_timeout(300)
     # ---- child phone (fresh context = the kid's phone)
     kc = b.new_context(viewport={'width': 400, 'height': 860}); kp = kc.new_page(); kp.on('pageerror', lambda e: errs.append('KID ' + str(e)))
     kc.route('https://api.nrg-egypt.com/**', srvr)
-    kp.goto(U); kp.evaluate("()=>{localStorage.setItem('sn_seen','true');localStorage.setItem('sn_morning','\"x\"')}")
+    kp.goto(U); kp.evaluate("()=>{localStorage.setItem('sy_seen','true');localStorage.setItem('sy_morning','\"x\"')}")
     kp.goto(setup.replace('http://127.0.0.1:8772/', U.replace('index.html', ''))); kp.wait_for_timeout(800)
     check('setup link opens kid setup prefilled', kp.input_value('#ksN') == 'ياسين', kp.inner_text('#sheetBody')[:100])
     kp.fill('#ksPh', '01001234567'); kp.fill('#ksPin', '1234'); kp.click('#ksGo'); kp.wait_for_timeout(1000)

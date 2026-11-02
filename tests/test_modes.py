@@ -13,10 +13,10 @@ def check(name, cond, extra=''):
     else: fail += 1; print('FAIL', name, extra)
 def handle(route):
     return route.fulfill(status=200, content_type='application/json', body='{"t":""}', headers={'Access-Control-Allow-Origin': '*'})
-SEED = """(ed)=>{localStorage.clear();localStorage.setItem('sn_seen','true');localStorage.setItem('sn_morning','"x"');if(ed)localStorage.setItem('sn_ed',JSON.stringify(ed));
- localStorage.setItem('sn_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'المفاتيح، البطاقة'}));
+SEED = """(ed)=>{localStorage.clear();localStorage.setItem('sy_seen','true');localStorage.setItem('sy_morning','"x"');if(ed)localStorage.setItem('sy_ed',JSON.stringify(ed));
+ localStorage.setItem('sy_prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'f',wake:'00:00',sleep:'23:59',travel:30,prep:'المفاتيح، البطاقة'}));
  const pad=n=>String(n).padStart(2,'0'),L=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());const n=Date.now();
- localStorage.setItem('sn_items',JSON.stringify([
+ localStorage.setItem('sy_items',JSON.stringify([
   {id:'a1',type:'appt',sec:'health',title:'كشف الدكتور',due:L(new Date(n+150*6e4)),where:'',done:false,created:n},
   {id:'t1',type:'task',sec:'work',title:'أبعت التقرير لأحمد',big:true,steps:[{t:'افتح الملف واكتب العنوان',min:3,done:false},{t:'اكتب أول فقرة',min:15,done:false}],done:false,created:n-3*864e5,star:true},
   {id:'c1',type:'call',sec:'people',title:'أكلم ماما',done:false,created:n},
@@ -88,7 +88,7 @@ with sync_playwright() as p:
     pg.click('#modeSeg [data-m=one]'); pg.wait_for_timeout(300)
     pg.screenshot(path=os.path.join(OUT, 'm_warm.png'))
     # ---- commercial edition
-    pg.evaluate("Object.keys(localStorage).filter(k=>k.startsWith('sn_')).forEach(k=>localStorage.setItem('sm_'+k.slice(3),localStorage.getItem(k)))"); pg.goto(U.replace('index.html','app/index.html')); pg.wait_for_timeout(800)
+    pg.evaluate("Object.keys(localStorage).filter(k=>k.startsWith('sy_')).forEach(k=>localStorage.setItem('sy_'+k.slice(3),localStorage.getItem(k)))"); pg.goto(U.replace('index.html','app/index.html')); pg.wait_for_timeout(800)
     seg = pg.inner_text('#modeSeg')
     check('commercial layouts offered', all(x in seg for x in ['مربعات', 'خط اليوم', 'كلام', 'حاجة واحدة']), seg)
     check('blocks default', pg.locator('#nowLay .blk').count() >= 4)

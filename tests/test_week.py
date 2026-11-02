@@ -27,7 +27,7 @@ SEED = """()=>{const pad=n=>String(n).padStart(2,'0');const L=d=>d.getFullYear()
   {id:'d2',type:'task',sec:'work',title:'خلصت 2',done:true,doneAt:n-3*D,created:n-9*D},
   {id:'d3',type:'task',sec:'work',title:'قديمة',done:true,doneAt:n-20*D,created:n-30*D}];
  for(let i=0;i<4;i++)it.push({id:'f'+i,type:'idea',sec:'me',title:'فكرة '+i,done:false,created:n-9*D});
- localStorage.setItem('sn_items',JSON.stringify(it));localStorage.setItem('sn_seen','true');localStorage.setItem('sn_simple','false');localStorage.setItem('sn_dev','devAAAA1111');localStorage.setItem('sn_tg','true');localStorage.setItem('sn_money',JSON.stringify({bal:5000,sal:9000,pay:25,spends:[]}));}"""
+ localStorage.setItem('sy_items',JSON.stringify(it));localStorage.setItem('sy_seen','true');localStorage.setItem('sy_simple','false');localStorage.setItem('sy_dev','devAAAA1111');localStorage.setItem('sy_tg','true');localStorage.setItem('sy_money',JSON.stringify({bal:5000,sal:9000,pay:25,spends:[]}));}"""
 with sync_playwright() as p:
     b = p.chromium.launch()
     ctx = b.new_context(viewport={'width': 400, 'height': 860}, accept_downloads=True)
@@ -50,7 +50,7 @@ with sync_playwright() as p:
     pg.screenshot(path=os.path.join(OUT, 'week.png'), full_page=False)
     # decisions
     pg.click('.wrow[data-w="l1"] [data-a="t"]'); pg.click('.wrow[data-w="l2"] [data-a="d"]'); pg.click('.wrow[data-w="l3"] [data-a="x"]'); pg.click('.wrow[data-w="l4"] [data-a="w"]')
-    st = pg.evaluate("()=>{const it=JSON.parse(localStorage.getItem('sn_items'));const g=id=>it.find(i=>i.id===id);return {l1:g('l1')&&g('l1').due,l2:g('l2')&&g('l2').done,l3:!!g('l3'),l4:g('l4')&&g('l4').due,rows:document.querySelectorAll('.wrow').length}}")
+    st = pg.evaluate("()=>{const it=JSON.parse(localStorage.getItem('sy_items'));const g=id=>it.find(i=>i.id===id);return {l1:g('l1')&&g('l1').due,l2:g('l2')&&g('l2').done,l3:!!g('l3'),l4:g('l4')&&g('l4').due,rows:document.querySelectorAll('.wrow').length}}")
     import datetime as dt
     tom = (dt.date.today() + dt.timedelta(days=1)).isoformat(); nw = (dt.date.today() + dt.timedelta(days=7)).isoformat()
     check('بكرة moves to tomorrow 10:00', st['l1'] == tom + 'T10:00', st)
@@ -60,10 +60,10 @@ with sync_playwright() as p:
     check('decided rows disappear', st['rows'] == 0, st)
     # pick top 3, 4th refused
     for i in ['p1', 'p2', 'p3', 'p4']: pg.click(f'#wPick [data-id="{i}"]')
-    stars = pg.evaluate("()=>JSON.parse(localStorage.getItem('sn_items')).filter(i=>i.star).map(i=>i.id)")
+    stars = pg.evaluate("()=>JSON.parse(localStorage.getItem('sy_items')).filter(i=>i.star).map(i=>i.id)")
     check('max 3 stars', sorted(stars) == ['p1', 'p2', 'p3'], stars)
     pg.click('#wDone'); pg.wait_for_timeout(400)
-    check('review recorded', pg.evaluate("()=>JSON.parse(localStorage.getItem('sn_weekRev'))") > 0)
+    check('review recorded', pg.evaluate("()=>JSON.parse(localStorage.getItem('sy_weekRev'))") > 0)
     check('weekly nudge gone after review', not any(x.startswith('wk') for x in pg.evaluate("()=>nudges().map(x=>x.id)")))
     # backup
     pg.click('#btnSet'); pg.click('#sBk'); pg.wait_for_timeout(200)
@@ -78,10 +78,10 @@ with sync_playwright() as p:
     pg2 = ctx.new_page(); pg2.on('pageerror', lambda e: errs.append(str(e)))
     pg2.route('https://api.nrg-egypt.com/**', lambda r: r.fulfill(status=200, content_type='application/json', body='{"linked":false}'))
     pg2.goto('http://127.0.0.1:8766/index.html')
-    pg2.evaluate("()=>{localStorage.clear();localStorage.setItem('sn_seen','true');localStorage.setItem('sn_simple','false');localStorage.setItem('sn_dev','devBBBB2222')}"); pg2.reload(); pg2.wait_for_timeout(600)
+    pg2.evaluate("()=>{localStorage.clear();localStorage.setItem('sy_seen','true');localStorage.setItem('sy_simple','false');localStorage.setItem('sy_dev','devBBBB2222')}"); pg2.reload(); pg2.wait_for_timeout(600)
     pg2.on('dialog', lambda d: d.accept())
     pg2.click('#btnSet'); pg2.click('#sBk'); pg2.set_input_files('#bkFile', path); pg2.wait_for_timeout(2500)
-    st2 = pg2.evaluate("()=>({n:JSON.parse(localStorage.getItem('sn_items')||'[]').length,dev:localStorage.getItem('sn_dev'),bal:JSON.parse(localStorage.getItem('sn_money')).bal,tg:localStorage.getItem('sn_tg')})")
+    st2 = pg2.evaluate("()=>({n:JSON.parse(localStorage.getItem('sy_items')||'[]').length,dev:localStorage.getItem('sy_dev'),bal:JSON.parse(localStorage.getItem('sy_money')).bal,tg:localStorage.getItem('sy_tg')})")
     check('restore brings all items', st2['n'] == n_items, st2)
     check('restore keeps the new phone device code', st2['dev'] == 'devBBBB2222', st2)
     check('restore brings money', st2['bal'] == 5000, st2)

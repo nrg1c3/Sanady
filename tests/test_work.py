@@ -25,7 +25,7 @@ with sync_playwright() as p:
         pg.goto(url); pg.evaluate(seed(px, extra)); pg.evaluate('window.__noNav=1'); pg.reload(); pg.evaluate('window.__noNav=1'); pg.wait_for_timeout(900); return pg
     A = 'http://127.0.0.1:8783/index.html'; M = 'http://127.0.0.1:8783/app/index.html'
     # ---- bill pay (ADHD edition)
-    pg = page(A, 'sn_')
+    pg = page(A, 'sy_')
     check('bill nudge offers pay', 'ادفعها' in pg.evaluate("nudges().map(n=>n.acts.map(a=>a[0]).join()).join()"))
     pg.evaluate("paySheet(byId('b1'))"); pg.wait_for_timeout(200)
     t = pg.inner_text('#sheetBody')
@@ -80,7 +80,7 @@ with sync_playwright() as p:
     E.click('#eExit'); E.fill('#ePin', '0000'); E.click('#ePinGo'); E.wait_for_timeout(200)
     check('wrong PIN stays locked', E.locator('#eOff').count() == 0)
     # ---- business mode (commercial edition)
-    m = page(M, 'sm_')
+    m = page(M, 'sy_')
     check('biz mode tab in commercial', 'الشغل' in m.inner_text('#modeSeg'))
     m.evaluate("setMode('biz')"); m.wait_for_timeout(300)
     check('biz screen visible', not m.is_hidden('#nowBiz') and 'صاحب الشغل' in m.inner_text('#nowBiz'))

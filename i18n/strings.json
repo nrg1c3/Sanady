@@ -289,7 +289,10 @@
 "fr": " : tu es arrivé à l'heure ? Comme ça j'apprends combien de temps prend ton trajet."
 },
 "Everything it does goes into the log (سندي عمل إيه) with an undo button. */": null,
+"Say it once. Sayvo sorts it. قولها مرة، وسايفو يرتّبها.": null,
+"Sayvo · سايفو": null,
 "Simple screen (default in سندي ADHD): the time left made visible, one thing now, one big mic, what the agent did.": null,
+"The texts still say سندي in places: the name is swapped on screen. */": null,
 "· آخر تغيير من": {
 "de": "· letzter Wechsel bei",
 "en": "· last change at",
@@ -667,6 +670,12 @@
 "en": "Pay it now?",
 "es": "¿La pago ahora?",
 "fr": "Je la paie maintenant ?"
+},
+"أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.": {
+"de": "Zusätzliche Werkzeuge für alle, denen Anfangen, Fokus oder Zeitgefühl schwerfällt, mit oder ohne ADHS.",
+"en": "Extra tools for anyone who finds it hard to start, focus or keep track of time, with or without ADHD.",
+"es": "Herramientas extra para quien le cuesta empezar, concentrarse o llevar el tiempo, con o sin TDAH.",
+"fr": "Des outils en plus pour toi si tu as du mal à commencer, te concentrer ou suivre le temps, avec ou sans TDAH."
 },
 "أدوات مدرسة": {
 "de": "Schulsachen",
@@ -1473,6 +1482,12 @@
 "es": "Elige la hora",
 "fr": "Choisis l'heure"
 },
+"اختيار الحاجة حسب طاقتك": {
+"de": "Aufgaben passend zu deiner Energie",
+"en": "Pick tasks to match your energy",
+"es": "Elegir según tu energía",
+"fr": "Choisir selon ton énergie"
+},
 "اخرج من التجربة": {
 "de": "Studie verlassen",
 "en": "Leave the study",
@@ -1827,6 +1842,12 @@
 "es": "Bloquear la pantalla del niño",
 "fr": "Verrouiller l'écran enfant"
 },
+"اقفل فوكس+": {
+"de": "Focus+ ausschalten",
+"en": "Turn off Focus+",
+"es": "Desactivar Focus+",
+"fr": "Désactiver Focus+"
+},
 "اكتب 3 نقط أهم حاجات اتعملت الشهر ده": {
 "de": "Schreib 3 Stichpunkte zu den wichtigsten Sachen diesen Monat",
 "en": "Write 3 bullet points on the main things done this month",
@@ -2126,6 +2147,12 @@
 "en": "Starting is the hard part, not you. Let's pick a way:",
 "es": "Lo difícil es empezar, no tú. Elijamos una forma:",
 "fr": "C'est le démarrage qui est dur, pas toi. On choisit une méthode :"
+},
+"البداية بدقيقتين بس، وتقسيم الحاجة الكبيرة لخطوات": {
+"de": "Mit nur 2 Minuten anfangen und Großes in Schritte teilen",
+"en": "Start with just 2 minutes, and big tasks split into steps",
+"es": "Empezar con solo 2 minutos y dividir lo grande en pasos",
+"fr": "Commencer par 2 minutes, et découper les grosses tâches en étapes"
 },
 "البس البيجامة 🌙": {
 "de": "Schlafanzug anziehen 🌙",
@@ -2552,6 +2579,12 @@
 "en": "The simple screen (one thing and a voice button)",
 "es": "La pantalla simple (una sola cosa y un botón de voz)",
 "fr": "L'écran simple (une seule chose et un bouton vocal)"
+},
+"الشاشة البسيطة: حاجة واحدة دلوقتي وزرار صوت كبير": {
+"de": "Einfacher Bildschirm: eine Sache jetzt und eine große Sprechtaste",
+"en": "Simple screen: one thing now and a big voice button",
+"es": "Pantalla simple: una sola cosa ahora y un botón de voz grande",
+"fr": "Écran simple : une seule chose maintenant et un gros bouton voix"
 },
 "الشاشة دي تتعمل على موبايل الطفل نفسه، بإيد الأب أو الأم.": {
 "de": "Dieser Bildschirm wird auf dem Handy des Kindes selbst eingerichtet, von Mama oder Papa.",
@@ -3902,6 +3935,12 @@
 "en": "May God accept it 🤍",
 "es": "Que Dios lo acepte 🤍",
 "fr": "Que Dieu l'accepte 🤍"
+},
+"تقدر تجربه دلوقتي ببلاش. الاشتراك هيبقى من جوجل بلاي.": {
+"de": "Du kannst es jetzt kostenlos testen. Das Abo läuft später über Google Play.",
+"en": "You can try it free now. The subscription will be through Google Play.",
+"es": "Puedes probarlo gratis ahora. La suscripción será a través de Google Play.",
+"fr": "Tu peux l'essayer gratuitement maintenant. L'abonnement se fera via Google Play."
 },
 "تقدر تحوّش كام في الأسبوع؟": {
 "de": "Wie viel kannst du pro Woche sparen?",
@@ -5475,6 +5514,12 @@
 "es": "Sándwiches de queso y pepino",
 "fr": "Sandwichs fromage-concombre"
 },
+"سايفو": {
+"de": "Sayvo",
+"en": "Sayvo",
+"es": "Sayvo",
+"fr": "Sayvo"
+},
 "سبتمبر": {
 "de": "September",
 "en": "September",
@@ -5750,6 +5795,12 @@
 "en": "A simple ADHD explainer for family",
 "es": "Explicación sencilla del TDAH para la familia",
 "fr": "Explication simple du TDAH pour la famille"
+},
+"شريك متابعة كل أسبوع": {
+"de": "Ein wöchentlicher Begleiter, der nachfragt",
+"en": "A weekly accountability buddy",
+"es": "Un compañero de seguimiento cada semana",
+"fr": "Un partenaire de suivi chaque semaine"
 },
 "شغال ✓ · آخر تحديث": {
 "de": "Läuft ✓ · zuletzt aktualisiert",
@@ -6632,6 +6683,12 @@
 "en": "Fawry",
 "es": "Fawry",
 "fr": "Fawry"
+},
+"فوكس+ شغال على الموبايل ده.": {
+"de": "Focus+ ist auf diesem Handy an.",
+"en": "Focus+ is on for this phone.",
+"es": "Focus+ está activado en este teléfono.",
+"fr": "Focus+ est activé sur ce téléphone."
 },
 "فول": {
 "de": "Saubohnen",
@@ -8283,6 +8340,12 @@
 "es": "sin",
 "fr": "sans"
 },
+"من غير حساب، وبياناتك محفوظة على موبايلك. سندي مش علاج ولا تشخيص.": {
+"de": "Ohne Konto, und deine Daten bleiben auf deinem Handy. Sanady ist keine Behandlung und keine Diagnose.",
+"en": "No account, and your data is kept on your phone. Sanady isn't treatment or a diagnosis.",
+"es": "Sin cuenta, y tus datos se guardan en tu teléfono. Sanady no es tratamiento ni diagnóstico.",
+"fr": "Sans compte, et tes données restent sur ton téléphone. Sanady n'est ni un traitement ni un diagnostic."
+},
 "من غير لوم، عشان تعرف بس": {
 "de": "Kein Vorwurf, nur damit du's weißt",
 "en": "No blame, just so you know",
@@ -8865,6 +8928,18 @@
 "en": "I'm at school 🏫",
 "es": "Llegué a la escuela 🏫",
 "fr": "Je suis à l'école 🏫"
+},
+"وضع «جنبك»: حد معاك وإنت بتشتغل": {
+"de": "„Neben dir“-Modus: jemand ist bei dir, während du arbeitest",
+"en": "\"By your side\" mode: someone with you while you work",
+"es": "Modo «A tu lado»: alguien contigo mientras trabajas",
+"fr": "Mode « À tes côtés » : quelqu’un avec toi pendant que tu travailles"
+},
+"وضع الانتظار قبل المواعيد، وأنا اللي أقولك تقوم": {
+"de": "Wartemodus vor Terminen, und ich sage dir, wann du losmusst",
+"en": "Waiting mode before appointments, and I'll tell you when to get up",
+"es": "Modo espera antes de las citas, y yo te digo cuándo salir",
+"fr": "Mode attente avant les rendez-vous, et je te dis quand partir"
 },
 "وضع النوم": {
 "de": "Schlafmodus",
@@ -9629,11 +9704,23 @@
 "es": "🎙️ Vamos a vaciar tu cabeza",
 "fr": "🎙️ On vide ta tête"
 },
+"🎯 جرّب فوكس+": {
+"de": "🎯 Focus+ testen",
+"en": "🎯 Try Focus+",
+"es": "🎯 Probar Focus+",
+"fr": "🎯 Essayer Focus+"
+},
 "🎯 حوّلها لهدف": {
 "de": "🎯 Mach ein Ziel daraus",
 "en": "🎯 Turn it into a goal",
 "es": "🎯 Conviértela en meta",
 "fr": "🎯 Fais-en un objectif"
+},
+"🎯 فوكس+": {
+"de": "🎯 Focus+",
+"en": "🎯 Focus+",
+"es": "🎯 Focus+",
+"fr": "🎯 Focus+"
 },
 "🎯 مشروعك الحالي:": {
 "de": "🎯 Dein aktuelles Projekt:",

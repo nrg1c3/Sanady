@@ -1,3 +1,4 @@
 __pycache__/
 tests/*.png
 tests/i18n_left.json
+tests/bk.json

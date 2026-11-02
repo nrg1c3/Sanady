@@ -1,3 +1,18 @@
+# Sayvo · سايفو
+
+Say it once. Sayvo sorts it. A voice-first personal AI agent for adults with a crowded life: say everything on your mind; Sayvo sorts it into tasks, appointments, bills and home needs, reminds you at the right moment (alarms ring even with the app closed), starts the first step with you, and replans your day when you fall behind. Egyptian Arabic first, plus Gulf Arabic, English, French, Spanish and German.
+
+**Focus+** is the paid add-on for people who find it hard to start, focus or keep track of time (with or without ADHD): the simple screen, body double, waiting mode, 2-minute starts, weekly accountability buddy, energy picker. It is what used to be the separate Sanady ADHD app.
+
+- Live: https://sayvo.nrg-egypt.com (until the DNS record exists: https://nrg1c3.github.io/sayvo/) · Focus+ link: `?focus=1` · Demo: `?demo=1`
+- The old links /Sanady/ and /mudabbir/ forward here (redirect pages in the nrg1c3.github.io repo).
+- Languages: the code is written in Egyptian Arabic; `i18n.js` translates the screen from `i18n/strings.json` (`python3 tools/build-i18n.py` builds the word lists, `--check` lists new Arabic text that needs a translation).
+- n8n on NRG's server (all "Sayvo - …"): Brain, Voice (`sayvo-tts`), Device Register (`sayvo-register`), Push Alarms, Backup, Home Sync, Pilot Stats, Waitlist. Separate from Wasl.
+
+---
+
+## History (Sanady)
+
 # سندي · Sanady
 سندك اللي جواك — Your inner companion.
 

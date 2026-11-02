@@ -31,8 +31,8 @@ with sync_playwright() as p:
     U = 'http://127.0.0.1:8771/index.html'
     pg.goto(U); pg.evaluate(SEED, None); pg.reload(); pg.wait_for_timeout(1200)
     # ---- ADHD edition defaults
-    check('default theme is night', pg.evaluate("document.body.dataset.th") == 'night')
-    check('accent is yellow', pg.evaluate("getComputedStyle(document.body).getPropertyValue('--pri').trim()").upper() == '#FFD24C')
+    check('default theme is sayvo', pg.evaluate("document.body.dataset.th") == 'sayvo')
+    check('accent is apricot', pg.evaluate("getComputedStyle(document.body).getPropertyValue('--pri').trim()").upper() == '#FFB57A')
     seg = pg.inner_text('#modeSeg')
     check('3 ADHD modes shown', all(x in seg for x in ['حاجة واحدة', 'جنبك', 'انتظار']), seg)
     check('time bar counts to leaving', 'وتتحرك لـ كشف الدكتور' in pg.inner_text('#tBar'), pg.inner_text('#tBar'))
@@ -88,7 +88,7 @@ with sync_playwright() as p:
     pg.click('#modeSeg [data-m=one]'); pg.wait_for_timeout(300)
     pg.screenshot(path=os.path.join(OUT, 'm_warm.png'))
     # ---- commercial edition
-    pg.evaluate("Object.keys(localStorage).filter(k=>k.startsWith('sy_')).forEach(k=>localStorage.setItem('sy_'+k.slice(3),localStorage.getItem(k)))"); pg.goto(U.replace('index.html','app/index.html')); pg.wait_for_timeout(800)
+    pg.evaluate("localStorage.setItem('sy_focus','false')"); pg.goto(U.replace('index.html','app/index.html')); pg.wait_for_timeout(800)
     seg = pg.inner_text('#modeSeg')
     check('commercial layouts offered', all(x in seg for x in ['مربعات', 'خط اليوم', 'كلام', 'حاجة واحدة']), seg)
     check('blocks default', pg.locator('#nowLay .blk').count() >= 4)
@@ -106,7 +106,7 @@ with sync_playwright() as p:
     pg.wait_for_timeout(21000)  # survive the 20s auto refresh
     check('typed text survives auto-refresh', pg.input_value('#chIn') == 'المفاتيح في الدرج')
     pg.screenshot(path=os.path.join(OUT, 'm_chat.png'))
-    pg.goto(U); pg.wait_for_timeout(600)
+    pg.evaluate("localStorage.setItem('sy_focus','true')"); pg.goto(U); pg.wait_for_timeout(600)
     check('switch back to ADHD edition', 'جنبك' in pg.inner_text('#modeSeg'))
     check('no page errors', not errs, errs)
     b.close()

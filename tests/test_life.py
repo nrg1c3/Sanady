@@ -77,7 +77,7 @@ with sync_playwright() as p:
     pg.click('#modeSeg [data-m=one]')
     # ---- without Focus+ the focus tools are hidden; everything else is the same app
     pg.evaluate("localStorage.setItem('sy_focus','false')"); pg.goto(A); pg.wait_for_timeout(900)
-    check('app title', pg.title() == 'Sayvo · سايفو', pg.title())
+    check('app title', pg.title() in ('سايفو', 'Sayvo · سايفو'), pg.title())
     check('no focus tools without Focus+', not pg.is_visible('#qDopa') and pg.is_hidden('#energy') and 'جنبك' not in pg.inner_text('#modeSeg'))
     check('daily-life hub without Focus+', pg.evaluate("show('all');setSeg('life');document.querySelectorAll('#allBody [data-l]').length") == 9)
     man = pg.evaluate("fetch('manifest.webmanifest').then(r=>r.json())")

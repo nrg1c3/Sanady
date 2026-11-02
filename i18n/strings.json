@@ -6273,6 +6273,12 @@
 "es": "Me distraje",
 "fr": "Décroché"
 },
+"سريع (صوت الموبايل)": {
+"de": "Schnell (Handystimme)",
+"en": "Fast (phone voice)",
+"es": "Rápido (voz del teléfono)",
+"fr": "Rapide (voix du téléphone)"
+},
 "سكر": {
 "de": "Zucker",
 "en": "Sugar",
@@ -6770,6 +6776,12 @@
 "en": "Prayer before bed",
 "es": "Oración antes de dormir",
 "fr": "Prière du coucher"
+},
+"صوت الهمس": {
+"de": "Flüsterstimme",
+"en": "Whisper voice",
+"es": "Voz del susurro",
+"fr": "Voix du murmure"
 },
 "صوت بيوطى لحد ما يقف": {
 "de": "Ton, der leiser wird, bis er aufhört",
@@ -9086,6 +9098,12 @@
 "en": "Egyptian Arabic",
 "es": "Árabe egipcio",
 "fr": "Arabe égyptien"
+},
+"مصري طبيعي (أبطأ شوية)": {
+"de": "Natürliches Ägyptisch (etwas langsamer)",
+"en": "Natural Egyptian (a bit slower)",
+"es": "Egipcio natural (un poco más lento)",
+"fr": "Égyptien naturel (un peu plus lent)"
 },
 "مضغوط؟": {
 "de": "Gestresst?",
@@ -11650,6 +11668,12 @@
 "en": "🔁 Did anyone get back to you about:",
 "es": "🔁 ¿Alguien te respondió sobre:",
 "fr": "🔁 Quelqu'un t'a répondu au sujet de :"
+},
+"🔄 بيشغّل المايك…": {
+"de": "🔄 Mikro startet neu…",
+"en": "🔄 Restarting the mic…",
+"es": "🔄 Reiniciando el micrófono…",
+"fr": "🔄 Je relance le micro…"
 },
 "🔄 حدّث التذكيرات دلوقتي": {
 "de": "🔄 Erinnerungen jetzt aktualisieren",

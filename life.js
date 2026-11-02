@@ -8,7 +8,7 @@ let LIFE_SUB='';
 const md=d=>pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const ymKey=d=>dayKey(d).slice(0,7);
 const back=()=>`<button class="link" id="lfBack" style="align-self:flex-start">‹ حياتي</button>`;
-const SECTIONS=[['me','🌿','اهتماماتي','دين، حيوانات، هوايات'],['habits','✅','عاداتي','حاجة صغيرة كل يوم'],['occ','🎂','المناسبات','أعياد ميلاد وذكريات'],['subs','🔁','الاشتراكات','بتدفع كام كل شهر'],['car','🚗','العربية','زيت، رخصة، تأمين'],['gam','🤝','الجمعية','قسطك ودورك'],['debts','💸','لي وعليا','السلف والفلوس اللي برة'],['health','💧','صحتي','مية ونوم ودكاترة'],['parents','👵','بابا وماما','مكالمة كل يوم ودواهم']];
+const SECTIONS=[['me','🌿','اهتماماتي','دين، حيوانات، هوايات'],['habits','✅','عاداتي','حاجة صغيرة كل يوم'],['occ','🎂','المناسبات','أعياد ميلاد وذكريات'],['subs','🔁','الاشتراكات','بتدفع كام كل شهر'],['car','🚗','العربية','زيت، رخصة، تأمين'],['gam','🤝','الجمعية','قسطك ودورك'],['debts','💸','لي وعليا','السلف والفلوس اللي برة'],['health','💧','صحتي','مية ونوم ودكاترة']].concat(IS_ADHD?[]:[['parents','👵','بابا وماما','مكالمة كل يوم ودواهم']]);
 function drawLife(b){if(SEG==='me')LIFE_SUB='me';const s=LIFE_SUB;
  if(!s){b.innerHTML=`<div class="card"><div class="ch"><h3>حياتي</h3><small>أقسام صغيرة لحاجات كل يوم. استخدم اللي يفيدك بس.</small></div></div><div class="blocks">${SECTIONS.map(([k,i,t,d])=>`<button class="blk" data-l="${k}"><i>${i}</i><b>${t}</b><small>${esc(lifeHint(k)||d)}</small></button>`).join('')}</div>`;
   b.querySelectorAll('[data-l]').forEach(x=>x.onclick=()=>{LIFE_SUB=x.dataset.l;drawAll();window.scrollTo(0,0)});return}

@@ -711,7 +711,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
  ${IS_ADHD?'':'<button class="btn ghost" id="sPlan">⭐ الباقات والاشتراك</button>'}
- <button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>
+ ${IS_ADHD?'':'<button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>'}
  <button class="btn ghost" id="sHome">🏠 البيت المشترك (قايمة واحدة لكل البيت)</button>
  <button class="btn ghost" id="sKid">👧 حوّل الموبايل ده لموبايل طفل</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
@@ -727,7 +727,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  $('sBk').onclick=()=>backupSheet();
  $('sKid').onclick=()=>kidSetup();
  $('sHome').onclick=()=>homeSheet();
- $('sOld').onclick=()=>elderSetup();if($('sPlan'))$('sPlan').onclick=()=>plansSheet();
+ if($('sOld'))$('sOld').onclick=()=>elderSetup();if($('sPlan'))$('sPlan').onclick=()=>plansSheet();
  $('sDoc').onclick=()=>docsSheet();
  $('sNot').onclick=()=>{closeSheet();store.get('push',false)?disablePush():enablePush()};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;

@@ -11,6 +11,12 @@
 "es": "(tu límite",
 "fr": "(ta limite"
 },
+"(بموافقتك)": {
+"de": "(mit deinem OK)",
+"en": "(with your OK)",
+"es": "(con tu permiso)",
+"fr": "(avec ton accord)"
+},
 "(بيخلص": {
 "de": "(läuft ab",
 "en": "(expires",
@@ -118,6 +124,12 @@
 "en": ". Get moving",
 "es": ". Muévete",
 "fr": ". Bouge"
+},
+". تبص عليه؟": {
+"de": ". Magst du reinschauen?",
+"en": ". Want to take a look?",
+"es": ". ¿Le echas un vistazo?",
+"fr": ". Tu veux jeter un œil ?"
 },
 ". تكلمه دلوقتي؟": {
 "de": ". Jetzt anrufen?",
@@ -395,11 +407,35 @@
 "es": "· te aviso 3 días antes",
 "fr": "· je te préviens 3 jours avant"
 },
+"» (إنت اللي بعتها)": {
+"de": "“ (du hast sie gesendet)",
+"en": "” (you sent it)",
+"es": "» (lo enviaste tú)",
+"fr": " » (c'est toi qui l'as envoyé)"
+},
 "» بس. خد نفس، وابدأ من أول سطر.": {
 "de": "“ – sonst nichts. Atme durch und fang mit der ersten Zeile an.",
 "en": "” only. Take a breath, and start with the first line.",
 "es": "» y nada más. Respira y empieza por la primera línea.",
 "fr": " » seulement. Respire, et commence par la première ligne."
+},
+"» في تطبيق الإيميل": {
+"de": "“ in deiner Mail-App",
+"en": "” in your mail app",
+"es": "» en tu app de correo",
+"fr": " » dans ton appli mail"
+},
+"» في جوجل كالندر": {
+"de": "“ in Google Kalender",
+"en": "” in Google Calendar",
+"es": "» en Google Calendar",
+"fr": " » dans Google Agenda"
+},
+"» لـ": {
+"de": "“ an ",
+"en": "” to ",
+"es": "» a ",
+"fr": " » à "
 },
 "،": {
 "de": ",",
@@ -694,6 +730,12 @@
 "en": "Extra tools for when it's hard to start, focus, or keep track of time: the simple screen, “By your side,” waiting before appointments, and a check-in buddy.",
 "es": "Herramientas extra para cuando cuesta empezar, concentrarse o no perder la noción del tiempo: la pantalla simple, «A tu lado», la espera antes de las citas y un compañero de seguimiento.",
 "fr": "Des outils en plus quand c'est dur de commencer, de te concentrer ou de voir le temps passer : l'écran simple, « À tes côtés », l'attente avant les rendez-vous et un partenaire de suivi."
+},
+"أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت: الشاشة البسيطة، و«جنبك»، والانتظار قبل المواعيد، وشريك متابعة، ومستشار في ودنك وإنت في اجتماع أو بتتكلم.": {
+"de": "Extra-Tools, wenn dir Anfangen, Dranbleiben oder das Zeitgefühl schwerfällt: der einfache Bildschirm, „An deiner Seite“, das Warten vor Terminen, ein Check-in-Partner und ein Coach im Ohr, während du im Meeting bist oder redest.",
+"en": "Extra tools if starting, focusing, or keeping track of time is hard: the simple screen, “By your side,” waiting mode before appointments, an accountability buddy, and a coach in your ear while you're in a meeting or talking.",
+"es": "Herramientas extra si te cuesta empezar, concentrarte o no perder la noción del tiempo: la pantalla simple, «A tu lado», la espera antes de las citas, un compañero de seguimiento y un coach en tu oído mientras estás en una reunión o hablando.",
+"fr": "Des outils en plus si tu as du mal à démarrer, à te concentrer ou à voir le temps passer : l'écran simple, « À tes côtés », l'attente avant les rendez-vous, un partenaire de suivi et un coach dans ton oreille pendant une réunion ou une conversation."
 },
 "أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.": {
 "de": "Zusätzliche Werkzeuge für alle, denen Anfangen, Fokus oder Zeitgefühl schwerfällt, mit oder ohne ADHS.",
@@ -995,6 +1037,12 @@
 "es": "Estoy contigo. No estás solo. Hay personas especializadas que pueden escucharte ahora mismo, y sus números están aquí.",
 "fr": "Je suis avec toi. Tu n'es pas seul. Il y a des gens formés pour ça qui peuvent t'écouter maintenant, et leurs numéros sont juste là."
 },
+"أنا معاك. ابدأ براحتك.": {
+"de": "Ich bin bei dir. Fang ganz in Ruhe an.",
+"en": "I'm with you. Start whenever you're ready.",
+"es": "Estoy contigo. Empieza a tu ritmo.",
+"fr": "Je suis avec toi. Commence à ton rythme."
+},
 "أنام قبل 12": {
 "de": "Vor Mitternacht schlafen",
 "en": "Sleep before midnight",
@@ -1151,6 +1199,12 @@
 "es": "¿Cómo estás? Te extraño, quería saber de ti.",
 "fr": "Comment ça va ? Tu me manques, je voulais prendre de tes nouvelles."
 },
+"إضافة فوق الاشتراك": {
+"de": "Zusatz zum Abo",
+"en": "Add-on to your plan",
+"es": "Complemento de tu plan",
+"fr": "Option en plus de l'abonnement"
+},
 "إعدادات الفلوس": {
 "de": "Geld-Einstellungen",
 "en": "Money settings",
@@ -1302,6 +1356,12 @@
 "es": "Envíatelo por WhatsApp o anótalo en un papel. Sin él, no hay forma de recuperar la copia.",
 "fr": "Envoie-le-toi par WhatsApp ou note-le sur papier. Sans lui, impossible de récupérer la sauvegarde."
 },
+"ابعته من جيميل بتاعي": {
+"de": "Über mein Gmail senden",
+"en": "Send it from my Gmail",
+"es": "Enviarlo desde mi Gmail",
+"fr": "Envoyer depuis mon Gmail"
+},
 "ابعتها": {
 "de": "Abschicken",
 "en": "Send it",
@@ -1368,6 +1428,12 @@
 "es": "Te atrasaste con",
 "fr": "Tu as pris du retard sur"
 },
+"اتبعت ✓": {
+"de": "Gesendet ✓",
+"en": "Sent ✓",
+"es": "Enviado ✓",
+"fr": "Envoyé ✓"
+},
 "اتبعتت لـ": {
 "de": "Gesendet an",
 "en": "Sent to",
@@ -1391,6 +1457,12 @@
 "en": "I'm off ✓",
 "es": "Ya salí ✓",
 "fr": "C'est parti ✓"
+},
+"اتحطت في جوجل كالندر ✓": {
+"de": "In Google Kalender eingetragen ✓",
+"en": "Added to Google Calendar ✓",
+"es": "Agregado a Google Calendar ✓",
+"fr": "Ajouté à Google Agenda ✓"
 },
 "اتحفظ": {
 "de": "Gespeichert",
@@ -1416,11 +1488,23 @@
 "es": "Pagado ✓ Te lo recuerdo la próxima vez",
 "fr": "Payé ✓ Je te le rappellerai la prochaine fois"
 },
+"اتربط ✓": {
+"de": "Verbunden ✓",
+"en": "Connected ✓",
+"es": "Conectado ✓",
+"fr": "Connecté ✓"
+},
 "اتركنت 💭 ارجع لشغلك، هتلاقيها بعدين": {
 "de": "Geparkt 💭 Zurück an die Arbeit, du findest sie später",
 "en": "Parked 💭 Back to work, it'll be here later",
 "es": "Guardada 💭 Vuelve a lo tuyo, la encontrarás después",
 "fr": "Mise de côté 💭 Retourne au travail, tu la retrouveras plus tard"
+},
+"اتسجلت إنها اتدفعت ✓": {
+"de": "Als bezahlt markiert ✓",
+"en": "Marked as paid ✓",
+"es": "Marcada como pagada ✓",
+"fr": "Marquée comme payée ✓"
 },
 "اتسددت": {
 "de": "Beglichen",
@@ -1476,6 +1560,12 @@
 "es": "Almuerza 🍽️",
 "fr": "Déjeune 🍽️"
 },
+"اتفصل": {
+"de": "Getrennt",
+"en": "Disconnected",
+"es": "Desconectado",
+"fr": "Déconnecté"
+},
 "اتفصل، ومسحنا تذكيراتك من السيرفر": {
 "de": "Getrennt, und wir haben deine Erinnerungen vom Server gelöscht",
 "en": "Disconnected, and we deleted your reminders from the server",
@@ -1505,6 +1595,12 @@
 "en": "Copied",
 "es": "Copiado",
 "fr": "Copié"
+},
+"اجتماع": {
+"de": "Meeting",
+"en": "Meeting",
+"es": "Reunión",
+"fr": "Réunion"
 },
 "احفظ": {
 "de": "Speichern",
@@ -1601,6 +1697,18 @@
 "en": "Pay it 💳",
 "es": "Pagarla 💳",
 "fr": "Payer 💳"
+},
+"اربط جوجل": {
+"de": "Google verbinden",
+"en": "Connect Google",
+"es": "Conectar Google",
+"fr": "Connecter Google"
+},
+"اربط حساب جوجل بتاعك:": {
+"de": "Verbinde dein Google-Konto:",
+"en": "Connect your Google account:",
+"es": "Conecta tu cuenta de Google:",
+"fr": "Connecte ton compte Google :"
 },
 "اركن": {
 "de": "Parken",
@@ -1854,11 +1962,23 @@
 "es": "Abre el archivo y agrega",
 "fr": "Ouvre le fichier et ajoute"
 },
+"افتح صفحة الدفع": {
+"de": "Zahlungsseite öffnen",
+"en": "Open the payment page",
+"es": "Abrir la página de pago",
+"fr": "Ouvrir la page de paiement"
+},
 "افتح ملف التقرير واكتب العنوان بس": {
 "de": "Öffne die Berichtsdatei und schreib nur den Titel",
 "en": "Open the report file and just write the title",
 "es": "Abre el archivo del informe y escribe solo el título",
 "fr": "Ouvre le fichier du rapport et écris juste le titre"
+},
+"افتحه في تطبيق الإيميل": {
+"de": "In der Mail-App öffnen",
+"en": "Open it in your mail app",
+"es": "Abrirlo en tu app de correo",
+"fr": "L'ouvrir dans ton appli mail"
 },
 "افتحي اللينك ده على موبايل": {
 "de": "Öffne diesen Link auf dem Handy von",
@@ -1871,6 +1991,12 @@
 "en": "Disconnect Telegram",
 "es": "Desconectar Telegram",
 "fr": "Déconnecter Telegram"
+},
+"افصل جوجل": {
+"de": "Google trennen",
+"en": "Disconnect Google",
+"es": "Desconectar Google",
+"fr": "Déconnecter Google"
 },
 "افطر 🥪": {
 "de": "Frühstücken 🥪",
@@ -1925,6 +2051,12 @@
 "en": "Write 3 bullet points on the main things done this month",
 "es": "Escribe 3 puntos con lo más importante que se hizo este mes",
 "fr": "Écris 3 points sur les choses importantes faites ce mois-ci"
+},
+"اكتب إيميل صحيح": {
+"de": "Gib eine gültige E-Mail ein",
+"en": "Enter a valid email",
+"es": "Escribe un correo válido",
+"fr": "Entre un e-mail valide"
 },
 "اكتب اسم الطفل": {
 "de": "Gib den Namen des Kindes ein",
@@ -2057,6 +2189,12 @@
 "en": "Wednesday",
 "es": "Miércoles",
 "fr": "Mercredi"
+},
+"الأرقام، الأسماء، اللي عايز تقوله": {
+"de": "Zahlen, Namen, was du sagen willst",
+"en": "Numbers, names, what you want to say",
+"es": "Números, nombres, lo que quieres decir",
+"fr": "Chiffres, noms, ce que tu veux dire"
 },
 "الأسبوع الجاي": {
 "de": "Nächste Woche",
@@ -2243,6 +2381,12 @@
 "en": "Put on your shoes 👟",
 "es": "Ponte los zapatos 👟",
 "fr": "Mets tes chaussures 👟"
+},
+"البس السماعة. هسمع الكلام، وكل شوية أهمس في ودنك بجملة قصيرة تساعدك. ولو احتجتني على طول دوس «ساعدني دلوقتي».": {
+"de": "Setz deine Kopfhörer auf. Ich höre zu und flüstere dir ab und zu einen kurzen Satz ins Ohr, der dir hilft. Wenn du mich sofort brauchst, tipp auf „Hilf mir jetzt“.",
+"en": "Put your earbuds in. I'll listen, and every so often I'll whisper a short line to help you. If you need me right away, tap “Help me now.”",
+"es": "Ponte los audífonos. Voy a escuchar y de vez en cuando te susurro una frase corta para ayudarte. Si me necesitas ya, toca «Ayúdame ahora».",
+"fr": "Mets tes écouteurs. J'écoute, et de temps en temps je te souffle une petite phrase pour t'aider. Si tu as besoin de moi tout de suite, appuie sur « Aide-moi maintenant »."
 },
 "البس هدوم المدرسة 👕": {
 "de": "Schulsachen anziehen 👕",
@@ -2550,6 +2694,12 @@
 "es": "Clóset",
 "fr": "Armoire"
 },
+"الربط بين موبايلك وجوجل على طول، وسيرفرنا مبيشوفش إيميلاتك ولا الكالندر.": {
+"de": "Dein Handy verbindet sich direkt mit Google, und unser Server sieht weder deine E-Mails noch deinen Kalender.",
+"en": "Your phone connects straight to Google, and our server never sees your emails or calendar.",
+"es": "Tu teléfono se conecta directo con Google, y nuestro servidor nunca ve tus correos ni tu calendario.",
+"fr": "Ton téléphone se connecte directement à Google, et notre serveur ne voit jamais tes e-mails ni ton agenda."
+},
 "الرحمن": {
 "de": "Ar-Rahman",
 "en": "Ar-Rahman",
@@ -2693,6 +2843,12 @@
 "en": "Simple screen: one thing now and a big voice button",
 "es": "Pantalla simple: una sola cosa ahora y un botón de voz grande",
 "fr": "Écran simple : une seule chose maintenant et un gros bouton voix"
+},
+"الشاشة البسيطة، و«جنبك»، والانتظار قبل المواعيد": {
+"de": "Der einfache Bildschirm, „An deiner Seite“ und das Warten vor Terminen",
+"en": "The simple screen, “By your side,” and waiting mode before appointments",
+"es": "La pantalla simple, «A tu lado» y la espera antes de las citas",
+"fr": "L'écran simple, « À tes côtés » et l'attente avant les rendez-vous"
 },
 "الشاشة دي تتعمل على موبايل الطفل نفسه، بإيد الأب أو الأم.": {
 "de": "Dieser Bildschirm wird auf dem Handy des Kindes selbst eingerichtet, von Mama oder Papa.",
@@ -2988,6 +3144,12 @@
 "es": "Todo",
 "fr": "Tout"
 },
+"الكلام بيتبعت عشان يتفهم بس، ومش بيتحفظ عندنا ولا على الموبايل.": {
+"de": "Das Gesagte wird nur gesendet, damit es verstanden wird. Es wird weder bei uns noch auf deinem Handy gespeichert.",
+"en": "What's said is sent only so it can be understood. It isn't saved on our end or on your phone.",
+"es": "Lo que se dice se envía solo para entenderlo. No se guarda en nuestros servidores ni en tu teléfono.",
+"fr": "Ce qui est dit est envoyé seulement pour être compris. Rien n'est gardé chez nous ni sur ton téléphone."
+},
 "الكهف": {
 "de": "Al-Kahf",
 "en": "Al-Kahf",
@@ -3053,6 +3215,12 @@
 "en": "What you got done today, the first things for tomorrow, and a chance to unload before bed.",
 "es": "Lo que terminaste hoy, lo primero de mañana, y un rato para desahogarte antes de dormir.",
 "fr": "Ce que tu as fini aujourd'hui, les premières choses de demain, et un moment pour vider ton sac avant de dormir."
+},
+"اللي سامعه": {
+"de": "Was ich höre",
+"en": "What I'm hearing",
+"es": "Lo que escucho",
+"fr": "Ce que j'entends"
 },
 "اللي سمعته منك": {
 "de": "Was ich von dir gehört habe",
@@ -3288,6 +3456,12 @@
 "es": "Teléfono",
 "fr": "Téléphone"
 },
+"الموبايل ده مش بيدعم السماع. جرّب Chrome": {
+"de": "Dieses Handy unterstützt kein Zuhören. Probier Chrome",
+"en": "This phone doesn't support listening. Try Chrome",
+"es": "Este teléfono no permite escuchar. Prueba con Chrome",
+"fr": "Ce téléphone ne permet pas l'écoute. Essaie Chrome"
+},
 "الموبايل ده مش بيدعم القفل، جربي متصفح أحدث": {
 "de": "Dieses Handy unterstützt keine Verschlüsselung, probier einen neueren Browser",
 "en": "This phone doesn't support encryption, try a newer browser",
@@ -3305,6 +3479,12 @@
 "en": "Mode",
 "es": "Modo",
 "fr": "Mode"
+},
+"الموضوع": {
+"de": "Betreff",
+"en": "Subject",
+"es": "Asunto",
+"fr": "Objet"
 },
 "الميعاد": {
 "de": "Termin",
@@ -3335,6 +3515,12 @@
 "en": "An-Naba'",
 "es": "An-Naba'",
 "fr": "An-Naba'"
+},
+"النت مش مساعد دلوقتي. هحاول تاني بعد شوية.": {
+"de": "Das Internet macht gerade nicht mit. Ich versuch's gleich noch mal.",
+"en": "The connection isn't cooperating right now. I'll try again in a bit.",
+"es": "La conexión no ayuda ahora mismo. Lo intento de nuevo en un rato.",
+"fr": "La connexion fait des siennes. Je réessaie dans un moment."
 },
 "النجوم بتيجي من الروتين والمهام": {
 "de": "Sterne gibt's für Routinen und Aufgaben",
@@ -3618,6 +3804,12 @@
 "es": "Calculando...",
 "fr": "Je calcule..."
 },
+"بحفظ اللينك مع الفاتورة، والمرة الجاية بتدوس وتدفع على طول. الدفع بيتم في صفحة الشركة نفسها، وإحنا مبنشوفش فلوسك.": {
+"de": "Ich speichere den Link bei der Rechnung, und nächstes Mal tippst du einfach und zahlst. Bezahlt wird direkt auf der Seite der Firma, und wir sehen dein Geld nie.",
+"en": "I'll save the link with the bill, so next time you just tap and pay. Payment happens on the company's own page, and we never see your money.",
+"es": "Guardo el enlace con la factura y la próxima vez solo tocas y pagas. El pago se hace en la página de la propia empresa, y nosotros nunca vemos tu dinero.",
+"fr": "Je garde le lien avec la facture : la prochaine fois, tu appuies et tu paies directement. Le paiement se fait sur la page de l'entreprise elle-même, et on ne voit jamais ton argent."
+},
 "بخصوص": {
 "de": "wegen",
 "en": "about",
@@ -3629,6 +3821,12 @@
 "en": "Well done",
 "es": "Bien hecho",
 "fr": "Bravo"
+},
+"برافو عليك 👏": {
+"de": "Stark gemacht 👏",
+"en": "Nice work 👏",
+"es": "Bien hecho 👏",
+"fr": "Bravo à toi 👏"
 },
 "برافو عليك! خلصت": {
 "de": "Super! Du hast geschafft:",
@@ -3863,6 +4061,12 @@
 "en": "Breaking it into small steps...",
 "es": "Dividiéndola en pasos pequeños...",
 "fr": "Je la découpe en petites étapes..."
+},
+"بكتب وبرتّب دلوقتي… ممكن ياخد لحد نص دقيقة.": {
+"de": "Ich schreibe und sortiere gerade… das kann bis zu einer halben Minute dauern.",
+"en": "Writing and organizing now… this can take up to half a minute.",
+"es": "Escribiendo y ordenando… puede tardar hasta medio minuto.",
+"fr": "J'écris et j'organise… ça peut prendre jusqu'à trente secondes."
 },
 "بكتبها...": {
 "de": "Ich schreib's...",
@@ -4110,6 +4314,12 @@
 "es": "Cambiar las sábanas",
 "fr": "Changer les draps"
 },
+"تفاوض": {
+"de": "Verhandlung",
+"en": "Negotiation",
+"es": "Negociación",
+"fr": "Négociation"
+},
 "تقبّل الله 🤍": {
 "de": "Möge Gott es annehmen 🤍",
 "en": "May God accept it 🤍",
@@ -4127,6 +4337,12 @@
 "en": "How much can you save per week?",
 "es": "¿Cuánto puedes ahorrar por semana?",
 "fr": "Tu peux mettre combien de côté par semaine ?"
+},
+"تقدر تربط جيميل من الإعدادات عشان يتبعت من هنا على طول.": {
+"de": "Du kannst Gmail in den Einstellungen verbinden, dann geht's direkt von hier raus.",
+"en": "You can connect Gmail in Settings so it sends right from here.",
+"es": "Puedes conectar Gmail en Ajustes para enviarlo directo desde aquí.",
+"fr": "Tu peux connecter Gmail dans les réglages pour envoyer directement d'ici."
 },
 "تقدر تشتري ✓": {
 "de": "Kannst du kaufen ✓",
@@ -4416,6 +4632,12 @@
 "es": "Prueba Focus+ (para concentrarte y arrancar)",
 "fr": "Essaie Focus+ (pour te concentrer et démarrer)"
 },
+"جرّب تاني": {
+"de": "Nochmal versuchen",
+"en": "Try again",
+"es": "Inténtalo de nuevo",
+"fr": "Réessaie"
+},
 "جرّب رنة بعد دقيقة": {
 "de": "Testklingeln in einer Minute",
 "en": "Try a test ring in a minute",
@@ -4523,6 +4745,18 @@
 "en": "Pack tomorrow's bag 🎒",
 "es": "Prepara la mochila de mañana 🎒",
 "fr": "Prépare ton sac pour demain 🎒"
+},
+"جهّزتلك": {
+"de": "Fertig für dich",
+"en": "Ready for you",
+"es": "Listo para ti",
+"fr": "Prêt pour toi"
+},
+"جهّزتلك «": {
+"de": "Fertig für dich: „",
+"en": "I prepped “",
+"es": "Te preparé «",
+"fr": "Je t'ai préparé « "
 },
 "جهّزي الرسالة": {
 "de": "Nachricht vorbereiten",
@@ -4746,6 +4980,12 @@
 "es": "Dios me basta; no hay más dios que Él. En Él confío, y Él es el Señor del Trono inmenso",
 "fr": "Dieu me suffit ; il n'y a de dieu que Lui. En Lui je place ma confiance, et Il est le Seigneur du Trône immense"
 },
+"حط لينك صفحة الدفع الأول": {
+"de": "Füg zuerst den Link zur Zahlungsseite ein",
+"en": "Add the payment page link first",
+"es": "Primero agrega el enlace de la página de pago",
+"fr": "Ajoute d'abord le lien de la page de paiement"
+},
 "حطها": {
 "de": "Hinzufügen",
 "en": "Add it",
@@ -4757,6 +4997,12 @@
 "en": "Put them on the wish list",
 "es": "Ponerlas en la lista de deseos",
 "fr": "Les mettre dans la liste d'envies"
+},
+"حطيتها خطوات": {
+"de": "In Schritte aufgeteilt",
+"en": "Turned it into steps",
+"es": "Lo convertí en pasos",
+"fr": "Découpé en étapes"
 },
 "حطيتهم في قايمة الأمنيات، وهقولك أول ما تقدر": {
 "de": "Ich hab sie auf die Wunschliste gesetzt und sag dir Bescheid, sobald du sie dir leisten kannst",
@@ -4931,6 +5177,12 @@
 "en": "small steps, the first one: “",
 "es": "pasos pequeños, el primero: «",
 "fr": "petites étapes, la première : « "
+},
+"خطوات لـ «": {
+"de": "Schritte für „",
+"en": "steps for “",
+"es": "pasos para «",
+"fr": "étapes pour « "
 },
 "خطوة النهارده في": {
 "de": "Heutiger Schritt bei",
@@ -5123,6 +5375,12 @@
 "en": "Enter",
 "es": "Entrar",
 "fr": "Entrer"
+},
+"دفع الفواتير من جوه التطبيق": {
+"de": "Rechnungen direkt in der App bezahlen",
+"en": "Pay bills right in the app",
+"es": "Pagar facturas desde la app",
+"fr": "Payer tes factures dans l'appli"
 },
 "دفع كام لحد دلوقتي؟": {
 "de": "Wie viel hat er bisher bezahlt?",
@@ -5904,6 +6162,12 @@
 "es": "Sanady está a tu lado",
 "fr": "Sanady est à tes côtés"
 },
+"سندي جهّزها بس. مفيش حاجة بتتبعت غير لما إنت تدوس.": {
+"de": "Sayvo hat es nur vorbereitet. Nichts wird gesendet, bis du tippst.",
+"en": "Sayvo only prepared it. Nothing gets sent until you tap.",
+"es": "Sayvo solo lo preparó. No se envía nada hasta que tú toques.",
+"fr": "Sayvo l'a juste préparé. Rien ne part tant que tu n'appuies pas."
+},
 "سندي عايز يقولهالك ›": {
 "de": "Sanady will dir sagen ›",
 "en": "Sanady wants to tell you ›",
@@ -5951,6 +6215,12 @@
 "en": "Sanady sends you a Telegram message at the time of each appointment or task, even if the app is closed and the phone's in your pocket.",
 "es": "Sanady te envía un mensaje por Telegram a la hora de cada cita o tarea, aunque la app esté cerrada y el celular en tu bolsillo.",
 "fr": "Sanady t'envoie un message sur Telegram à l'heure de chaque rendez-vous ou tâche, même si l'appli est fermée et le téléphone dans ta poche."
+},
+"سندي يتصل بالنيابة عنك": {
+"de": "Sayvo ruft für dich an",
+"en": "Sayvo makes calls for you",
+"es": "Sayvo llama por ti",
+"fr": "Sayvo appelle pour toi"
 },
 "سندي يتكلم بصوت": {
 "de": "Sanady spricht mit",
@@ -6324,6 +6594,12 @@
 "es": "Agregar",
 "fr": "Ajouter"
 },
+"ضيف المواعيد الجديدة للكالندر لوحدها": {
+"de": "Neue Termine automatisch in den Kalender eintragen",
+"en": "Add new appointments to the calendar automatically",
+"es": "Agregar las citas nuevas al calendario automáticamente",
+"fr": "Ajouter les nouveaux rendez-vous à l'agenda automatiquement"
+},
 "ضيف بابا أو ماما أو حد كبير بتراعيه.": {
 "de": "Füg Papa, Mama oder eine ältere Person hinzu, um die du dich kümmerst.",
 "en": "Add Dad, Mom, or an older person you care for.",
@@ -6528,6 +6804,18 @@
 "es": "¿Quieres comprar algo?",
 "fr": "Envie d'acheter un truc ?"
 },
+"عايز تعديل؟": {
+"de": "Möchtest du was ändern?",
+"en": "Want any changes?",
+"es": "¿Quieres algún cambio?",
+"fr": "Tu veux changer quelque chose ?"
+},
+"عايز توصل لإيه؟": {
+"de": "Was willst du erreichen?",
+"en": "What do you want to get out of it?",
+"es": "¿Qué quieres lograr?",
+"fr": "Tu veux arriver à quoi ?"
+},
 "عايزني أساعدك في إيه أكتر؟": {
 "de": "Wobei willst du am meisten Hilfe?",
 "en": "What do you want the most help with?",
@@ -6593,6 +6881,12 @@
 "en": "A day has passed. Still want",
 "es": "Pasó un día. ¿Todavía quieres",
 "fr": "Une journée est passée. Tu veux toujours"
+},
+"عرض أو كلمة": {
+"de": "Vortrag oder Rede",
+"en": "Presentation or speech",
+"es": "Presentación o discurso",
+"fr": "Présentation ou discours"
 },
 "عرض تجريبي": {
 "de": "Demo",
@@ -6677,6 +6971,12 @@
 "en": "Owes",
 "es": "Debe",
 "fr": "Doit"
+},
+"علّم على الموافقة الأول": {
+"de": "Hak zuerst die Zustimmung ab",
+"en": "Check the agreement box first",
+"es": "Primero marca la casilla de aceptación",
+"fr": "Coche d'abord la case d'accord"
 },
 "عمل إيه لوحده": {
 "de": "was es allein gemacht hat",
@@ -6839,6 +7139,12 @@
 "en": "Fruit",
 "es": "Fruta",
 "fr": "Fruits"
+},
+"فاهم إني مسؤول أعرّف اللي بكلمهم إن معايا مساعد بيسمع لو ده مطلوب عندي، ومش هستخدمه في امتحان أو مقابلة ممنوع فيها المساعدة.": {
+"de": "Ich verstehe, dass ich selbst dafür verantwortlich bin, meinen Gesprächspartnern zu sagen, dass ein Assistent zuhört, falls das bei mir vorgeschrieben ist, und dass ich ihn nicht in einer Prüfung oder einem Gespräch nutze, in dem Hilfe verboten ist.",
+"en": "I understand it's on me to tell the people I'm talking with that I have an assistant listening, if that's required where I am, and I won't use it in an exam or interview where help isn't allowed.",
+"es": "Entiendo que me toca avisar a las personas con quienes hablo que tengo un asistente escuchando, si así lo exige el lugar donde estoy, y que no lo usaré en un examen o entrevista donde no se permita ayuda.",
+"fr": "Je comprends que c'est à moi de prévenir les personnes avec qui je parle qu'un assistant écoute, si c'est obligatoire chez moi, et que je ne l'utiliserai pas pendant un examen ou un entretien où l'aide est interdite."
 },
 "فبراير": {
 "de": "Februar",
@@ -7062,6 +7368,12 @@
 "es": "A tiempo",
 "fr": "À l'heure"
 },
+"في مصر عن طريق بساطة": {
+"de": "In Ägypten über Basata",
+"en": "In Egypt through Basata",
+"es": "En Egipto a través de Basata",
+"fr": "En Égypte via Basata"
+},
 "فين الباسبور؟": {
 "de": "Wo ist der Pass?",
 "en": "Where's the passport?",
@@ -7198,6 +7510,18 @@
 "de": "Bald",
 "en": "Soon",
 "es": "Pronto",
+"fr": "Bientôt"
+},
+"قريب: مواعيدك تتحط في جوجل كالندر لوحدها، والإيميلات اللي سندي بيكتبها تتبعت من جيميل بتاعك بعد موافقتك.": {
+"de": "Bald: Deine Termine landen von selbst in Google Kalender, und die E-Mails, die Sayvo schreibt, gehen nach deinem OK über dein Gmail raus.",
+"en": "Coming soon: your appointments go into Google Calendar on their own, and the emails Sayvo writes send from your Gmail once you OK them.",
+"es": "Muy pronto: tus citas se agregarán solas a Google Calendar, y los correos que escriba Sayvo se enviarán desde tu Gmail cuando des el visto bueno.",
+"fr": "Bientôt : tes rendez-vous iront tout seuls dans Google Agenda, et les e-mails écrits par Sayvo partiront de ton Gmail une fois que tu auras donné ton accord."
+},
+"قريباً": {
+"de": "Demnächst",
+"en": "Coming soon",
+"es": "Muy pronto",
 "fr": "Bientôt"
 },
 "قسط": {
@@ -7584,6 +7908,12 @@
 "es": "Chat",
 "fr": "Discussion"
 },
+"كلام مع حد": {
+"de": "Gespräch mit jemandem",
+"en": "Talking with someone",
+"es": "Hablar con alguien",
+"fr": "Discussion avec quelqu'un"
+},
 "كلب": {
 "de": "Hund",
 "en": "Dog",
@@ -7710,6 +8040,12 @@
 "es": "Sigue así ⭐",
 "fr": "Continue comme ça ⭐"
 },
+"كمّل، إنت ماشي كويس.": {
+"de": "Mach weiter, du machst das gut.",
+"en": "Keep going, you're doing great.",
+"es": "Sigue, vas muy bien.",
+"fr": "Continue, tu t'en sors très bien."
+},
 "كمّلي كده": {
 "de": "Mach weiter so",
 "en": "Keep going like that",
@@ -7823,6 +8159,12 @@
 "en": "until payday",
 "es": "hasta el día de pago",
 "fr": "jusqu'à la paie"
+},
+"لحد ما يجهز، زرار «📅 ضيفها للكالندر» شغال مع أي كالندر.": {
+"de": "Bis dahin funktioniert der Button „📅 Zum Kalender hinzufügen“ mit jedem Kalender.",
+"en": "Until it's ready, the “📅 Add to calendar” button works with any calendar.",
+"es": "Mientras tanto, el botón «📅 Agregar al calendario» funciona con cualquier calendario.",
+"fr": "En attendant, le bouton « 📅 Ajouter à l'agenda » marche avec n'importe quel agenda."
 },
 "لحظة": {
 "de": "Moment",
@@ -7974,6 +8316,12 @@
 "es": "Cuando tengas una cita en una o dos horas, este modo te dice qué hacer hasta que tengas que salir, y yo te aviso cuándo levantarte.",
 "fr": "Quand tu as un rendez-vous dans une heure ou deux, ce mode te dit quoi faire en attendant de partir, et c'est moi qui te dirai quand te lever."
 },
+"لمين؟ (الإيميل)": {
+"de": "An wen? (E-Mail)",
+"en": "To whom? (email)",
+"es": "¿Para quién? (correo)",
+"fr": "À qui ? (e-mail)"
+},
 "لو بتاخد دوا تركيز، قولّي ميعاده والمفعول بيبدأ وبيستمر قد إيه حسب كلام دكتورك. هطلعلك الحاجات الصعبة في الوقت ده.": {
 "de": "Wenn du ein Medikament für die Konzentration nimmst, sag mir, wann du es nimmst, wann es wirkt und wie lange, so wie dein Arzt es sagt. Ich leg dir die schweren Sachen in diese Zeit.",
 "en": "If you take focus meds, tell me when you take them, when they kick in, and how long they last, per your doctor. I'll bring up the hard stuff during that time.",
@@ -8064,11 +8412,35 @@
 "es": "Noche tranquila",
 "fr": "Nuit calme"
 },
+"لينك صفحة الدفع بتاعة الشركة": {
+"de": "Link zur Zahlungsseite der Firma",
+"en": "The company's payment page link",
+"es": "El enlace de la página de pago de la empresa",
+"fr": "Le lien de la page de paiement de l'entreprise"
+},
 "مؤنث": {
 "de": "Weiblich",
 "en": "Feminine",
 "es": "Femenino",
 "fr": "Féminin"
+},
+"ما اتبعتش. جرّب تاني": {
+"de": "Nicht gesendet. Versuch's nochmal",
+"en": "It didn't send. Try again",
+"es": "No se envió. Inténtalo de nuevo",
+"fr": "Ça n'est pas parti. Réessaie"
+},
+"ما اتحطتش، جرّب تاني": {
+"de": "Hat nicht geklappt, versuch's nochmal",
+"en": "Couldn't add it, try again",
+"es": "No se pudo agregar, inténtalo de nuevo",
+"fr": "Pas pu l'ajouter, réessaie"
+},
+"ما اتربطش": {
+"de": "Verbindung hat nicht geklappt",
+"en": "Couldn't connect",
+"es": "No se pudo conectar",
+"fr": "Connexion impossible"
 },
 "ما كلمتش": {
 "de": "hast du nicht mit … gesprochen:",
@@ -8160,6 +8532,12 @@
 "es": "Seguimiento sobre:",
 "fr": "Je reviens vers vous au sujet de :"
 },
+"متربط ✓": {
+"de": "Verbunden ✓",
+"en": "Connected ✓",
+"es": "Conectado ✓",
+"fr": "Connecté ✓"
+},
 "متنزّل على الشاشة الرئيسية": {
 "de": "Auf dem Homescreen installiert",
 "en": "Installed on home screen",
@@ -8177,6 +8555,18 @@
 "en": "e.g. 90",
 "es": "p. ej. 90",
 "fr": "ex. 90"
+},
+"مثلاً: أقصر، أرسمي، بالإنجليزي، زوّد نقطة…": {
+"de": "z. B. kürzer, förmlicher, auf Englisch, noch ein Punkt…",
+"en": "e.g. shorter, more formal, in English, add a point…",
+"es": "p. ej.: más corto, más formal, en inglés, agrega un punto…",
+"fr": "ex. : plus court, plus formel, en anglais, ajoute un point…"
+},
+"مثلاً: أقنعهم يوافقوا على الميزانية": {
+"de": "z. B. sie überzeugen, das Budget freizugeben",
+"en": "e.g. get them to approve the budget",
+"es": "p. ej.: convencerlos de aprobar el presupuesto",
+"fr": "ex. : les convaincre d'approuver le budget"
 },
 "مثلاً: الباسبور": {
 "de": "z. B.: Reisepass",
@@ -8267,6 +8657,18 @@
 "en": "Good evening",
 "es": "Buenas noches",
 "fr": "Bonsoir"
+},
+"مستشار في ودنك": {
+"de": "Coach im Ohr",
+"en": "Coach in your ear",
+"es": "Coach en tu oído",
+"fr": "Coach dans ton oreille"
+},
+"مستشار في ودنك: يسمع الاجتماع أو المحادثة ويهمسلك بالرد المناسب": {
+"de": "Coach im Ohr: hört beim Meeting oder Gespräch zu und flüstert dir die passende Antwort",
+"en": "Coach in your ear: listens to the meeting or conversation and whispers the right reply",
+"es": "Coach en tu oído: escucha la reunión o la conversación y te susurra la respuesta adecuada",
+"fr": "Coach dans ton oreille : il écoute la réunion ou la conversation et te souffle la bonne réponse"
 },
 "مستعجل:": {
 "de": "Dringend:",
@@ -9072,6 +9474,12 @@
 "es": "Lo dividimos en pasos pequeños y empiezo contigo el primero.",
 "fr": "On le découpe en petites étapes, et je commence la première avec toi."
 },
+"نقط مهمة عايز تفتكرها (اختياري)": {
+"de": "Wichtige Punkte, an die du denken willst (optional)",
+"en": "Key points you want to remember (optional)",
+"es": "Puntos clave que quieres recordar (opcional)",
+"fr": "Points importants à ne pas oublier (facultatif)"
+},
 "نقطك": {
 "de": "Deine Punkte",
 "en": "Your points",
@@ -9241,6 +9649,12 @@
 "es": "esa persona",
 "fr": "la personne"
 },
+"هيتبعت من حسابك أول ما تدوس.": {
+"de": "Es geht von deinem Konto raus, sobald du tippst.",
+"en": "It'll send from your account as soon as you tap.",
+"es": "Se enviará desde tu cuenta en cuanto toques.",
+"fr": "Ça partira de ton compte dès que tu appuies."
+},
 "هيترد امتى": {
 "de": "Wann wird's zurückgezahlt",
 "en": "When will it be paid back",
@@ -9324,6 +9738,12 @@
 "en": "Rose",
 "es": "Rosa",
 "fr": "Rose"
+},
+"وريني": {
+"de": "Zeig mal",
+"en": "Show me",
+"es": "Muéstrame",
+"fr": "Montre-moi"
 },
 "وزعت خطوات": {
 "de": "Schritte verteilt",
@@ -9518,6 +9938,12 @@
 "es": "Yassin",
 "fr": "Yassin"
 },
+"يحجز ميعاد أو يسأل ويرجعلك بالنتيجة": {
+"de": "Bucht einen Termin oder fragt nach und meldet sich mit dem Ergebnis",
+"en": "Books an appointment or asks a question and gets back to you with the answer",
+"es": "Agenda una cita o pregunta algo y te trae la respuesta",
+"fr": "Prend un rendez-vous ou pose une question et revient vers toi avec la réponse"
+},
 "يرن والتطبيق مقفول": {
 "de": "Klingelt auch bei geschlossener App",
 "en": "Rings even with the app closed",
@@ -9529,6 +9955,12 @@
 "en": "Ya-Sin",
 "es": "Ya-Sin",
 "fr": "Yâ-Sîn"
+},
+"يسمع الاجتماع أو المحادثة ويهمسلك بالرد المناسب": {
+"de": "Hört beim Meeting oder Gespräch zu und flüstert dir die passende Antwort",
+"en": "Listens to the meeting or conversation and whispers the right reply",
+"es": "Escucha la reunión o la conversación y te susurra la respuesta adecuada",
+"fr": "Écoute la réunion ou la conversation et te souffle la bonne réponse"
 },
 "يشاركك قايمة البيت: الناقص والنضافة والولاد.": {
 "de": "die Haushaltsliste mit dir teilen: was fehlt, Putzen und die Kinder.",
@@ -9818,6 +10250,30 @@
 "es": "⏳ Preparando...",
 "fr": "⏳ Préparation..."
 },
+"⏸ واقف": {
+"de": "⏸ Pausiert",
+"en": "⏸ Paused",
+"es": "⏸ En pausa",
+"fr": "⏸ En pause"
+},
+"⏸ وقفة": {
+"de": "⏸ Pause",
+"en": "⏸ Pause",
+"es": "⏸ Pausa",
+"fr": "⏸ Pause"
+},
+"⏹ خلصت": {
+"de": "⏹ Fertig",
+"en": "⏹ I'm done",
+"es": "⏹ Terminé",
+"fr": "⏹ J'ai fini"
+},
+"▶️ كمّل": {
+"de": "▶️ Weiter",
+"en": "▶️ Keep going",
+"es": "▶️ Seguir",
+"fr": "▶️ Reprendre"
+},
 "☀️ 7:45 فرّغ دماغك": {
 "de": "☀️ 7:45 Kopf leeren",
 "en": "☀️ 7:45 Empty your head",
@@ -9884,6 +10340,42 @@
 "es": "⚠️ Tu saldo no alcanza,",
 "fr": "⚠️ Ton solde ne suffira pas,"
 },
+"⚡ اللي جهّزته": {
+"de": "⚡ Was ich vorbereitet habe",
+"en": "⚡ What I prepped",
+"es": "⚡ Lo que preparé",
+"fr": "⚡ Ce que j'ai préparé"
+},
+"⚡ جهّزت «": {
+"de": "⚡ Vorbereitet: „",
+"en": "⚡ Prepped “",
+"es": "⚡ Preparé «",
+"fr": "⚡ Préparé : « "
+},
+"⚡ جهّزت لوحدي «": {
+"de": "⚡ Selbst vorbereitet: „",
+"en": "⚡ Prepped on my own “",
+"es": "⚡ Preparé por mi cuenta «",
+"fr": "⚡ Préparé tout seul : « "
+},
+"⚡ سندي بيعملها": {
+"de": "⚡ Sayvo ist dran",
+"en": "⚡ Sayvo's on it",
+"es": "⚡ Sayvo se encarga",
+"fr": "⚡ Sayvo s'en occupe"
+},
+"⚡ سندي يعملها": {
+"de": "⚡ Sayvo macht's",
+"en": "⚡ Sayvo does it",
+"es": "⚡ Sayvo lo hace",
+"fr": "⚡ Sayvo s'en charge"
+},
+"⚡ عدّلها": {
+"de": "⚡ Anpassen",
+"en": "⚡ Tweak it",
+"es": "⚡ Ajustarlo",
+"fr": "⚡ Modifier"
+},
 "⛪ القداس كمان ساعة": {
 "de": "⛪ Messe in einer Stunde",
 "en": "⛪ Mass in an hour",
@@ -9901,6 +10393,18 @@
 "en": "✅ Telegram is connected. Your reminders will reach you there even if Sanady is closed",
 "es": "✅ Telegram está conectado. Tus recordatorios te llegarán ahí aunque Sanady esté cerrado",
 "fr": "✅ Telegram est connecté. Tes rappels t'arriveront là-bas même si Sanady est fermé"
+},
+"✅ حطها خطوات": {
+"de": "✅ In Schritte aufteilen",
+"en": "✅ Make it steps",
+"es": "✅ Convertir en pasos",
+"fr": "✅ En faire des étapes"
+},
+"✅ حطيت": {
+"de": "✅ Hinzugefügt:",
+"en": "✅ Added",
+"es": "✅ Agregué",
+"fr": "✅ J'ai ajouté"
 },
 "✅ خلصت النهارده": {
 "de": "✅ Heute erledigt",
@@ -10027,6 +10531,12 @@
 "en": "⭐ A monthly plan perk, free for the whole trial period.",
 "es": "⭐ Una ventaja del plan mensual, gratis durante todo el periodo de prueba.",
 "fr": "⭐ Un avantage de l'abonnement mensuel, gratuit pendant toute la période d'essai."
+},
+"🆘 ساعدني دلوقتي": {
+"de": "🆘 Hilf mir jetzt",
+"en": "🆘 Help me now",
+"es": "🆘 Ayúdame ahora",
+"fr": "🆘 Aide-moi maintenant"
 },
 "🌀 مروحة": {
 "de": "🌀 Ventilator",
@@ -10172,6 +10682,12 @@
 "es": "🎒 En 10 minutos sales a",
 "fr": "🎒 Dans 10 minutes, tu pars pour"
 },
+"🎙️ بسمع…": {
+"de": "🎙️ Ich höre zu…",
+"en": "🎙️ Listening…",
+"es": "🎙️ Escuchando…",
+"fr": "🎙️ J'écoute…"
+},
 "🎙️ فرّغ دماغك": {
 "de": "🎙️ Kopf leeren",
 "en": "🎙️ Empty your head",
@@ -10208,11 +10724,29 @@
 "es": "🎙️ Vamos a vaciar tu cabeza",
 "fr": "🎙️ On vide ta tête"
 },
+"🎧 ابدأ": {
+"de": "🎧 Starten",
+"en": "🎧 Start",
+"es": "🎧 Empezar",
+"fr": "🎧 Commencer"
+},
 "🎧 جلسة تركيز": {
 "de": "🎧 Fokus-Session",
 "en": "🎧 Focus session",
 "es": "🎧 Sesión de concentración",
 "fr": "🎧 Session de concentration"
+},
+"🎧 شغّلت المستشار في ودنك": {
+"de": "🎧 Coach im Ohr eingeschaltet",
+"en": "🎧 Turned on the coach in your ear",
+"es": "🎧 Activé el coach en tu oído",
+"fr": "🎧 Coach dans ton oreille activé"
+},
+"🎧 مستشار في ودنك": {
+"de": "🎧 Coach im Ohr",
+"en": "🎧 Coach in your ear",
+"es": "🎧 Coach en tu oído",
+"fr": "🎧 Coach dans ton oreille"
 },
 "🎯 جرّب فوكس+": {
 "de": "🎯 Focus+ testen",
@@ -10376,11 +10910,29 @@
 "es": "💧 Agua hoy",
 "fr": "💧 L'eau aujourd'hui"
 },
+"💬 ابعتها واتساب": {
+"de": "💬 Per WhatsApp senden",
+"en": "💬 Send it on WhatsApp",
+"es": "💬 Enviar por WhatsApp",
+"fr": "💬 Envoyer sur WhatsApp"
+},
 "💬 اطمن": {
 "de": "💬 Nachfragen",
 "en": "💬 Check in",
 "es": "💬 Preguntar cómo está",
 "fr": "💬 Prendre des nouvelles"
+},
+"💬 فتحت واتساب برسالة «": {
+"de": "💬 WhatsApp geöffnet mit der Nachricht „",
+"en": "💬 Opened WhatsApp with the message “",
+"es": "💬 Abrí WhatsApp con el mensaje «",
+"fr": "💬 WhatsApp ouvert avec le message « "
+},
+"💭 بفكّر…": {
+"de": "💭 Ich überlege…",
+"en": "💭 Thinking…",
+"es": "💭 Pensando…",
+"fr": "💭 Je réfléchis…"
 },
 "💭 فكرة طارت في دماغك؟ اركنها هنا وكمّل": {
 "de": "💭 Ist dir eine Idee durch den Kopf geschossen? Park sie hier und mach weiter",
@@ -10436,11 +10988,23 @@
 "es": "📄 Mis papeles y fechas de renovación",
 "fr": "📄 Mes papiers et dates de renouvellement"
 },
+"📅 المواعيد الجديدة تتحط في جوجل كالندر لوحدها": {
+"de": "📅 Neue Termine landen von selbst in Google Kalender",
+"en": "📅 New appointments go into Google Calendar on their own",
+"es": "📅 Las citas nuevas se agregan solas a Google Calendar",
+"fr": "📅 Les nouveaux rendez-vous vont tout seuls dans Google Agenda"
+},
 "📅 حط الدوا والمواعيد في الكالندر كمان (احتياطي)": {
 "de": "📅 Medikamente und Termine auch in den Kalender eintragen (als Backup)",
 "en": "📅 Also put meds and appointments in your calendar (as a backup)",
 "es": "📅 Pon también las medicinas y citas en el calendario (de respaldo)",
 "fr": "📅 Mets aussi les médicaments et rendez-vous dans le calendrier (en secours)"
+},
+"📅 حطيت «": {
+"de": "📅 Eingetragen: „",
+"en": "📅 Put “",
+"es": "📅 Puse «",
+"fr": "📅 J'ai mis « "
 },
 "📅 ضيفها للكالندر": {
 "de": "📅 Zum Kalender hinzufügen",
@@ -10555,6 +11119,36 @@
 "en": "📦 Delivery",
 "es": "📦 Entrega",
 "fr": "📦 Livraison"
+},
+"📧 ابعت الإيميل": {
+"de": "📧 E-Mail senden",
+"en": "📧 Send the email",
+"es": "📧 Enviar el correo",
+"fr": "📧 Envoyer l'e-mail"
+},
+"📧 ابعته": {
+"de": "📧 Senden",
+"en": "📧 Send it",
+"es": "📧 Enviarlo",
+"fr": "📧 Envoyer"
+},
+"📧 الإيميلات اللي سندي بيكتبها تتبعت من جيميل بتاعك، بس لما تدوس «ابعته»": {
+"de": "📧 E-Mails, die Sayvo schreibt, gehen über dein Gmail raus, aber nur, wenn du auf „Senden“ tippst",
+"en": "📧 Emails Sayvo writes send from your Gmail, but only when you tap “Send it”",
+"es": "📧 Los correos que escribe Sayvo se envían desde tu Gmail, solo cuando tocas «Enviarlo»",
+"fr": "📧 Les e-mails écrits par Sayvo partent de ton Gmail, seulement quand tu appuies sur « Envoyer »"
+},
+"📧 بعت إيميل «": {
+"de": "📧 Gesendet: E-Mail „",
+"en": "📧 Sent the email “",
+"es": "📧 Envié el correo «",
+"fr": "📧 J'ai envoyé l'e-mail « "
+},
+"📧 فتحت الإيميل «": {
+"de": "📧 Geöffnet: E-Mail „",
+"en": "📧 Opened the email “",
+"es": "📧 Abrí el correo «",
+"fr": "📧 J'ai ouvert l'e-mail « "
 },
 "📱 موبايل": {
 "de": "📱 Handy",
@@ -10724,6 +11318,30 @@
 "es": "🔕 Desactivar la alarma",
 "fr": "🔕 Désactiver l'alarme"
 },
+"🔗 جوجل": {
+"de": "🔗 Google",
+"en": "🔗 Google",
+"es": "🔗 Google",
+"fr": "🔗 Google"
+},
+"🔗 ربط جوجل": {
+"de": "🔗 Google verbinden",
+"en": "🔗 Connect Google",
+"es": "🔗 Conectar Google",
+"fr": "🔗 Connecter Google"
+},
+"🔗 ربط جوجل (الكالندر والجيميل)": {
+"de": "🔗 Google verbinden (Kalender und Gmail)",
+"en": "🔗 Connect Google (Calendar and Gmail)",
+"es": "🔗 Conectar Google (Calendar y Gmail)",
+"fr": "🔗 Connecter Google (Agenda et Gmail)"
+},
+"🔗 ربطت حساب جوجل": {
+"de": "🔗 Google-Konto verbunden",
+"en": "🔗 Connected your Google account",
+"es": "🔗 Conecté tu cuenta de Google",
+"fr": "🔗 Compte Google connecté"
+},
 "🔥 نار هادية": {
 "de": "🔥 Ruhiges Feuer",
 "en": "🔥 Crackling fire",
@@ -10837,6 +11455,12 @@
 "en": "🚗 Car",
 "es": "🚗 Auto",
 "fr": "🚗 Voiture"
+},
+"🚫 لازم تسمح للميكروفون": {
+"de": "🚫 Du musst das Mikrofon erlauben",
+"en": "🚫 You need to allow the microphone",
+"es": "🚫 Tienes que permitir el micrófono",
+"fr": "🚫 Il faut autoriser le micro"
 },
 "🚶 اتحرك دلوقتي عشان تلحق:": {
 "de": "🚶 Geh jetzt los, um es zu schaffen:",

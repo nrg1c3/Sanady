@@ -87,12 +87,14 @@ NUDGE_EXTRA.push((t,hard)=>{if(!PILOT||!PILOT.on)return[];const last=PILOT.rAt||
  return[{id:'pl'+dayKey(),pr:30,i:'🧪',p:'عدّى أسبوع في التجربة. 3 أسئلة سريعة عن أسبوعك؟',acts:[['يلا',()=>{store.set('plNag',dayKey());pilotRate()}],['بكرة',()=>{store.set('plNag',dayKey());render()}]]}]});
 
 /* 4) language of the conversation: Egyptian, Gulf, or English */
-const LANGS=[['eg','مصري'],['gulf','خليجي'],['en','English']];
+const LANGS=[['eg','مصري'],['gulf','خليجي'],['en','English'],['fr','Français'],['es','Español'],['de','Deutsch']];
 
 /* settings entries */
 function trustSettings(){const box=document.querySelector('#sheetBody .form');if(!box||$('sAlarm'))return;
  const nm=$('sN');nm&&nm.closest('label').insertAdjacentHTML('afterend',`<label>لغة الكلام مع ${esc(BRAND)}<select id="sLang">${LANGS.map(([k,v])=>`<option value="${k}" ${(prof.lang||'eg')===k?'selected':''}>${v}</option>`).join('')}</select></label>`);
- $('sLang').onchange=e=>{prof.lang=e.target.value;save();toast(e.target.value==='en'?'I will talk to you in English':e.target.value==='gulf'?'تم، بكلمك خليجي':'تمام، مصري')};
+ $('sLang').onchange=e=>{const v=e.target.value,was=window.UI_LANG||'ar';prof.lang=v;save();
+  const ui=['en','fr','es','de'].includes(v)?v:'ar';if(ui!==was){try{KV.set('lang',ui)}catch(x){}location.reload();return}
+  toast(v==='gulf'?'تم، بكلمك خليجي':'تمام، مصري')};
  const k=$('sNot');k&&k.insertAdjacentHTML('afterend',`<button class="btn ghost" id="sAlarm">🩺 اتأكد إن المنبّه شغال</button><button class="btn ghost" id="sCloud">☁️ نسخة احتياطية تلقائية${tGet('bk_code')?' ✓':''}</button>${IS_ADHD?`<button class="btn ghost" id="sPilot">🧪 تجربة ${esc(BRAND)}${PILOT&&PILOT.on?' ✓':''}</button>`:''}`);
  $('sAlarm').onclick=alarmSheet;$('sCloud').onclick=backupCloudSheet;if($('sPilot'))$('sPilot').onclick=pilotSheet}
 

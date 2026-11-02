@@ -12,9 +12,9 @@ s = open(os.path.join(R, 'index.html'), encoding='utf-8').read()
 s = s.replace('<title>سندي ADHD</title>', '<title>مُدبّر</title>')
 s = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="مُدبّر: قولها وهو يدبّرها. بيرتب يومك وبيتك وفلوسك ويفكّرك في الوقت الصح.">', s)
 s = re.sub(r'<meta name="theme-color" content="[^"]*">', '<meta name="theme-color" content="#0F5552">', s)
-for f in ['app.css', 'sounds.js', 'app.js', 'family.js', 'life.js', 'sync.js', 'work.js', 'agent.js', 'adhd.js', 'trust.js', 'demo.js']:
+for f in ['app.css', 'i18n.js', 'sounds.js', 'app.js', 'family.js', 'life.js', 'sync.js', 'work.js', 'agent.js', 'adhd.js', 'trust.js', 'demo.js']:
     s = re.sub(r'(href|src)="' + re.escape(f) + '"', r'\1="/Sanady/' + f + '"', s)
-s = s.replace('<script src="/Sanady/sounds.js"></script>', '<script>window.SANADY_ED="main"</script>\n<script src="/Sanady/sounds.js"></script>')
+s = s.replace('<script src="/Sanady/i18n.js"></script>', '<script>window.SANADY_ED="main"</script>\n<script src="/Sanady/i18n.js"></script>')
 s = s.replace('href="privacy.html"', 'href="/Sanady/privacy.html?b=m"')
 open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write(s)
 m = json.load(open(os.path.join(R, 'manifest.webmanifest'), encoding='utf-8'))

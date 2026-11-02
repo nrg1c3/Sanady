@@ -9,6 +9,7 @@ python3 "$HERE/tools/build-app.py" >/dev/null || exit 1
 W="$(mktemp -d)"; trap 'rm -rf "$W"' EXIT
 for f in "$HERE"/*; do ln -s "$f" "$W/$(basename "$f")"; done
 rm -f "$W/app"; ln -s "$SITE/mudabbir" "$W/app"; ln -s "$HERE" "$W/Sanady"
+export PYTHONPATH="$HERE/tests/_ar${PYTHONPATH:+:$PYTHONPATH}"
 fail=0
 for t in "$HERE"/tests/test_*.py; do
   n=$(basename "$t" .py); runner=python3

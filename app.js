@@ -126,14 +126,14 @@ async function speak(t,done){t=brandify(String(t||'').trim());if(!t||!prof.voice
  const fin=()=>{if(speaking===me)speaking=null;done&&done()};
  try{if(prof.lang&&prof.lang!=='eg')throw 0;const ac=new AbortController();const to=setTimeout(()=>ac.abort(),12000);const b=await ttsBlob(t,!!DEMO,ac.signal);clearTimeout(to);if(speaking!==me)return;
   const u=URL.createObjectURL(b);AUD.src=u;AUD.onended=()=>{URL.revokeObjectURL(u);fin()};AUD.onerror=fin;await AUD.play();return}catch(e){}
- try{const L=({gulf:'ar-AE',en:'en-US'})[prof.lang]||'ar-EG';const u=new SpeechSynthesisUtterance(t);u.lang=L;u.rate=.95;const v=speechSynthesis.getVoices().find(v=>v.lang===L)||speechSynthesis.getVoices().find(v=>v.lang.slice(0,2)===L.slice(0,2));if(v)u.voice=v;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u)}catch(e){fin()}}
+ try{const L=({gulf:'ar-AE',en:'en-US',fr:'fr-FR',es:'es-ES',de:'de-DE'})[prof.lang]||'ar-EG';const u=new SpeechSynthesisUtterance(t);u.lang=L;u.rate=.95;const v=speechSynthesis.getVoices().find(v=>v.lang===L)||speechSynthesis.getVoices().find(v=>v.lang.slice(0,2)===L.slice(0,2));if(v)u.voice=v;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u)}catch(e){fin()}}
 function hush(){speaking=null;try{AUD.pause()}catch(e){}try{speechSynthesis.cancel()}catch(e){}}
 
 /* ---------- voice in ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,recWant=false,recFinal='';
 function startRec(onUpd,onState){if(!SR){onState&&onState('nosr');return false}hush();recWant=true;recFinal='';
  try{rec&&rec.abort()}catch(e){}rec=null;let fails=0,t0=0;
- const go=()=>{const me=new SR();rec=me;me.lang=({gulf:'ar-AE',en:'en-US'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=true;t0=Date.now();
+ const go=()=>{const me=new SR();rec=me;me.lang=({gulf:'ar-AE',en:'en-US',fr:'fr-FR',es:'es-ES',de:'de-DE'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=true;t0=Date.now();
   me.onstart=()=>{if(rec===me)onState&&onState('on')};
   me.onresult=e=>{if(rec!==me)return;let int='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)recFinal+=(recFinal?' ':'')+r[0].transcript.trim();else int+=r[0].transcript}onUpd&&onUpd(recFinal,int)};
   me.onerror=ev=>{if(rec!==me)return;if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){recWant=false;onState&&onState('blocked')}};

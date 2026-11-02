@@ -39,6 +39,8 @@ function core(s){
  // times like "5:30 بالليل"
  s=s.replace(/(\d{1,2})(?::(\d\d))?\s*(الصبح|الضهر|بالليل)/g,(m,h,mm,ap)=>{h=+h;mm=mm||'00';
   if(!H24)return h+(mm!=='00'?':'+mm:'')+' '+AMPM[ap];const H=ap==='الصبح'?h%12:(h===12?12:h+12);return H+':'+mm});
+ // one-letter units right after a number: 500 ج, 25 د, 2 س
+ s=s.replace(/(\d[\d,.]*)\s*(ج|جنيه)(?![\u0600-\u06FF])/g,'$1 ¤').replace(/(\d+)\s*د(?![\u0600-\u06FF])/g,'$1 '+(L==='de'?'Min.':'min')).replace(/(\d+)\s*س(?![\u0600-\u06FF])/g,'$1 '+(L==='de'?'Std.':'h'));
  const t=s.trim();if(D[t])s=s.replace(t,D[t]);else s=s.replace(RX,k=>D[k]||k);
  return s}
 function tr(s){if(s==null)return s;s=String(s);if(!AR.test(s)||!ready())return s;

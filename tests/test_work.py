@@ -69,7 +69,7 @@ with sync_playwright() as p:
     E = ctx.new_page(); E.on('pageerror', lambda e: errs.append(str(e)))
     E.goto(A); E.evaluate("localStorage.clear()"); E.goto(link); E.wait_for_timeout(1500)
     check('elder setup prefilled', E.input_value('#esN') == 'ماما' and 'الضغط' in E.input_value('#esM'))
-    E.fill('#esP', '01099998888'); E.fill('#esPin', '1234'); E.click('#esGo'); E.wait_for_timeout(1500); E.evaluate('window.__noNav=1')
+    E.fill('#esP', '01099998888'); E.fill('#esPin', '1234'); E.click('#esGo'); E.wait_for_timeout(1500); E.evaluate('window.__noNav=1'); E.evaluate('ringAlarm=()=>{};const a=document.getElementById("alarm");if(a)a.hidden=true')
     check('big screen shows', E.locator('#kidApp').count() == 1 and 'كلّم محمد' in E.inner_text('#kidApp'))
     E.click('#kidApp [data-m^="أنا كويس"]'); E.wait_for_timeout(200)
     check('I am OK goes to child on WhatsApp', '201099998888' in (E.evaluate("window.__lastElderMsg") or ''))

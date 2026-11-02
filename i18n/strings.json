@@ -245,6 +245,12 @@
 "es": "10 minutos de movimiento",
 "fr": "10 minutes de mouvement"
 },
+"10 ساعات محاضرات و5 كتب في الشهر": {
+"de": "10 Stunden Vorlesungen und 5 Bücher im Monat",
+"en": "10 hours of lectures and 5 books a month",
+"es": "10 horas de clases y 5 libros al mes",
+"fr": "10 heures de cours et 5 livres par mois"
+},
 "15 د": {
 "de": "15 Min.",
 "en": "15 min",
@@ -268,6 +274,12 @@
 "en": "3 is enough. Remove one first",
 "es": "Con 3 basta. Quita una primero",
 "fr": "3, ça suffit. Retire-en une d'abord"
+},
+"3 مرات في الشهر": {
+"de": "3-mal im Monat",
+"en": "3 times a month",
+"es": "3 veces al mes",
+"fr": "3 fois par mois"
 },
 "30 د": {
 "de": "30 Min.",
@@ -767,6 +779,12 @@
 "es": "Ir al banco",
 "fr": "Aller à la banque"
 },
+"أسئلة مراجعة": {
+"de": "Wiederholungsfragen",
+"en": "Review questions",
+"es": "Preguntas de repaso",
+"fr": "Questions de révision"
+},
 "أسبوع جديد، بداية جديدة. يلا نرتب سوا من غير لوم.": {
 "de": "Neue Woche, neuer Anfang. Lass uns zusammen planen, ohne Vorwürfe.",
 "en": "New week, fresh start. Let's plan it together, no blame.",
@@ -1085,6 +1103,12 @@
 "es": "Las 3 de hoy",
 "fr": "Top 3 du jour"
 },
+"أهم النقط": {
+"de": "Wichtigste Punkte",
+"en": "Key points",
+"es": "Puntos clave",
+"fr": "Points clés"
+},
 "أو": {
 "de": "oder",
 "en": "or",
@@ -1198,6 +1222,12 @@
 "en": "How are you? I miss you, just wanted to check in.",
 "es": "¿Cómo estás? Te extraño, quería saber de ti.",
 "fr": "Comment ça va ? Tu me manques, je voulais prendre de tes nouvelles."
+},
+"إضافة فوق Plus": {
+"de": "Zusatz zu Plus",
+"en": "Add-on to Plus",
+"es": "Complemento de Plus",
+"fr": "Option en plus de Plus"
 },
 "إضافة فوق الاشتراك": {
 "de": "Zusatz zum Abo",
@@ -1782,6 +1812,12 @@
 "es": "Nombre del niño",
 "fr": "Prénom de l'enfant"
 },
+"اسم المادة أو المحاضرة": {
+"de": "Name des Fachs oder der Vorlesung",
+"en": "Course or lecture name",
+"es": "Nombre de la materia o la clase",
+"fr": "Nom de la matière ou du cours"
+},
 "اسم الورقة": {
 "de": "Name des Dokuments",
 "en": "Document name",
@@ -2316,11 +2352,23 @@
 "es": "Suscripción",
 "fr": "Abonnement"
 },
+"الاشتراك الأساسي": {
+"de": "Haupt-Abo",
+"en": "Main plan",
+"es": "Plan principal",
+"fr": "Abonnement principal"
+},
 "الاشتراك الشهري": {
 "de": "Monatsabo",
 "en": "Monthly plan",
 "es": "Plan mensual",
 "fr": "Abonnement mensuel"
+},
+"الاشتراك هيبقى من جوجل بلاي قريب.": {
+"de": "Das Abo läuft bald über Google Play.",
+"en": "Subscriptions will be through Google Play soon.",
+"es": "La suscripción será por Google Play pronto.",
+"fr": "L'abonnement passera bientôt par Google Play."
 },
 "الاشتراكات": {
 "de": "Abos",
@@ -2904,6 +2952,12 @@
 "es": "Este mes: ingresos",
 "fr": "Ce mois-ci : entrées"
 },
+"الشهر ده: ⚡": {
+"de": "Diesen Monat: ⚡",
+"en": "This month: ⚡",
+"es": "Este mes: ⚡",
+"fr": "Ce mois-ci : ⚡"
+},
 "الصباح": {
 "de": "Morgen",
 "en": "Morning",
@@ -2933,6 +2987,12 @@
 "en": "Paste or type the message here",
 "es": "Pega o escribe el mensaje aquí",
 "fr": "Colle ou écris le message ici"
+},
+"الصق النص هنا": {
+"de": "Füg den Text hier ein",
+"en": "Paste the text here",
+"es": "Pega el texto aquí",
+"fr": "Colle le texte ici"
 },
 "الصلاة الجاية:": {
 "de": "Nächstes Gebet:",
@@ -3030,6 +3090,12 @@
 "es": "Cliente",
 "fr": "Client"
 },
+"العنوان": {
+"de": "Titel",
+"en": "Title",
+"es": "Título",
+"fr": "Titre"
+},
 "العيلة والناس": {
 "de": "Familie & Menschen",
 "en": "Family & people",
@@ -3090,6 +3156,12 @@
 "es": "El dinero hasta el día de pago no alcanzará para las facturas y los gastos. Cuida lo que gastas estos días y avísame si cambia tu saldo.",
 "fr": "L'argent jusqu'à la paie ne suffira pas pour les factures et les dépenses. Fais attention à tes dépenses ces jours-ci, et dis-moi si ton solde change."
 },
+"الفواتير والفلوس والدفع": {
+"de": "Rechnungen, Geld und Zahlungen",
+"en": "Bills, money and payments",
+"es": "Facturas, dinero y pagos",
+"fr": "Factures, argent et paiements"
+},
 "الفواتير والفلوس والدفع ببساطة وفوري": {
 "de": "Rechnungen, Geld und Zahlungen mit Basata und Fawry",
 "en": "Bills, money and payments with Basata and Fawry",
@@ -3144,6 +3216,12 @@
 "es": "Todo",
 "fr": "Tout"
 },
+"الكلام اللي اتسجل قليل قوي": {
+"de": "Es wurde sehr wenig aufgenommen",
+"en": "Very little was recorded",
+"es": "Se grabó muy poco",
+"fr": "Très peu de choses ont été enregistrées"
+},
 "الكلام بيتبعت عشان يتفهم بس، ومش بيتحفظ عندنا ولا على الموبايل.": {
 "de": "Das Gesagte wird nur gesendet, damit es verstanden wird. Es wird weder bei uns noch auf deinem Handy gespeichert.",
 "en": "What's said is sent only so it can be understood. It isn't saved on our end or on your phone.",
@@ -3191,6 +3269,12 @@
 "en": "O God, send blessings and peace upon our Prophet Muhammad",
 "es": "Oh Dios, bendice y da paz a nuestro Profeta Muhammad",
 "fr": "Ô Dieu, prie sur notre Prophète Muhammad et accorde-lui la paix"
+},
+"اللي اتكتب لحد دلوقتي": {
+"de": "Was bisher mitgeschrieben wurde",
+"en": "What's been written so far",
+"es": "Lo que se ha escrito hasta ahora",
+"fr": "Ce qui est écrit jusqu'ici"
 },
 "اللي بيبدأ بيخلّص، وإنت بدأت": {
 "de": "Wer anfängt, wird fertig, und du hast angefangen",
@@ -3324,6 +3408,12 @@
 "es": "Fuente: Hisn al-Muslim.",
 "fr": "Source : Hisn al-Muslim."
 },
+"المصطلحات": {
+"de": "Begriffe",
+"en": "Terms",
+"es": "Términos",
+"fr": "Termes"
+},
 "المغرب": {
 "de": "Maghrib",
 "en": "Maghrib",
@@ -3365,6 +3455,12 @@
 "en": "Place (for appointments)",
 "es": "Lugar (para citas)",
 "fr": "Lieu (pour les rendez-vous)"
+},
+"الملف ده عبارة عن صور مش نص. صوّر الصفحات المهمة من «📷 صوّر صفحات» وأنا أقراها.": {
+"de": "Diese Datei besteht aus Bildern, nicht aus Text. Fotografier die wichtigen Seiten mit „📷 Seiten fotografieren“ und ich lese sie.",
+"en": "This file is images, not text. Take photos of the important pages with “📷 Snap pages” and I'll read them.",
+"es": "Este archivo son imágenes, no texto. Toma fotos de las páginas importantes con «📷 Fotografiar páginas» y yo las leo.",
+"fr": "Ce fichier contient des images, pas du texte. Prends en photo les pages importantes avec « 📷 Photographier des pages » et je les lirai."
 },
 "الملف ده مش نسخة من سندي": {
 "de": "Diese Datei ist keine Sanady-Sicherung",
@@ -3516,6 +3612,12 @@
 "es": "An-Naba'",
 "fr": "An-Naba'"
 },
+"النت مش مساعد دلوقتي. جرّب تاني": {
+"de": "Das Internet macht gerade nicht mit. Versuch's noch mal",
+"en": "The internet isn't cooperating right now. Try again",
+"es": "El internet no está ayudando ahora. Inténtalo de nuevo",
+"fr": "Internet ne suit pas pour l'instant. Réessaie"
+},
 "النت مش مساعد دلوقتي. هحاول تاني بعد شوية.": {
 "de": "Das Internet macht gerade nicht mit. Ich versuch's gleich noch mal.",
 "en": "The connection isn't cooperating right now. I'll try again in a bit.",
@@ -3533,6 +3635,12 @@
 "en": "The first backup will be made as soon as you're back online.",
 "es": "La primera copia se hará en cuanto vuelva el internet.",
 "fr": "La première sauvegarde se fera dès que internet revient."
+},
+"النص قصير قوي": {
+"de": "Der Text ist zu kurz",
+"en": "The text is too short",
+"es": "El texto es muy corto",
+"fr": "Le texte est trop court"
 },
 "النهارده": {
 "de": "Heute",
@@ -3666,6 +3774,15 @@
 "es": "Borrar todos mis datos",
 "fr": "Supprimer toutes mes données"
 },
+"امسحه": {
+"de": "Löschen",
+"en": "Delete it",
+"es": "Bórralo",
+"fr": "Supprime-le"
+},
+"انا": null,
+"انا عايز": null,
+"انا عايز اروح": null,
 "انتظار": {
 "de": "Wartet",
 "en": "Waiting",
@@ -3677,6 +3794,12 @@
 "en": "Copy",
 "es": "Copiar",
 "fr": "Copier"
+},
+"انسخ الملخص": {
+"de": "Zusammenfassung kopieren",
+"en": "Copy summary",
+"es": "Copiar resumen",
+"fr": "Copier le résumé"
 },
 "انسخي اللينك": {
 "de": "Link kopieren",
@@ -3935,6 +4058,12 @@
 "en": "Listening...",
 "es": "Te escucho...",
 "fr": "Je t'écoute..."
+},
+"بسمع…": {
+"de": "Ich höre zu…",
+"en": "Listening…",
+"es": "Escuchando…",
+"fr": "J'écoute…"
 },
 "بصيغة المؤنث": {
 "de": "in weiblicher Form",
@@ -4284,6 +4413,12 @@
 "es": "Buenas noches. El sonido bajará y se detendrá solo.",
 "fr": "Bonne nuit. Le son baissera et s'arrêtera tout seul."
 },
+"تطبّقها إزاي": {
+"de": "So wendest du es an",
+"en": "How to apply it",
+"es": "Cómo aplicarlo",
+"fr": "Comment l'appliquer"
+},
 "تطعيم": {
 "de": "Impfung",
 "en": "Vaccine",
@@ -4391,6 +4526,18 @@
 "en": "Recitation by Sheikh Mishary Alafasy (needs internet)",
 "es": "Recitación del jeque Mishary Alafasy (necesita internet)",
 "fr": "Récitation de Cheikh Mishary Alafasy (internet requis)"
+},
+"تلخيص المحاضرات والكتب": {
+"de": "Zusammenfassungen von Vorlesungen und Büchern",
+"en": "Lecture and book summaries",
+"es": "Resúmenes de clases y libros",
+"fr": "Résumés de cours et de livres"
+},
+"تلخيص المحاضرات والكتب جزء من Sayvo Plus.": {
+"de": "Zusammenfassungen von Vorlesungen und Büchern gehören zu Sayvo Plus.",
+"en": "Lecture and book summaries are part of Sayvo Plus.",
+"es": "Los resúmenes de clases y libros son parte de Sayvo Plus.",
+"fr": "Les résumés de cours et de livres font partie de Sayvo Plus."
 },
 "تلقائي (زي الموبايل)": {
 "de": "Automatisch (wie dein Handy)",
@@ -4541,6 +4688,12 @@
 "en": "Get there safe 🚗",
 "es": "Que llegues bien 🚗",
 "fr": "Bonne route 🚗"
+},
+"توقف التسجيل من غير ملخص؟": {
+"de": "Aufnahme ohne Zusammenfassung beenden?",
+"en": "Stop recording without a summary?",
+"es": "¿Detener la grabación sin resumen?",
+"fr": "Arrêter l'enregistrement sans résumé ?"
 },
 "تونة": {
 "de": "Thunfisch",
@@ -4764,6 +4917,12 @@
 "es": "Prepara el mensaje",
 "fr": "Prépare le message"
 },
+"جوجل كالندر وجيميل": {
+"de": "Google Kalender und Gmail",
+"en": "Google Calendar and Gmail",
+"es": "Google Calendar y Gmail",
+"fr": "Google Agenda et Gmail"
+},
 "حاجات": {
 "de": "Dinge",
 "en": "things",
@@ -4979,6 +5138,12 @@
 "en": "God is enough for me; there is no god but Him. In Him I put my trust, and He is the Lord of the Mighty Throne",
 "es": "Dios me basta; no hay más dios que Él. En Él confío, y Él es el Señor del Trono inmenso",
 "fr": "Dieu me suffit ; il n'y a de dieu que Lui. En Lui je place ma confiance, et Il est le Seigneur du Trône immense"
+},
+"حط الموبايل قريب من الدكتور، وسيب الشاشة مفتوحة. الكلام بيتكتب على موبايلك، ولما تخلص بلخّصه.": {
+"de": "Leg dein Handy nah an den Dozenten und lass den Bildschirm an. Das Gesagte wird auf deinem Handy mitgeschrieben, und wenn du fertig bist, fasse ich es zusammen.",
+"en": "Put your phone close to the lecturer and keep the screen on. The words are written down on your phone, and when you're done I'll summarize it.",
+"es": "Pon el celular cerca del profe y deja la pantalla encendida. Lo que se dice se escribe en tu celular y, cuando termines, lo resumo.",
+"fr": "Pose ton téléphone près du prof et laisse l'écran allumé. Les paroles s'écrivent sur ton téléphone, et quand tu as fini, je résume."
 },
 "حط لينك صفحة الدفع الأول": {
 "de": "Füg zuerst den Link zur Zahlungsseite ein",
@@ -5256,11 +5421,29 @@
 "es": "Ya terminé esta ✓",
 "fr": "Fini ✓"
 },
+"خلصت ساعات المحاضرات للشهر ده.": {
+"de": "Deine Vorlesungsstunden für diesen Monat sind aufgebraucht.",
+"en": "You've used up this month's lecture hours.",
+"es": "Ya usaste las horas de clases de este mes.",
+"fr": "Tu as utilisé toutes tes heures de cours ce mois-ci."
+},
+"خلصت كتب الشهر ده.": {
+"de": "Deine Bücher für diesen Monat sind aufgebraucht.",
+"en": "You've used up this month's books.",
+"es": "Ya usaste los libros de este mes.",
+"fr": "Tu as utilisé tous tes livres ce mois-ci."
+},
 "خلصت كل الخطوات!": {
 "de": "Alle Schritte geschafft!",
 "en": "All steps done!",
 "es": "¡Terminaste todos los pasos!",
 "fr": "Toutes les étapes sont finies !"
+},
+"خلصت مرات «سندي يعملها» المجانية للشهر ده. مع Sayvo Plus يعملها لك من غير ما تعدّ.": {
+"de": "Deine kostenlosen „Sayvo macht's“-Runden für diesen Monat sind aufgebraucht. Mit Sayvo Plus macht es das für dich, ohne zu zählen.",
+"en": "You've used up this month's free “Sayvo does it” runs. With Sayvo Plus, it does it for you without counting.",
+"es": "Ya usaste las veces gratis de «Sayvo lo hace» de este mes. Con Sayvo Plus lo hace por ti sin contar.",
+"fr": "Tu as utilisé toutes tes fois gratuites de « Sayvo s'en charge » ce mois-ci. Avec Sayvo Plus, il s'en charge pour toi sans compter."
 },
 "خلصت ✓": {
 "de": "Fertig ✓",
@@ -5429,6 +5612,12 @@
 "en": "minutes",
 "es": "minutos",
 "fr": "minutes"
+},
+"دقيقة محاضرات · 📖": {
+"de": "Minuten Vorlesungen · 📖",
+"en": "minutes of lectures · 📖",
+"es": "minutos de clases · 📖",
+"fr": "minutes de cours · 📖"
 },
 "دقيقة. هحسبها كده المرة الجاية": {
 "de": "Minuten. So rechne ich nächstes Mal",
@@ -6228,6 +6417,12 @@
 "es": "Sanady habla con voz",
 "fr": "Sanady parle avec une voix"
 },
+"سندي يعملها": {
+"de": "Sayvo macht's",
+"en": "Sayvo does it",
+"es": "Sayvo lo hace",
+"fr": "Sayvo s'en charge"
+},
 "سندي يفكّرك لو بقالك فترة ما كلمتهمش": {
 "de": "Sanady erinnert dich, wenn du dich länger nicht gemeldet hast",
 "en": "Sanady reminds you if it's been a while since you talked to them",
@@ -6426,6 +6621,12 @@
 "es": "Sopa rápida de lentejas",
 "fr": "Soupe de lentilles express"
 },
+"شوف الباقات": {
+"de": "Pläne ansehen",
+"en": "See plans",
+"es": "Ver planes",
+"fr": "Voir les offres"
+},
 "شوف التفاصيل": {
 "de": "Details ansehen",
 "en": "See details",
@@ -6546,6 +6747,12 @@
 "es": "Cuánto gastaste en comida y transporte",
 "fr": "Combien tu as dépensé en nourriture et transport"
 },
+"صفحات": {
+"de": "Seiten",
+"en": "pages",
+"es": "páginas",
+"fr": "pages"
+},
 "صلاة الجمعة": {
 "de": "Freitagsgebet",
 "en": "Friday prayer",
@@ -6642,6 +6849,12 @@
 "es": "Agrégalo",
 "fr": "Ajoute-le"
 },
+"ضيفها": {
+"de": "Hinzufügen",
+"en": "Add them",
+"es": "Agrégalos",
+"fr": "Ajoute-les"
+},
 "ضيفهم": {
 "de": "Alle hinzufügen",
 "en": "Add them",
@@ -6695,6 +6908,12 @@
 "en": "Tanta",
 "es": "Tanta",
 "fr": "Tanta"
+},
+"طول فترة التجربة كل حاجة مفتوحة ببلاش. السعر هيتعلن قبل ما التجربة تخلص.": {
+"de": "Während der Testphase ist alles kostenlos freigeschaltet. Der Preis wird vor Ende der Testphase bekannt gegeben.",
+"en": "During the trial, everything is open for free. The price will be announced before the trial ends.",
+"es": "Durante la prueba, todo está abierto gratis. El precio se anunciará antes de que termine la prueba.",
+"fr": "Pendant l'essai, tout est ouvert gratuitement. Le prix sera annoncé avant la fin de l'essai."
 },
 "ظبطت البطارية ✓": {
 "de": "Akku eingestellt ✓",
@@ -6828,6 +7047,12 @@
 "es": "Tortilla de perejil",
 "fr": "Omelette au persil"
 },
+"عدد مرات في اليوم": {
+"de": "Mal pro Tag",
+"en": "times a day",
+"es": "veces al día",
+"fr": "fois par jour"
+},
 "عدد مرات محدود في اليوم": {
 "de": "Begrenzte Nutzung pro Tag",
 "en": "Limited uses per day",
@@ -6905,6 +7130,12 @@
 "en": "So your balance stays accurate",
 "es": "Para que tu saldo siga exacto",
 "fr": "Pour que ton solde reste juste"
+},
+"عشان تجرّب سندي": {
+"de": "Zum Ausprobieren von Sayvo",
+"en": "To try out Sayvo",
+"es": "Para probar Sayvo",
+"fr": "Pour essayer Sayvo"
 },
 "عصفور": {
 "de": "Vogel",
@@ -7752,6 +7983,12 @@
 "es": "Es grande, la vamos a dividir",
 "fr": "C'est gros, on va découper"
 },
+"كتاب": {
+"de": "Bücher",
+"en": "books",
+"es": "libros",
+"fr": "livres"
+},
 "كحلي": {
 "de": "Marineblau",
 "en": "Navy",
@@ -7931,6 +8168,12 @@
 "en": "Ate ✓",
 "es": "Ya comí ✓",
 "fr": "J'ai mangé ✓"
+},
+"كلمة": {
+"de": "Wörter",
+"en": "words",
+"es": "palabras",
+"fr": "mots"
 },
 "كلمت": {
 "de": "Kontaktiert",
@@ -8177,6 +8420,18 @@
 "en": "One sec...",
 "es": "Un momento...",
 "fr": "Un instant..."
+},
+"لخّص": {
+"de": "Zusammenfassen",
+"en": "Summarize",
+"es": "Resumir",
+"fr": "Résume"
+},
+"لخّصلي": {
+"de": "Fass es mir zusammen",
+"en": "Summarize for me",
+"es": "Resúmeme esto",
+"fr": "Résume-moi ça"
 },
 "لرصيدك": {
 "de": "zu deinem Guthaben",
@@ -8442,6 +8697,24 @@
 "es": "No se pudo conectar",
 "fr": "Connexion impossible"
 },
+"ما قدرتش أقرا الصور": {
+"de": "Ich konnte die Fotos nicht lesen",
+"en": "I couldn't read the photos",
+"es": "No pude leer las fotos",
+"fr": "Je n'ai pas pu lire les photos"
+},
+"ما قدرتش أقرا الملف ده": {
+"de": "Ich konnte diese Datei nicht lesen",
+"en": "I couldn't read this file",
+"es": "No pude leer este archivo",
+"fr": "Je n'ai pas pu lire ce fichier"
+},
+"ما قدرتش ألخّص دلوقتي. جرّب تاني": {
+"de": "Ich konnte das gerade nicht zusammenfassen. Versuch's noch mal",
+"en": "I couldn't summarize right now. Try again",
+"es": "No pude resumir ahora. Inténtalo de nuevo",
+"fr": "Je n'ai pas pu résumer pour l'instant. Réessaie"
+},
 "ما كلمتش": {
 "de": "hast du nicht mit … gesprochen:",
 "en": "haven't talked to",
@@ -8574,6 +8847,12 @@
 "es": "p. ej.: el pasaporte",
 "fr": "ex. : le passeport"
 },
+"مثلاً: تسويق رقمي، المحاضرة 3": {
+"de": "z. B. Digitales Marketing, Vorlesung 3",
+"en": "e.g. Digital marketing, Lecture 3",
+"es": "p. ej.: Marketing digital, clase 3",
+"fr": "ex. : Marketing digital, cours 3"
+},
 "مثلاً: رياضة": {
 "de": "z. B.: Sport",
 "en": "e.g. sports",
@@ -8591,6 +8870,24 @@
 "en": "Free",
 "es": "Gratis",
 "fr": "Gratuit"
+},
+"محاضرة": {
+"de": "Vorlesung",
+"en": "Lecture",
+"es": "Clase",
+"fr": "Cours"
+},
+"محاضرة أو كتاب": {
+"de": "Vorlesung oder Buch",
+"en": "Lecture or book",
+"es": "Clase o libro",
+"fr": "Cours ou livre"
+},
+"محاضرة، أو كتاب، أو أي نص طويل. بطلعلك الملخص وأهم النقط والمصطلحات وأسئلة مراجعة، وأي ميعاد أو واجب بيتحط مهمة.": {
+"de": "Eine Vorlesung, ein Buch oder ein langer Text. Ich hol dir die Zusammenfassung, die wichtigsten Punkte, Begriffe und Wiederholungsfragen raus, und jeder Termin oder jede Hausaufgabe wird zur Aufgabe.",
+"en": "A lecture, a book, or any long text. I'll give you the summary, key points, terms and review questions, and any date or assignment becomes a task.",
+"es": "Una clase, un libro o cualquier texto largo. Te saco el resumen, los puntos clave, los términos y preguntas de repaso, y cualquier fecha o tarea se vuelve una tarea pendiente.",
+"fr": "Un cours, un livre ou n'importe quel long texte. Je te sors le résumé, les points clés, les termes et des questions de révision, et chaque date ou devoir devient une tâche."
 },
 "محتاج أكلم حد دلوقتي": {
 "de": "Ich muss jetzt mit jemandem reden",
@@ -8651,6 +8948,12 @@
 "en": "Blocks",
 "es": "Bloques",
 "fr": "Blocs"
+},
+"مرة · 🎓": {
+"de": "Mal · 🎓",
+"en": "times · 🎓",
+"es": "veces · 🎓",
+"fr": "fois · 🎓"
 },
 "مساء الخير": {
 "de": "Guten Abend",
@@ -9084,6 +9387,12 @@
 "es": "Resumen del día",
 "fr": "Résumé de la journée"
 },
+"ملخصاتك": {
+"de": "Deine Zusammenfassungen",
+"en": "Your summaries",
+"es": "Tus resúmenes",
+"fr": "Tes résumés"
+},
 "ممكن نتكلم في الموضوع ده بكرة بهدوء؟ أنا محتاج أفهم اللي حصل.": {
 "de": "Können wir morgen in Ruhe darüber reden? Ich muss verstehen, was passiert ist.",
 "en": "Can we talk about this calmly tomorrow? I need to understand what happened.",
@@ -9173,6 +9482,12 @@
 "en": "Cleaning products",
 "es": "Productos de limpieza",
 "fr": "Produits d'entretien"
+},
+"مهام ومواعيد": {
+"de": "Aufgaben und Termine",
+"en": "Tasks and dates",
+"es": "Tareas y fechas",
+"fr": "Tâches et dates"
 },
 "مهمة": {
 "de": "Aufgabe",
@@ -9986,6 +10301,12 @@
 "es": "Se apaga solo después de:",
 "fr": "S'arrête tout seul après :"
 },
+"يكتب ويخطط ويدوّر بدالك، ويجهّز لوحده": {
+"de": "Schreibt, plant und sucht für dich und bereitet alles von selbst vor",
+"en": "Writes, plans and searches for you, and gets things ready on its own",
+"es": "Escribe, planea y busca por ti, y prepara todo solo",
+"fr": "Écrit, planifie et cherche à ta place, et prépare tout seul"
+},
 "يلا": {
 "de": "Los geht's",
 "en": "Let's go",
@@ -10268,6 +10589,12 @@
 "es": "⏹ Terminé",
 "fr": "⏹ J'ai fini"
 },
+"⏹ خلصت، لخّص": {
+"de": "⏹ Fertig, zusammenfassen",
+"en": "⏹ Done, summarize",
+"es": "⏹ Listo, resume",
+"fr": "⏹ Fini, résume"
+},
 "▶️ كمّل": {
 "de": "▶️ Weiter",
 "en": "▶️ Keep going",
@@ -10370,6 +10697,12 @@
 "es": "⚡ Sayvo lo hace",
 "fr": "⚡ Sayvo s'en charge"
 },
+"⚡ سندي يعملها من غير حد تقريباً، ويجهّز لوحده": {
+"de": "⚡ Sayvo macht's fast ohne Limit und bereitet alles von selbst vor",
+"en": "⚡ Sayvo does it almost without limits, and gets things ready on its own",
+"es": "⚡ Sayvo lo hace casi sin límite, y prepara todo solo",
+"fr": "⚡ Sayvo s'en charge presque sans limite, et prépare tout seul"
+},
 "⚡ عدّلها": {
 "de": "⚡ Anpassen",
 "en": "⚡ Tweak it",
@@ -10453,6 +10786,18 @@
 "en": "✈️ Open Telegram and tap Start",
 "es": "✈️ Abre Telegram y toca Start",
 "fr": "✈️ Ouvre Telegram et appuie sur Start"
+},
+"✍️ بجمّع الملخص…": {
+"de": "✍️ Ich stelle die Zusammenfassung zusammen…",
+"en": "✍️ Putting the summary together…",
+"es": "✍️ Armando el resumen…",
+"fr": "✍️ Je rassemble le résumé…"
+},
+"✍️ بلخّص…": {
+"de": "✍️ Ich fasse zusammen…",
+"en": "✍️ Summarizing…",
+"es": "✍️ Resumiendo…",
+"fr": "✍️ Je résume…"
 },
 "✓ تمام": {
 "de": "✓ Passt",
@@ -10682,6 +11027,18 @@
 "es": "🎒 En 10 minutos sales a",
 "fr": "🎒 Dans 10 minutes, tu pars pour"
 },
+"🎓 سجّل محاضرة دلوقتي": {
+"de": "🎓 Jetzt Vorlesung aufnehmen",
+"en": "🎓 Record a lecture now",
+"es": "🎓 Grabar una clase ahora",
+"fr": "🎓 Enregistrer un cours maintenant"
+},
+"🎓 محاضرة": {
+"de": "🎓 Vorlesung",
+"en": "🎓 Lecture",
+"es": "🎓 Clase",
+"fr": "🎓 Cours"
+},
 "🎙️ بسمع…": {
 "de": "🎙️ Ich höre zu…",
 "en": "🎙️ Listening…",
@@ -10795,6 +11152,12 @@
 "en": "🏠 Shared home (one list for the whole household)",
 "es": "🏠 Casa compartida (una lista para toda la casa)",
 "fr": "🏠 Maison partagée (une seule liste pour tout le foyer)"
+},
+"🏠 البيت المشترك، والصوت من غير حدود": {
+"de": "🏠 Gemeinsames Zuhause und Stimme ohne Limit",
+"en": "🏠 Shared home, and unlimited voice",
+"es": "🏠 Casa compartida, y voz sin límite",
+"fr": "🏠 Maison partagée, et la voix sans limite"
 },
 "🏠 تنضمي للبيت؟": {
 "de": "🏠 Dem Zuhause beitreten?",
@@ -10982,6 +11345,18 @@
 "es": "📂 Restaurar desde una copia",
 "fr": "📂 Restaurer une sauvegarde"
 },
+"📄 الملف ده صور": {
+"de": "📄 Diese Datei besteht aus Bildern",
+"en": "📄 This file is images",
+"es": "📄 Este archivo son imágenes",
+"fr": "📄 Ce fichier, c'est des images"
+},
+"📄 ملف PDF": {
+"de": "📄 PDF-Datei",
+"en": "📄 PDF file",
+"es": "📄 Archivo PDF",
+"fr": "📄 Fichier PDF"
+},
 "📄 ورقي ومواعيد التجديد": {
 "de": "📄 Meine Papiere & Verlängerungstermine",
 "en": "📄 My papers & renewal dates",
@@ -11024,6 +11399,12 @@
 "es": "📊 Este mes",
 "fr": "📊 Ce mois-ci"
 },
+"📋 الصق نص": {
+"de": "📋 Text einfügen",
+"en": "📋 Paste text",
+"es": "📋 Pegar texto",
+"fr": "📋 Coller du texte"
+},
 "📌 مدرسة / حوار": {
 "de": "📌 Schule / Thema",
 "en": "📌 School / issue",
@@ -11048,6 +11429,24 @@
 "es": "📖 Corán",
 "fr": "📖 Coran"
 },
+"📖 بقرا الجزء": {
+"de": "📖 Ich lese Teil",
+"en": "📖 Reading part",
+"es": "📖 Leyendo la parte",
+"fr": "📖 Je lis la partie"
+},
+"📖 بقرا الصفحات…": {
+"de": "📖 Ich lese die Seiten…",
+"en": "📖 Reading the pages…",
+"es": "📖 Leyendo las páginas…",
+"fr": "📖 Je lis les pages…"
+},
+"📖 بقرا الملف…": {
+"de": "📖 Ich lese die Datei…",
+"en": "📖 Reading the file…",
+"es": "📖 Leyendo el archivo…",
+"fr": "📖 Je lis le fichier…"
+},
 "📖 قراية الإنجيل": {
 "de": "📖 Evangelium lesen",
 "en": "📖 Gospel reading",
@@ -11065,6 +11464,30 @@
 "en": "📚 Tasks",
 "es": "📚 Tareas",
 "fr": "📚 Tâches"
+},
+"📚 تلخيص المحاضرات والكتب": {
+"de": "📚 Zusammenfassungen von Vorlesungen und Büchern",
+"en": "📚 Lecture and book summaries",
+"es": "📚 Resúmenes de clases y libros",
+"fr": "📚 Résumés de cours et de livres"
+},
+"📚 لخّصت «": {
+"de": "📚 Zusammengefasst: „",
+"en": "📚 Summarized “",
+"es": "📚 Resumí «",
+"fr": "📚 J'ai résumé « "
+},
+"📚 لخّصلي": {
+"de": "📚 Fass es mir zusammen",
+"en": "📚 Summarize for me",
+"es": "📚 Resúmeme esto",
+"fr": "📚 Résume-moi ça"
+},
+"📚 لخّصلي محاضرة أو كتاب": {
+"de": "📚 Fass mir eine Vorlesung oder ein Buch zusammen",
+"en": "📚 Summarize a lecture or book for me",
+"es": "📚 Resúmeme una clase o un libro",
+"fr": "📚 Résume-moi un cours ou un livre"
 },
 "📚 مهمة جديدة:": {
 "de": "📚 Neue Aufgabe:",
@@ -11179,6 +11602,18 @@
 "en": "📲 Telegram reminders (even with the app closed)",
 "es": "📲 Recordatorios por Telegram (aunque la app esté cerrada)",
 "fr": "📲 Rappels sur Telegram (même appli fermée)"
+},
+"📷 بجهّز الصور…": {
+"de": "📷 Ich bereite die Fotos vor…",
+"en": "📷 Preparing the photos…",
+"es": "📷 Preparando las fotos…",
+"fr": "📷 Je prépare les photos…"
+},
+"📷 صوّر صفحات": {
+"de": "📷 Seiten fotografieren",
+"en": "📷 Snap pages",
+"es": "📷 Fotografiar páginas",
+"fr": "📷 Photographier des pages"
 },
 "📿 أذكار": {
 "de": "📿 Adhkar",
@@ -11324,6 +11759,12 @@
 "es": "🔗 Google",
 "fr": "🔗 Google"
 },
+"🔗 جوجل كالندر وجيميل": {
+"de": "🔗 Google Kalender und Gmail",
+"en": "🔗 Google Calendar and Gmail",
+"es": "🔗 Google Calendar y Gmail",
+"fr": "🔗 Google Agenda et Gmail"
+},
 "🔗 ربط جوجل": {
 "de": "🔗 Google verbinden",
 "en": "🔗 Connect Google",
@@ -11347,6 +11788,12 @@
 "en": "🔥 Crackling fire",
 "es": "🔥 Fuego tranquilo",
 "fr": "🔥 Feu doux"
+},
+"🔴 ابدأ التسجيل": {
+"de": "🔴 Aufnahme starten",
+"en": "🔴 Start recording",
+"es": "🔴 Empezar a grabar",
+"fr": "🔴 Démarrer l'enregistrement"
 },
 "🗓️ الخطة:": {
 "de": "🗓️ Plan:",

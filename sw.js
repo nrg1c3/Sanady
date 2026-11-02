@@ -1,6 +1,6 @@
 /* shared by both apps: Sanady ADHD (/Sanady/) and Mudabbir for everyone (/mudabbir/, a generated copy) */
 const SC=self.registration.scope,MUD=/\/mudabbir\/$/.test(SC),MAIN=MUD||/\/app\/$/.test(SC),P=MUD?'mudabbir-':MAIN?'sanady-main-':'sanady-',UP=MUD?'/Sanady/':MAIN?'../':'',IUP=MUD?'':UP,BRAND=MAIN?'مُدبّر':'سندي';
-const SHELL=P+'shell-v21',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
+const SHELL=P+'shell-v22',RT=P+'rt-v1',KEEP=[SHELL,RT,P+'demo-v1'];
 const FILES=['./','index.html','manifest.webmanifest'].concat(['app.css','app.js','family.js','life.js','sync.js','work.js','sounds.js','demo.js','privacy.html'].map(f=>UP+f)).concat(['icon-192.png','icon-512.png'].map(f=>IUP+f));
 const ICON=IUP+'icon-192.png';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});

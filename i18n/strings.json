@@ -2880,6 +2880,12 @@
 "es": "Sharjah",
 "fr": "Charjah"
 },
+"الشاشة البسيطة": {
+"de": "Einfacher Bildschirm",
+"en": "Simple screen",
+"es": "Pantalla simple",
+"fr": "Écran simple"
+},
 "الشاشة البسيطة (حاجة واحدة وزرار صوت)": {
 "de": "Der einfache Bildschirm (eine Sache und ein Sprachknopf)",
 "en": "The simple screen (one thing and a voice button)",
@@ -2897,6 +2903,12 @@
 "en": "The simple screen, “By your side,” and waiting mode before appointments",
 "es": "La pantalla simple, «A tu lado» y la espera antes de las citas",
 "fr": "L'écran simple, « À tes côtés » et l'attente avant les rendez-vous"
+},
+"الشاشة الكاملة": {
+"de": "Voller Bildschirm",
+"en": "Full screen",
+"es": "Pantalla completa",
+"fr": "Écran complet"
 },
 "الشاشة دي تتعمل على موبايل الطفل نفسه، بإيد الأب أو الأم.": {
 "de": "Dieser Bildschirm wird auf dem Handy des Kindes selbst eingerichtet, von Mama oder Papa.",
@@ -4803,6 +4815,12 @@
 "es": "Prueba Focus+",
 "fr": "Essaie Focus+"
 },
+"جرّب فوكس+ ببلاش": {
+"de": "Focus+ kostenlos testen",
+"en": "Try Focus+ free",
+"es": "Prueba Focus+ gratis",
+"fr": "Essaie Focus+ gratuitement"
+},
 "جلسة تركيز": {
 "de": "Fokus-Session",
 "en": "Focus session",
@@ -5061,6 +5079,12 @@
 "es": "Una sola cosa",
 "fr": "Une seule chose"
 },
+"حاجة واحدة ومايك كبير": {
+"de": "Eine Sache und ein großes Mikro",
+"en": "One thing and a big mic",
+"es": "Una sola cosa y un micro grande",
+"fr": "Une seule chose et un gros micro"
+},
 "حاجة. اللي على الموبايل دلوقتي هيتبدل بيها. موافق؟": {
 "de": "Einträge. Was jetzt auf dem Handy ist, wird dadurch ersetzt. Okay?",
 "en": "items. What's on the phone now will be replaced with them. OK?",
@@ -5114,6 +5138,12 @@
 "en": "Someone didn't reply to me and I feel like they're upset with me",
 "es": "Alguien no me respondió y siento que está molesto conmigo",
 "fr": "Quelqu'un ne m'a pas répondu et j'ai l'impression qu'il m'en veut"
+},
+"حد معاك وإنت بتشتغل": {
+"de": "Jemand bei dir, während du arbeitest",
+"en": "Someone with you while you work",
+"es": "Alguien contigo mientras trabajas",
+"fr": "Quelqu’un avec toi pendant que tu bosses"
 },
 "حد معاك وإنت بتشتغل، بيطمن عليك كل شوية.": {
 "de": "Jemand ist bei dir, während du arbeitest, und schaut ab und zu nach dir.",
@@ -5919,6 +5949,12 @@
 "es": "Restaurar mis datos",
 "fr": "Restaurer mes données"
 },
+"رجّع كل الأدوات": {
+"de": "Alle Werkzeuge zurück",
+"en": "Bring back all tools",
+"es": "Volver a todas las herramientas",
+"fr": "Remettre tous les outils"
+},
 "رجّع كل حاجة": {
 "de": "Alles wiederherstellen",
 "en": "Restore everything",
@@ -5960,6 +5996,12 @@
 "en": "Rice with vermicelli",
 "es": "Arroz con fideos",
 "fr": "Riz aux vermicelles"
+},
+"رسالة إنجازاتك كل أسبوع": {
+"de": "Deine Erfolge, jede Woche",
+"en": "Your wins, sent weekly",
+"es": "Tus logros, cada semana",
+"fr": "Tes réussites, chaque semaine"
 },
 "رسالة تفكير": {
 "de": "Erinnerungsnachricht",
@@ -6110,6 +6152,12 @@
 "en": "Bored, busy, or stressed? Let's finish just one thing from the pile.",
 "es": "¿Aburrido, ocupado o estresado? Terminemos solo una cosa de las pendientes.",
 "fr": "Pas envie, débordé ou stressé ? On finit juste une chose de la pile."
+},
+"زي الشات": {
+"de": "Wie ein Chat",
+"en": "Like a chat",
+"es": "Como un chat",
+"fr": "Comme un chat"
 },
 "زي الشات: بتكلّمني وأنا برد وأرتّب، من غير قوايم.": {
 "de": "Wie ein Chat: Du redest mit mir, ich antworte und sortiere, ganz ohne Listen.",
@@ -6482,6 +6530,12 @@
 "en": "A simple ADHD explainer for family",
 "es": "Explicación sencilla del TDAH para la familia",
 "fr": "Explication simple du TDAH pour la famille"
+},
+"شريك المتابعة": {
+"de": "Check-in-Partner",
+"en": "Check-in buddy",
+"es": "Compañero de seguimiento",
+"fr": "Partenaire de suivi"
 },
 "شريك متابعة كل أسبوع": {
 "de": "Ein wöchentlicher Begleiter, der nachfragt",
@@ -7713,6 +7767,12 @@
 "es": "Antes de una cita importante: hacemos cositas pequeñas hasta que te diga que es hora de salir.",
 "fr": "Avant un rendez-vous important : on fait de petites choses jusqu'à ce que je te dise d'y aller."
 },
+"قبل ميعاد مهم، أقولك تقوم": {
+"de": "Vor einem wichtigen Termin sag ich dir, wann du losmusst",
+"en": "Before a big appointment, I'll tell you when to go",
+"es": "Antes de una cita importante, te aviso cuándo salir",
+"fr": "Avant un rendez-vous important, je te dis quand partir"
+},
 "قبلها بشهر": {
 "de": "einen Monat vorher",
 "en": "a month before",
@@ -8090,6 +8150,12 @@
 "en": "Everything in Sanady is saved on this phone only. If it gets lost or you switch phones, this copy brings everything back: your tasks, your money, where your things are, and your journal.",
 "es": "Todo en Sanady se guarda solo en este celular. Si se pierde o lo cambias, esta copia recupera todo: tus tareas, tu dinero, dónde están tus cosas y tu diario.",
 "fr": "Tout dans Sanady est enregistré uniquement sur ce téléphone. Si tu le perds ou en changes, cette sauvegarde récupère tout : tes tâches, ton argent, où sont tes affaires et ton journal."
+},
+"كل حاجة في مربع": {
+"de": "Alles in Kacheln",
+"en": "Everything in a tile",
+"es": "Todo en bloques",
+"fr": "Tout en blocs"
 },
 "كل حاجة في مربع: الشغل، البيت، الفلوس، المواعيد. تدوس على المربع تشوف اللي جواه.": {
 "de": "Alles in Kacheln: Arbeit, Zuhause, Geld, Termine. Tipp auf eine Kachel, um zu sehen, was drin ist.",
@@ -10403,6 +10469,12 @@
 "es": "enero",
 "fr": "janvier"
 },
+"يهمسلك بالرد وإنت بتتكلم": {
+"de": "Flüstert dir die Antwort zu, während du sprichst",
+"en": "Whispers you the reply while you talk",
+"es": "Te susurra la respuesta mientras hablas",
+"fr": "Te souffle la réponse pendant que tu parles"
+},
 "يوافق عليه.": {
 "de": "es genehmigt.",
 "en": "approves it.",
@@ -10480,6 +10552,12 @@
 "en": "Day got messy? Let's replan it",
 "es": "¿Se te desordenó el día? Lo reorganizamos",
 "fr": "Journée chamboulée ? On la réorganise"
+},
+"يومك بالترتيب": {
+"de": "Dein Tag der Reihe nach",
+"en": "Your day in order",
+"es": "Tu día en orden",
+"fr": "Ta journée dans l’ordre"
 },
 "يومك بالترتيب من الصبح لبالليل، وعلامة بتوريك إنت فين دلوقتي.": {
 "de": "Dein Tag der Reihe nach, von morgens bis abends, mit einer Markierung, die zeigt, wo du gerade bist.",

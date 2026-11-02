@@ -37,10 +37,16 @@ function adhdSettings(){const box=document.querySelector('#sheetBody .form');if(
  if($('sSimple'))$('sSimple').onchange=e=>setSimple(e.target.checked);if($('sBuddy'))$('sBuddy').onclick=buddySheet;$('sAgent').onclick=agentSheet;if(window.trustSettings)trustSettings()}
 new MutationObserver(()=>{if($('sSave')&&!$('sAgent'))adhdSettings()}).observe(document.getElementById('sheetBody'),{childList:true});
 /* the Focus+ tab: the focus timer is free for everyone; Focus+ adds its tools on top */
-function drawFP(){const box=$('fpCard');if(!box)return;
- if(!IS_ADHD){box.innerHTML=`<div class="ch"><h3>${FP_ICON} فوكس+</h3><small>للتركيز والبداية</small></div><p class="note">أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت: الشاشة البسيطة، و«جنبك»، والانتظار قبل المواعيد، وشريك متابعة، ومستشار في ودنك وإنت في اجتماع أو بتتكلم.</p><button class="btn" id="fpTry">جرّب فوكس+</button>`;$('fpTry').onclick=focusSheet;return}
- box.innerHTML=`<div class="ch"><h3>${FP_ICON} فوكس+</h3><small>شغال ✓</small></div><div class="acts"><button class="btn ghost" id="fpWith">🤝 جنبك</button><button class="btn ghost" id="fpWait">⏳ الانتظار</button><button class="btn ghost" id="fpSimple">${simpleOn()?'☝️ الشاشة الكاملة':'☝️ الشاشة البسيطة'}</button><button class="btn" id="fpCoach">🎧 مستشار في ودنك</button><button class="btn ghost" id="fpBuddy">🤝 شريك المتابعة</button><button class="link" id="fpSet">إعدادات فوكس+</button></div>`;
- $('fpWith').onclick=()=>setMode('with');$('fpWait').onclick=()=>setMode('wait');$('fpSimple').onclick=()=>{setMode('one');setSimple(!simpleOn())};$('fpBuddy').onclick=buddySheet;$('fpCoach').onclick=()=>window.coachSheet&&coachSheet();$('fpSet').onclick=focusSheet}
+function drawFP(){const box=$('fpCard');if(!box)return;const on=IS_ADHD;
+ const T=[['coach','🎧','مستشار في ودنك','يهمسلك بالرد وإنت بتتكلم',1],['with','🤝','جنبك','حد معاك وإنت بتشتغل'],['wait','⏳','الانتظار','قبل ميعاد مهم، أقولك تقوم'],
+  ['simple','☝️',simpleOn()?'الشاشة الكاملة':'الشاشة البسيطة',simpleOn()?'رجّع كل الأدوات':'حاجة واحدة ومايك كبير'],['buddy','👥','شريك المتابعة','رسالة إنجازاتك كل أسبوع']];
+ box.innerHTML=`<div class="fph"><h3>${FP_ICON} فوكس+</h3>${on?'<span class="fps">شغال ✓</span><button class="ic fpset" id="fpSet" aria-label="إعدادات فوكس+">⚙️</button>':'<span class="fps off">للتركيز والبداية</span>'}</div>
+ ${on?'':'<p class="note">أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.</p>'}
+ <div class="fpg ${on?'':'locked'}">${T.map(([k,ic,t,d,wide])=>`<button class="fpt ${wide?'wide':''}" data-f="${k}"><i>${ic}</i><span><b>${t}</b><small>${d}</small></span>${on?'':'<em class="lk">🔒</em>'}</button>`).join('')}</div>
+ ${on?'':'<button class="btn big" id="fpTry">جرّب فوكس+ ببلاش</button>'}`;
+ box.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{if(!on){focusSheet();return}const k=b.dataset.f;
+  if(k==='coach')window.coachSheet&&coachSheet();else if(k==='with')setMode('with');else if(k==='wait')setMode('wait');else if(k==='buddy')buddySheet();else if(k==='simple'){setMode('one');setSimple(!simpleOn())}});
+ if($('fpSet'))$('fpSet').onclick=focusSheet;if($('fpTry'))$('fpTry').onclick=focusSheet}
 const _render=render;render=function(){applySimple();_render();drawFP()};
 applySimple();
 /* Focus+: what it adds, and turning it on or off (sold through Google Play once the store app is out; free to try now) */

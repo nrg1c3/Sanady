@@ -49,8 +49,8 @@ with sync_playwright() as p:
                 pg.evaluate(f"setView('{k}')"); pg.wait_for_timeout(150); left |= set(pg.evaluate(LEFT))
             for k in pg.evaluate("MODES.map(x=>x[0])"):
                 pg.evaluate(f"setMode('{k}')"); pg.wait_for_timeout(150); left |= set(pg.evaluate(LEFT)); pg.evaluate("closeSheet()")
-            pg.evaluate("setMode('none')"); pg.click('#pView'); pg.wait_for_timeout(150); left |= set(pg.evaluate(LEFT)); pg.evaluate("closeSheet()")
-            pg.click('#pMode'); pg.wait_for_timeout(150); left |= set(pg.evaluate(LEFT)); pg.evaluate("closeSheet()")
+            pg.evaluate("setMode('none')"); pg.click('#modeSeg [data-v=line]'); pg.wait_for_timeout(150); left |= set(pg.evaluate(LEFT))
+            pg.click('#modeSeg [data-m=one]'); pg.wait_for_timeout(150); left |= set(pg.evaluate(LEFT)); pg.evaluate("setMode('none');setView('blocks')")
             pg.click('#btnSet'); pg.wait_for_timeout(300); left |= set(pg.evaluate(LEFT))
             if app == 'Sanady/': pg.screenshot(path=os.path.join(OUT, f'i18n_{lang}_settings.png'), full_page=True)
             pg.evaluate("closeSheet()")

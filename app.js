@@ -803,9 +803,15 @@ function pickSheet(kind){const L=kind==='view'?VIEWS:MODES,cur=kind==='view'?cur
  openSheet(`<h2>${kind==='view'?'شكل الشاشة':'مودك النهارده'}</h2><p class="note">${kind==='view'?'إزاي تحب تشوف حاجاتك. تقدر تغيّرها في أي وقت.':'على حسب يومك. المود بيغيّر اللي بيظهرلك، ولما تقفله الشاشة بترجع زي ما كانت.'}</p>
  <div class="picks">${L.map(([k,ic,t,d,plus])=>`<button class="pick ${k===cur?'on':''}" data-k="${k}"><i>${ic}</i><span><b>${t}${plus?'<em class="fpb">Focus+</em>':''}</b><small>${d}</small></span></button>`).join('')}</div>`);
  document.querySelectorAll('#sheetBody .pick').forEach(b=>b.onclick=()=>{closeSheet();kind==='view'?setView(b.dataset.k):setMode(b.dataset.k)})}
-function drawNow(){const m=curMode(),v=curView(),V=VIEWS.find(x=>x[0]===v),M=MODES.find(x=>x[0]===m);
- $('modeSeg').innerHTML=`<button class="pill" id="pView"><i>${V[1]}</i><span><small>الواجهة</small><b>${V[2]}</b></span></button><button class="pill ${m!=='none'?'on':''}" id="pMode"><i>${M[1]}</i><span><small>المود</small><b>${M[2]}</b></span></button>${m!=='none'?'<button class="pillx" id="pOff" aria-label="اقفل المود">✕</button>':''}`;
- $('pView').onclick=()=>pickSheet('view');$('pMode').onclick=()=>pickSheet('mode');if($('pOff'))$('pOff').onclick=()=>setMode('none');
+// both choices are on the screen: the view (three tiles, each with a few words) and the mode (a row of chips); the chosen mode is explained underneath
+const VSHORT={blocks:'كل حاجة في مربع',line:'يومك بالترتيب',chat:'زي الشات'};
+function drawNow(){const m=curMode(),v=curView(),M=MODES.find(x=>x[0]===m),V=VIEWS.find(x=>x[0]===v);
+ $('modeSeg').innerHTML=`<div class="lbl">الواجهة</div><div class="vrow">${VIEWS.map(([k,ic,t])=>`<button class="vt ${k===v?'on':''}" data-v="${k}" aria-pressed="${k===v}"><i>${ic}</i><b>${t}</b><small>${VSHORT[k]}</small></button>`).join('')}</div>
+ <div class="lbl">المود</div><div class="mrow">${MODES.map(([k,ic,t,d,plus])=>`<button class="mc ${k===m?'on':''} ${plus&&!IS_ADHD?'lock':''}" data-m="${k}" aria-pressed="${k===m}"><i>${ic}</i>${t}${plus?'<em class="fpb">+</em>':''}</button>`).join('')}</div>
+ <p class="mdesc">${m==='none'?V[3]:M[3]}</p>`;
+ $('modeSeg').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>setView(b.dataset.v));
+ $('modeSeg').querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+ {const on=$('modeSeg').querySelector('.mc.on'),row=$('modeSeg').querySelector('.mrow');if(on&&row){const r=on.getBoundingClientRect(),rr=row.getBoundingClientRect();if(r.left<rr.left||r.right>rr.right)row.scrollLeft+=(r.left+r.width/2)-(rr.left+rr.width/2)}}
  const box={one:'nowOne',with:'nowWith',wait:'nowWait',mom:'nowMom',biz:'nowBiz',out:'nowOut',calm:'nowCalm'};
  Object.values(box).forEach(id=>{const e=$(id);if(e)e.hidden=id!==box[m]});$('nowLay').hidden=m!=='none';
  if(m==='one'){drawTBar();drawNudge();drawNext();drawEnergy();drawTop3();drawMini()}

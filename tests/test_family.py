@@ -27,7 +27,7 @@ with sync_playwright() as p:
     ctx.route('https://api.nrg-egypt.com/**', srvr)
     ctx.route('https://api.alquran.cloud/**', quran)
     U = 'http://127.0.0.1:8772/index.html'
-    pg.goto(U); pg.evaluate(SEED); pg.reload(); pg.wait_for_timeout(1000)
+    pg.goto(U); pg.evaluate(SEED); pg.reload(); pg.wait_for_timeout(1000); pg.evaluate('ringAlarm=()=>{};const a=document.getElementById("alarm");if(a)a.hidden=true')
     # ---- mom mode
     check('mom mode tab in ADHD edition', 'الأم' in pg.evaluate("(MODES.filter(x=>!x[4]||IS_ADHD).map(x=>x[2]).join(' ')+' '+VIEWS.map(x=>x[2]).join(' '))"))
     check('mom mode visible', not pg.is_hidden('#nowMom'))

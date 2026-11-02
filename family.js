@@ -31,7 +31,7 @@ function drawMom(){const box=$('nowMom'),n=NOW(),k=dayKey(),work=workToday();
   ${Object.entries(NEEDS).map(([c,[h]])=>byCat[c].length?`<div class="sec"><div class="sech">${h} <span>${byCat[c].length}</span></div>${byCat[c].map(itemRow).join('')}</div>`:'').join('')}
   <div class="feel" id="mChips">${Object.entries(NEEDS).map(([c,[,l]])=>l.filter(t=>!needs.some(i=>i.title===t)).slice(0,6).map(t=>`<button class="chip" data-c="${c}">${esc(t)}</button>`).join('')).join('')}</div>
   <div class="inrow"><input id="mNeed" placeholder="حاجة تانية خلصت؟"><button class="btn" id="mNeedGo">ضيف</button></div>
-  ${needs.length?'<button class="btn ghost" id="mShare">ابعتي القايمة واتساب</button>':''}</div>
+  ${needs.length?'<button class="btn ghost" id="mShare">ابعتي القايمة واتساب</button>':''}<button class="link" id="mHome" style="align-self:flex-start">🏠 ${typeof HS!=='undefined'&&HS.key?'البيت المشترك شغال ✓':'شاركي القايمة مع أهل البيت'}</button></div>
  <div class="card"><div class="ch"><h3>🍳 تعبانة؟ أكلة سريعة</h3><small>قوليلي عندك إيه وأقولك تعملي إيه في ربع ساعة</small></div><button class="btn" id="mFood">اقترحلي أكلة</button></div>
  <div class="card"><div class="ch"><h3>👧 الولاد</h3><small>دواهم ودكتورهم ومدرستهم وحواراتهم</small></div><div id="mKids"></div><button class="btn ghost" id="mKidAdd">+ ضيفي طفل</button></div>`;
  $('mWork').querySelectorAll('button').forEach(b=>b.onclick=()=>{HOME.work[dayKey()]=b.dataset.w==='1';const ks=Object.keys(HOME.work).sort().slice(-30);HOME.work=Object.fromEntries(ks.map(x=>[x,HOME.work[x]]));saveHome();render()});
@@ -39,6 +39,7 @@ function drawMom(){const box=$('nowMom'),n=NOW(),k=dayKey(),work=workToday();
  $('mChores').onclick=choresSheet;
  $('mChips').querySelectorAll('button').forEach(b=>b.onclick=()=>{addNeed(b.textContent,b.dataset.c);render()});
  const add=()=>{const v=$('mNeed').value.trim();if(!v)return;addNeed(v,'food');render()};$('mNeedGo').onclick=add;$('mNeed').onkeydown=e=>{if(e.key==='Enter')add()};
+ $('mHome').onclick=()=>homeSheet();
  const sh=$('mShare');if(sh)sh.onclick=()=>openSheet('<h2>قايمة البيت</h2>'+draftBox('محتاجين من برة:\n'+needs.map(i=>'• '+i.title).join('\n')));
  $('mFood').onclick=()=>foodSheet();$('mKidAdd').onclick=()=>kidForm();
  bindRows($('mToday'));box.querySelectorAll('.sec').forEach(s=>bindRows(s));drawKids()}
@@ -250,4 +251,4 @@ function petForm(){openSheet(`<h2>حيوان جديد</h2><div class="form"><lab
   savePets();save();closeSheet();toast('هفكّرك بأكل '+name+(p.vac?' وتطعيمه':''));LIFE_SUB='me';show('all');setSeg('life')}}
 $('qMe').onclick=()=>{LIFE_SUB='';show('all');setSeg('life')};
 /* links opened while the app is already open only change the hash: reload so they are handled */
-window.addEventListener('hashchange',()=>{if(/^#(hw|kidsetup|add)=/.test(location.hash))location.reload()});
+window.addEventListener('hashchange',()=>{if(/^#(hw|kidsetup|add|home)=/.test(location.hash))location.reload()});

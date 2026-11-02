@@ -5,7 +5,7 @@ R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 s = open(os.path.join(R, 'index.html'), encoding='utf-8').read()
 s = s.replace('<title>سندي ADHD</title>', '<title>سندي</title>')
 s = s.replace('content="سندي: سندك اللي جواك. Agent بالعامية بيرتب دماغك ويفكّرك ويبدأ معاك."', 'content="سندي: بيرتب يومك وبيتك وفلوسك ويفكّرك في الوقت الصح."')
-for f in ['icon-192.png', 'apple-touch-icon.png', 'app.css', 'sounds.js', 'app.js', 'family.js', 'life.js', 'demo.js']:
+for f in ['icon-192.png', 'apple-touch-icon.png', 'app.css', 'sounds.js', 'app.js', 'family.js', 'life.js', 'sync.js', 'demo.js']:
     s = re.sub(r'(href|src)="' + re.escape(f) + '"', r'\1="../' + f + '"', s)
 s = s.replace('<script src="../sounds.js"></script>', '<script>window.SANADY_ED="main"</script>\n<script src="../sounds.js"></script>')
 s = s.replace('href="privacy.html"', 'href="../privacy.html"')

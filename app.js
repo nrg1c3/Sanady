@@ -707,6 +707,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
+ <button class="btn ghost" id="sHome">🏠 البيت المشترك (قايمة واحدة لكل البيت)</button>
  <button class="btn ghost" id="sKid">👧 حوّل الموبايل ده لموبايل طفل</button>
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
@@ -720,6 +721,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();
  $('sKid').onclick=()=>kidSetup();
+ $('sHome').onclick=()=>homeSheet();
  $('sDoc').onclick=()=>docsSheet();
  $('sNot').onclick=()=>{closeSheet();store.get('push',false)?disablePush():enablePush()};
  $('sFam').onclick=()=>{const link=location.origin+location.pathname+'?send=1&to='+encodeURIComponent(prof.name||'');const txt='لو عايز تفكّرني بحاجة، ابعتلي من اللينك ده وهتوصل على سندي: '+link;

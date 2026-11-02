@@ -28,8 +28,13 @@ const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(PFX+k));return
 if(new URLSearchParams(location.search).get('focus')==='1'&&store.get('focus',null)===null){store.set('focus',true);store.set('focusAt',Date.now())}
 const IS_ADHD=store.get('focus',false)===true;
 const START=IS_ADHD?2:5; // first push into a task: 2 minutes for ADHD
-const THEMES={sayvo:['سايفو','#1C1F45','#FFB57A'],green:['أخضر','#0E2B2A','#F2B33D'],night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
-function applyTheme(th){th=THEMES[th]?th:store.get('theme','sayvo');if(!THEMES[th])th='sayvo';document.body.dataset.th=th;document.documentElement.style.background=THEMES[th][1];const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[th][1]}
+const THEMES={auto:['تلقائي (زي الموبايل)','',''],day:['نهاري هادي','#F6F3EE','#EBA27A'],sayvo:['ليلي هادي','#1B1D33','#F0B088'],green:['أخضر','#0E2B2A','#F2B33D'],night:['ليلي','#101326','#FFD24C'],warm:['دافي','#FFF8EC','#FFC83D'],light:['فاتح','#F6F5F0','#FFD24C']};
+// colours follow the phone (light by day, dark at night) unless the person picks one
+const darkPhone=()=>{try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return true}};
+function applyTheme(th){th=THEMES[th]?th:store.get('theme','auto');if(!THEMES[th])th='auto';const real=th==='auto'?(darkPhone()?'sayvo':'day'):th;document.body.dataset.th=real;document.documentElement.style.background=THEMES[real][1];const m=document.querySelector('meta[name=theme-color]');if(m)m.content=THEMES[real][1]}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(store.get('theme','auto')==='auto')applyTheme()})}catch(e){}
+/* the Focus+ mark: a target with a plus (the headphones belong to the focus timer) */
+const FP_ICON='<span class="fpi"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="11" cy="13" r="3" fill="currentColor"/><path d="M19.5 2.5v6M16.5 5.5h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>';
 applyTheme();
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let DEMO=null; // set by demo.js
@@ -713,14 +718,14 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <label>بتنام الساعة كام؟<input id="sS" type="time" value="${esc(prof.sleep)}"></label>
  <label>المشوار العادي بياخد كام دقيقة؟<input id="sT" type="number" inputmode="numeric" value="${prof.travel}"></label>
  <label>حاجات تاخدها وإنت نازل<input id="sP" value="${esc(prof.prep)}"></label>
- <label>ألوان الشاشة</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${document.body.dataset.th===k?'on':''}" style="background:${v[1]};color:${k==='night'||k==='green'?'#F3F4FB':'#1C1B1F'}"><span style="color:${v[2]}">●</span> ${v[0]}</button>`).join('')}</div>
+ <label>ألوان الشاشة</label><div class="swatch" id="sTh">${Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${store.get('theme','auto')===k?'on':''}" style="background:${k==='auto'?'linear-gradient(90deg,#F6F3EE 50%,#1B1D33 50%)':v[1]};color:${['night','green','sayvo'].includes(k)?'#F3F4FB':'#1C1B1F'}"><span style="color:${v[2]}">●</span> ${v[0]}</button>`).join('')}</div>
  <button class="btn" id="sSave">احفظ</button>
  ${TG_READY?'<button class="btn ghost" id="sTg">📲 تذكير على تليجرام (والتطبيق مقفول)</button>':''}
  <button class="btn ghost" id="sDoc">📄 ورقي ومواعيد التجديد</button>
  <button class="btn ghost" id="sBk">💾 نسخة احتياطية / موبايل جديد</button>
  <button class="btn ghost" id="sCal">📅 كل مواعيدي في الكالندر (ينبّهك والتطبيق مقفول)</button>
  <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
- <button class="btn ghost" id="sFocus">🎯 فوكس+ ${IS_ADHD?'✓':''}</button>
+ <button class="btn ghost" id="sFocus">${FP_ICON} فوكس+ ${IS_ADHD?'✓':''}</button>
  <button class="btn ghost" id="sPlan">⭐ الباقات والاشتراك</button>
  <button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>
  <button class="btn ghost" id="sHome">🏠 البيت المشترك (قايمة واحدة لكل البيت)</button>
@@ -729,7 +734,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
  <a class="btn ghost" href="privacy.html">🔒 الخصوصية والأمان</a>
  <button class="btn ghost" id="sWipe" style="color:var(--red)">امسح كل بياناتي</button>
- <p class="note">سندي مش دكتور ولا علاج، وبيكمّل الدكتور مش بيبدله. مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
+ <p class="note">مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.</p></div>`);
  $('sSave').onclick=()=>{Object.assign(prof,{name:$('sN').value.trim(),sex:$('sX').value,voice:$('sV').checked,vg:$('sG').value,wake:$('sW').value||'07:30',sleep:$('sS').value||'23:30',travel:+$('sT').value||30,prep:$('sP').value.trim()||'المفاتيح'});save();closeSheet();toast('اتحفظ')};
  $('sCal').onclick=()=>icsAll();
  $('sTh').querySelectorAll('button').forEach(b=>b.onclick=()=>{store.set('theme',b.dataset.th);applyTheme(b.dataset.th);$('sTh').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
@@ -759,25 +764,60 @@ function familyFlows(){const q=new URLSearchParams(location.search);
  if(location.hash.startsWith('#add=')){const o=b64d(location.hash.slice(5));history.replaceState(null,'',location.pathname+location.search);if(o&&o.t){setTimeout(()=>{openSheet(`<h2>تذكير من ${esc(o.f||'حد بيحبك')}</h2><div class="stack"><div class="say">${esc(o.t)}${o.d?' · '+esc(fmtWhen(o.d)):''}</div><div class="acts"><button class="btn" id="faY">ضيفه</button><button class="btn ghost" onclick="closeSheet()">لأ</button></div></div>`);$('faY').onclick=()=>{addItem({type:'task',sec:'people',title:o.t,due:o.d||'',from:o.f});closeSheet();toast('اتضاف 💜')}},400)}}
  return false}
 
-/* ---------- home modes: the user picks how the home screen works, nothing is forced ---------- */
-const MODES=IS_ADHD?[['one','حاجة واحدة'],['with','جنبك'],['wait','انتظار'],['mom','الأم']]:[['blocks','مربعات'],['line','خط اليوم'],['chat','كلام'],['one','حاجة واحدة'],['mom','الأم'],['biz','الشغل']];
-const curMode=()=>{const m=store.get(IS_ADHD?'mode':'lay',IS_ADHD?'one':'blocks');return MODES.some(x=>x[0]===m)?m:MODES[0][0]};
-function setMode(m){store.set(IS_ADHD?'mode':'lay',m);show('now')}
+/* ---------- home: the VIEW is how the screen looks (blocks, day line, chat); the MODE is how your day is going.
+   A mode takes over the screen until it's turned off; then the chosen view comes back. Focus+ adds two modes. ---------- */
+const VIEWS=[['blocks','🧱','مربعات','كل حاجة في مربع: الشغل، البيت، الفلوس، المواعيد. تدوس على المربع تشوف اللي جواه.'],
+ ['line','🕒','خط اليوم','يومك بالترتيب من الصبح لبالليل، وعلامة بتوريك إنت فين دلوقتي.'],
+ ['chat','💬','كلام','زي الشات: بتكلّمني وأنا برد وأرتّب، من غير قوايم.']];
+const MODES=[['none','🏠','عادي','الشاشة زي ما اخترتها في الواجهة.'],
+ ['one','☝️','حاجة واحدة','زهقان أو مشغول أو مضغوط؟ نخلص حاجة واحدة بس من اللي مركونين.'],
+ ['biz','💼','الشغل','شغلك بس: مواعيد الشغل والمكالمات والفلوس اللي ليك وعليك.'],
+ ['mom','👩‍👧','الأم','البيت والولاد: الناقص، والنضافة، ومواعيد الولاد ودواهم.'],
+ ['out','🚗','مشاوير','نازل؟ اللي هتشتريه والمشاوير والفواتير اللي تدفعها برّه في مكان واحد.'],
+ ['calm','🌙','آخر اليوم','اللي خلص النهارده، وأول حاجات بكرة، وتفضفض قبل ما تنام.'],
+ ['with','🤝','جنبك','حد معاك وإنت بتشتغل، بيطمن عليك كل شوية.',1],
+ ['wait','⏳','الانتظار','قبل ميعاد مهم: نعمل حاجات صغيرة لحد ما أقولك تقوم.',1]];
+const curView=()=>{let v=store.get('view',null);if(v===null){const old=store.get('lay','');v=['blocks','line','chat'].includes(old)?old:'blocks'}return VIEWS.some(x=>x[0]===v)?v:'blocks'};
+const curMode=()=>{let m=store.get('mode2',null);if(m===null){const old=store.get(IS_ADHD?'mode':'lay','');m=['one','with','wait','mom','biz'].includes(old)?old:(IS_ADHD?'one':'none')}
+ const d=MODES.find(x=>x[0]===m);return d&&(!d[4]||IS_ADHD)?m:'none'};
+function setMode(m){const d=MODES.find(x=>x[0]===m);if(d&&d[4]&&!IS_ADHD){focusSheet();return}store.set('mode2',m);show('now')}
+function setView(v){store.set('view',v);store.set('mode2','none');show('now')}
+function pickSheet(kind){const L=kind==='view'?VIEWS:MODES,cur=kind==='view'?curView():curMode();
+ openSheet(`<h2>${kind==='view'?'شكل الشاشة':'مودك النهارده'}</h2><p class="note">${kind==='view'?'إزاي تحب تشوف حاجاتك. تقدر تغيّرها في أي وقت.':'على حسب يومك. المود بيغيّر اللي بيظهرلك، ولما تقفله الشاشة بترجع زي ما كانت.'}</p>
+ <div class="picks">${L.map(([k,ic,t,d,plus])=>`<button class="pick ${k===cur?'on':''}" data-k="${k}"><i>${ic}</i><span><b>${t}${plus?'<em class="fpb">Focus+</em>':''}</b><small>${d}</small></span></button>`).join('')}</div>`);
+ document.querySelectorAll('#sheetBody .pick').forEach(b=>b.onclick=()=>{closeSheet();kind==='view'?setView(b.dataset.k):setMode(b.dataset.k)})}
+function drawNow(){const m=curMode(),v=curView(),V=VIEWS.find(x=>x[0]===v),M=MODES.find(x=>x[0]===m);
+ $('modeSeg').innerHTML=`<button class="pill" id="pView"><i>${V[1]}</i><span><small>الواجهة</small><b>${V[2]}</b></span></button><button class="pill ${m!=='none'?'on':''}" id="pMode"><i>${M[1]}</i><span><small>المود</small><b>${M[2]}</b></span></button>${m!=='none'?'<button class="pillx" id="pOff" aria-label="اقفل المود">✕</button>':''}`;
+ $('pView').onclick=()=>pickSheet('view');$('pMode').onclick=()=>pickSheet('mode');if($('pOff'))$('pOff').onclick=()=>setMode('none');
+ const box={one:'nowOne',with:'nowWith',wait:'nowWait',mom:'nowMom',biz:'nowBiz',out:'nowOut',calm:'nowCalm'};
+ Object.values(box).forEach(id=>{const e=$(id);if(e)e.hidden=id!==box[m]});$('nowLay').hidden=m!=='none';
+ if(m==='one'){drawTBar();drawNudge();drawNext();drawEnergy();drawTop3();drawMini()}
+ else if(m==='with')drawWith();else if(m==='wait')drawWait();else if(m==='mom')drawMom();else if(m==='biz')drawBiz();else if(m==='out')drawOut();else if(m==='calm')drawCalm();else drawLay(v)}
+/* errands: everything you can do while you're out, in one place */
+function drawOut(){const box=$('nowOut'),k=dayKey(),n=nowMs();
+ const need=typeof needItems==='function'?needItems():[];const buy=items.filter(i=>!i.done&&i.type==='buy'&&!need.includes(i));
+ const outs=items.filter(i=>!i.done&&i.due&&i.where&&i.type!=='idea'&&dayKey(parseL(i.due))===k);
+ const bills=items.filter(i=>!i.done&&i.type==='bill'&&(!i.due||parseL(i.due)-n<3*864e5));
+ const sec=(h,l,e)=>`<div class="card"><div class="ch"><h3>${h}</h3><small>${l.length||''}</small></div>${l.length?l.map(itemRow).join(''):`<p class="note">${e}</p>`}</div>`;
+ box.innerHTML=sec('🛒 هتشتري',[...need,...buy],'مفيش حاجة ناقصة.')+sec('📍 مشاوير النهارده',outs,'مفيش مشاوير برّه النهارده.')+sec('🧾 فواتير تدفعها',bills,'مفيش فواتير قريبة.');bindRows(box)}
+/* end of the day: what got done, what's first tomorrow, empty your head before sleep */
+function drawCalm(){const box=$('nowCalm'),k=dayKey(),tm=NOW();tm.setDate(tm.getDate()+1);const tk=dayKey(tm);
+ const done=items.filter(i=>i.done&&i.doneAt&&dayKey(new Date(i.doneAt))===k&&!i.ghost);
+ const tom=items.filter(i=>!i.done&&i.due&&i.type!=='idea'&&dayKey(parseL(i.due))===tk).sort((a,b)=>parseL(a.due)-parseL(b.due)).slice(0,3);
+ box.innerHTML=`<div class="card"><div class="ch"><h3>✅ خلصت النهارده</h3><small>${done.length||''}</small></div>${done.length?done.slice(-6).map(i=>`<p>✓ ${esc(i.title)}</p>`).join(''):'<p class="note">ولا يهمك، بكرة يوم جديد.</p>'}</div>
+ <div class="card"><div class="ch"><h3>☀️ أول حاجات بكرة</h3></div>${tom.length?tom.map(itemRow).join(''):'<p class="note">بكرة لسه فاضي.</p>'}</div>
+ <button class="btn big" id="clDump">🎙️ قول اللي في دماغك لبكرة</button>
+ <div class="row2"><button class="card tile" id="clNight"><i>📝</i><b>ملخص اليوم</b><small>وأفكّرك بإيه بكرة</small></button><button class="card tile" id="clSleep"><i>😴</i><b>وضع النوم</b><small>صوت بيوطى لحد ما يقف</small></button></div>`;
+ bindRows(box);$('clDump').onclick=()=>openDump();$('clNight').onclick=()=>nightSheet();$('clSleep').onclick=()=>{show('focus');sleepMode()}}
 const durAr=m=>{m=Math.max(0,Math.round(m));if(m<60)return minsAr(m);const h=Math.floor(m/60),r=m%60;const hs=h===1?'ساعة':h===2?'ساعتين':h+' ساعات';return r?hs+' و'+minsAr(r):hs};
 const energy=()=>{const e=store.get('energy',null);return e&&e.d===dayKey()?e.e:null};
 function nextAppt(maxH){const n=nowMs();return items.filter(i=>!i.done&&i.type==='appt'&&i.due&&!i.left).map(i=>({i,d:parseL(i.due)})).filter(x=>x.d&&x.d-n>-5*6e4&&x.d-n<(maxH||8)*36e5).sort((a,b)=>a.d-b.d)[0]||null}
-function drawNow(){const m=curMode();
- $('modeSeg').innerHTML=MODES.map(([k,v])=>`<button data-m="${k}" role="tab" aria-selected="${k===m}" class="${k===m?'on':''}">${v}</button>`).join('');
- $('modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
- $('nowOne').hidden=m!=='one';$('nowWith').hidden=m!=='with';$('nowWait').hidden=m!=='wait';$('nowMom').hidden=m!=='mom';$('nowBiz').hidden=m!=='biz';$('nowLay').hidden=!['blocks','line','chat'].includes(m);
- if(m==='one'){drawTBar();drawNudge();drawNext();drawEnergy();drawTop3();drawMini()}
- else if(m==='with')drawWith();else if(m==='wait')drawWait();else if(m==='mom')drawMom();else if(m==='biz')drawBiz();else drawLay(m)}
 
 /* time made visible: "40 minutes left before you leave" instead of a clock time */
 function drawTBar(){const box=$('tBar'),n=nowMs();const A=nextAppt(4);
  if(A){const leave=A.d.getTime()-leaveMins(A.i)*6e4,mins=(leave-n)/6e4;const frac=Math.max(0,Math.min(1,1-mins/240));
   box.innerHTML=`<div class="tbar ${mins<=10?'now':''}"><div class="tt"><span>${mins<=0?'اتحرك دلوقتي لـ '+esc(A.i.title):'فاضل '+durAr(mins)+' وتتحرك لـ '+esc(A.i.title)}</span><small>${esc(fmtT(new Date(leave)))}</small></div><div class="bar"><i style="width:${frac*100}%"></i></div>${mins>40?`<button class="link" style="align-self:flex-start" id="tbWait">إيه اللي ألحق أعمله قبلها؟</button>`:''}</div>`;
-  const w=$('tbWait');if(w)w.onclick=()=>setMode(IS_ADHD?'wait':'line');return}
+  const w=$('tbWait');if(w)w.onclick=()=>IS_ADHD?setMode('wait'):setView('line');return}
  const it=items.filter(i=>!i.done&&i.due&&i.type!=='idea'&&i.type!=='bill').map(i=>({i,d:parseL(i.due)})).filter(x=>x.d-n>0&&x.d-n<3*36e5).sort((a,b)=>a.d-b.d)[0];
  if(it){const mins=(it.d-n)/6e4;box.innerHTML=`<div class="tbar"><div class="tt"><span>فاضل ${durAr(mins)} على ${esc(it.i.title)}</span><small>${esc(fmtT(it.d))}</small></div><div class="bar"><i style="width:${Math.max(0,Math.min(1,1-mins/180))*100}%"></i></div></div>`;return}
  box.innerHTML=''}
@@ -913,11 +953,31 @@ if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('messag
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 window.addEventListener('DOMContentLoaded',()=>{if(window.kidBoot&&kidBoot())return;if(window.elderBoot&&elderBoot())return;if(window.workBoot)workBoot();if(familyFlows())return;render();setTimeout(()=>{tgCheck();tgSync();applyPending().then(()=>{checkAlarms();writeAlarms();pushSync()})},1500);if(store.get('seen',false))morning();
  const go=new URLSearchParams(location.search).get('go');if(go==='focus')show('focus');else if(go==='money')show('money');else if(go==='dump'&&store.get('seen',false))setTimeout(()=>openDump(),300);
- if(!store.get('seen',false)&&!DEMO){store.set('seen',true);openSheet(`<h2>أهلاً، أنا سندي 💜</h2><div class="stack"><div class="say">قولها مرة وأنا أرتّبها. قولّي كل اللي في دماغك، وأنا أفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.</div>
- <label class="form">اسمك إيه؟<input id="wN" placeholder="اسمك"></label><div class="acts"><button class="btn ghost" data-x="m">كلّمني بصيغة المذكر</button><button class="btn ghost" data-x="f">بصيغة المؤنث</button></div>
- <button class="btn big" id="wGo">🎙️ يلا نفرّغ دماغك</button><p class="note">من غير حساب، وبياناتك محفوظة على موبايلك. سندي مش علاج ولا تشخيص.</p></div>`);
-  document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{prof.sex=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b))});
-  $('wGo').onclick=()=>{prof.name=$('wN').value.trim();save();closeSheet();openDump()}}});
+ if(!store.get('seen',false)&&!DEMO){store.set('seen',true);onboard()}});
+/* first open: hello, a little about you, a short tour, then start */
+const HELP=[['work','💼','الشغل'],['home','🏠','البيت'],['kids','👧','الولاد'],['money','💰','الفلوس'],['study','📚','المذاكرة'],['health','🩺','الصحة والدوا'],['focus','🎯','التركيز والبداية']];
+const TOUR=[['🎙️','قول كل حاجة مرة واحدة','اتكلم براحتك حتى لو الكلام ملخبط: مهام، مواعيد، فواتير، أفكار. أنا اللي أرتّبها.'],
+ ['⏰','أفكّرك في الوقت الصح','ومنبّه بيرن حتى والتطبيق مقفول. وأحسبلك إمتى تتحرك عشان توصل في ميعادك.'],
+ ['🧩','الحاجة الكبيرة نقسّمها','نقسّمها لخطوات صغيرة، وأبدأ معاك أول خطوة.'],
+ ['🔁','يومك اتلخبط؟ نرتّبه من تاني','لو فاتك حاجة بعيد ترتيب يومك وأقولك غيّرت إيه، وتقدر ترجّعه.'],
+ ['🧱','إنت اللي تختار الشكل','الواجهة (مربعات، خط اليوم، كلام) والمود (حاجة واحدة، الشغل، الأم، مشاوير...) من فوق في الشاشة الرئيسية.']];
+function onboard(){openSheet(`<h2>أهلاً، أنا سندي 👋</h2><div class="stack"><div class="say">قولّي كل اللي في دماغك، وأنا أرتّبهولك، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة.</div>
+ <p class="note">ولو فاتك ميعاد أو نسيت حاجة، ولا يهمك. بنرتّب من تاني، من غير ما نحاسب نفسنا.</p><button class="btn big" id="ob1">يلا نتعرّف</button></div>`);
+ $('ob1').onclick=obAbout}
+function obAbout(){const pick=new Set(prof.help||[]);
+ $('sheetBody').innerHTML=`<h2>نتعرّف 🙂</h2><div class="stack"><label class="form">اسمك إيه؟<input id="wN" placeholder="اسمك" value="${esc(prof.name||'')}"></label>
+ <div class="acts"><button class="btn ghost" data-x="m">كلّمني بصيغة المذكر</button><button class="btn ghost" data-x="f">بصيغة المؤنث</button></div>
+ <p><b>عايزني أساعدك في إيه أكتر؟</b></p><div class="chips">${HELP.map(([k,ic,t])=>`<button class="chip ${pick.has(k)?'on':''}" data-h="${k}">${ic} ${t}</button>`).join('')}</div>
+ <div class="row2"><label class="form">بتصحى الساعة كام؟<input type="time" id="wW" value="${esc(prof.wake||'07:30')}"></label><label class="form">وبتنام الساعة كام؟<input type="time" id="wS" value="${esc(prof.sleep||'23:30')}"></label></div>
+ <button class="btn big" id="ob2">التالي</button></div>`;
+ document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{prof.sex=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b))});
+ document.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{const k=b.dataset.h;pick.has(k)?pick.delete(k):pick.add(k);b.classList.toggle('on',pick.has(k))});
+ $('ob2').onclick=()=>{prof.name=$('wN').value.trim();prof.help=[...pick];prof.wake=$('wW').value||prof.wake;prof.sleep=$('wS').value||prof.sleep;save();obTour(0)}}
+function obTour(i){const [ic,t,d]=TOUR[i],last=i===TOUR.length-1,focus=(prof.help||[]).includes('focus')&&!IS_ADHD;
+ $('sheetBody').innerHTML=`<div class="tour"><div class="big">${ic}</div><h2>${t}</h2><p>${d}</p><div class="dots">${TOUR.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div></div>
+ <div class="stack">${last?`<button class="btn big" id="obGo">🎙️ يلا نبدأ</button>${focus?`<button class="btn ghost" id="obFp">${FP_ICON} جرّب Focus+ (للتركيز والبداية)</button>`:''}`:`<button class="btn big" id="obNx">التالي</button><button class="link" id="obSk">تخطّى</button>`}</div>`;
+ if(last){$('obGo').onclick=()=>{closeSheet();openDump()};if($('obFp'))$('obFp').onclick=()=>{store.set('focus',true);store.set('focusAt',Date.now());store.set('simple',true);location.search='?go=dump'}}
+ else{$('obNx').onclick=()=>obTour(i+1);$('obSk').onclick=()=>obTour(TOUR.length-1)}}
 // the texts were written for سندي and مُدبّر: show the app's name everywhere
 if(ED==='main'){const fixT=t=>{if(t.nodeValue&&/سندي|مُدبّر/.test(t.nodeValue))t.nodeValue=brandify(t.nodeValue)};
  const fix=n=>{if(!n)return;if(n.nodeType===3)return fixT(n);if(n.nodeType!==1)return;if(n.placeholder&&n.placeholder.includes('سندي'))n.placeholder=brandify(n.placeholder);

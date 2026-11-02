@@ -515,6 +515,12 @@
 "es": "Últimos 14 días (solo se envían estos números, sin palabras ni nombres):",
 "fr": "14 derniers jours (seuls ces chiffres sont envoyés, sans aucun mot ni nom) :"
 },
+"آخر اليوم": {
+"de": "Tagesabschluss",
+"en": "End of day",
+"es": "Fin del día",
+"fr": "Fin de journée"
+},
 "آخر حاجات:": {
 "de": "Zuletzt:",
 "en": "Latest:",
@@ -671,6 +677,12 @@
 "es": "¿La pago ahora?",
 "fr": "Je la paie maintenant ?"
 },
+"أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت: الشاشة البسيطة، و«جنبك»، والانتظار قبل المواعيد، وشريك متابعة.": {
+"de": "Extra-Tools, wenn es schwerfällt, anzufangen, dranzubleiben oder die Zeit im Blick zu behalten: der einfache Bildschirm, „An deiner Seite“, die Wartezeit vor Terminen und ein Check-in-Buddy.",
+"en": "Extra tools for when it's hard to start, focus, or keep track of time: the simple screen, “By your side,” waiting before appointments, and a check-in buddy.",
+"es": "Herramientas extra para cuando cuesta empezar, concentrarse o no perder la noción del tiempo: la pantalla simple, «A tu lado», la espera antes de las citas y un compañero de seguimiento.",
+"fr": "Des outils en plus quand c'est dur de commencer, de te concentrer ou de voir le temps passer : l'écran simple, « À tes côtés », l'attente avant les rendez-vous et un partenaire de suivi."
+},
 "أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.": {
 "de": "Zusätzliche Werkzeuge für alle, denen Anfangen, Fokus oder Zeitgefühl schwerfällt, mit oder ohne ADHS.",
 "en": "Extra tools for anyone who finds it hard to start, focus or keep track of time, with or without ADHD.",
@@ -814,6 +826,12 @@
 "en": "ideas in the vault. Pick one that's worth it?",
 "es": "ideas en la bóveda. ¿Elegimos una que valga la pena?",
 "fr": "idées dans le coffre. On en choisit une qui vaut le coup ?"
+},
+"أفكّرك في الوقت الصح": {
+"de": "Ich erinnere dich zur richtigen Zeit",
+"en": "I'll remind you at the right time",
+"es": "Te lo recuerdo en el momento justo",
+"fr": "Je te le rappelle au bon moment"
 },
 "أقرا 10 صفحات": {
 "de": "10 Seiten lesen",
@@ -977,6 +995,12 @@
 "es": "Hola",
 "fr": "Salut"
 },
+"أهلاً، أنا سندي 👋": {
+"de": "Hallo, ich bin Sayvo 👋",
+"en": "Hi, I'm Sayvo 👋",
+"es": "Hola, soy Sayvo 👋",
+"fr": "Salut, moi c'est Sayvo 👋"
+},
 "أهلاً، أنا سندي 💜": {
 "de": "Hallo, ich bin Sanady 💜",
 "en": "Hi, I'm Sanady 💜",
@@ -1091,6 +1115,12 @@
 "es": "Sentimiento",
 "fr": "Ressenti"
 },
+"إزاي تحب تشوف حاجاتك. تقدر تغيّرها في أي وقت.": {
+"de": "Wie du deine Sachen sehen möchtest. Du kannst es jederzeit ändern.",
+"en": "How you'd like to see your stuff. You can change it anytime.",
+"es": "Cómo quieres ver tus cosas. Puedes cambiarlo cuando quieras.",
+"fr": "Comment tu veux voir tes affaires. Tu peux changer quand tu veux."
+},
 "إزيك يا": {
 "de": "Hey",
 "en": "Hey",
@@ -1109,6 +1139,12 @@
 "es": "Ajustes de dinero",
 "fr": "Réglages argent"
 },
+"إعدادات فوكس+": {
+"de": "Focus+-Einstellungen",
+"en": "Focus+ settings",
+"es": "Ajustes de Focus+",
+"fr": "Réglages Focus+"
+},
 "إعدادات موبايل الطفل": {
 "de": "Einstellungen Kinderhandy",
 "en": "Kid's phone settings",
@@ -1126,6 +1162,12 @@
 "en": "You're the one sending it, Sanady just wrote it.",
 "es": "Tú eres quien lo envía, Sanady solo lo escribió.",
 "fr": "C'est toi qui l'envoies, Sanady l'a juste écrit."
+},
+"إنت اللي تختار الشكل": {
+"de": "Du wählst den Look",
+"en": "You choose the look",
+"es": "Tú eliges el aspecto",
+"fr": "C'est toi qui choisis le style"
 },
 "إنت شغال على": {
 "de": "Du arbeitest an",
@@ -1427,6 +1469,12 @@
 "en": "Turned off",
 "es": "Desactivada",
 "fr": "Désactivée"
+},
+"اتكلم براحتك حتى لو الكلام ملخبط: مهام، مواعيد، فواتير، أفكار. أنا اللي أرتّبها.": {
+"de": "Erzähl einfach drauflos, auch wenn's durcheinander ist: Aufgaben, Termine, Rechnungen, Ideen. Ich sortiere das.",
+"en": "Talk freely, even if it's all jumbled: tasks, appointments, bills, ideas. I'll sort it out.",
+"es": "Habla con calma, aunque esté todo revuelto: tareas, citas, facturas, ideas. Yo lo ordeno.",
+"fr": "Parle comme ça vient, même si c'est en vrac : tâches, rendez-vous, factures, idées. Je m'occupe de ranger."
 },
 "اتنسخ": {
 "de": "Kopiert",
@@ -1830,6 +1878,12 @@
 "es": "Cerrar la pantalla grande",
 "fr": "Fermer le grand écran"
 },
+"اقفل المود": {
+"de": "Modus beenden",
+"en": "Turn off mode",
+"es": "Salir del modo",
+"fr": "Quitter le mode"
+},
 "اقفل النسخة التلقائية": {
 "de": "Auto-Backup ausschalten",
 "en": "Turn off auto backup",
@@ -2118,6 +2172,12 @@
 "es": "Suscripciones",
 "fr": "Abonnements"
 },
+"الانتظار": {
+"de": "Warten",
+"en": "Waiting",
+"es": "Espera",
+"fr": "Attente"
+},
 "الباسبور": {
 "de": "Reisepass",
 "en": "Passport",
@@ -2220,6 +2280,12 @@
 "es": "La casa está lista 🏠",
 "fr": "La maison est prête 🏠"
 },
+"البيت والولاد: الناقص، والنضافة، ومواعيد الولاد ودواهم.": {
+"de": "Zuhause und Kinder: was fehlt, Putzen und die Termine und Medikamente der Kinder.",
+"en": "Home and kids: what's running low, cleaning, and the kids' appointments and meds.",
+"es": "Casa y niños: lo que falta, la limpieza, y las citas y medicinas de los niños.",
+"fr": "Maison et enfants : ce qui manque, le ménage, et les rendez-vous et médicaments des enfants."
+},
 "البيطري": {
 "de": "Tierarzt",
 "en": "Vet",
@@ -2237,6 +2303,12 @@
 "en": "Date",
 "es": "Fecha",
 "fr": "Date"
+},
+"التالي": {
+"de": "Weiter",
+"en": "Next",
+"es": "Siguiente",
+"fr": "Suivant"
 },
 "التذكير": {
 "de": "Erinnerung",
@@ -2261,6 +2333,12 @@
 "en": "How was your focus today?",
 "es": "¿Cómo estuvo tu concentración hoy?",
 "fr": "Comment était ta concentration aujourd'hui ?"
+},
+"التركيز والبداية": {
+"de": "Fokus und Anfangen",
+"en": "Focus and getting started",
+"es": "Concentración y arranque",
+"fr": "Concentration et démarrage"
 },
 "التطعيم الجاي (اختياري)": {
 "de": "Nächste Impfung (optional)",
@@ -2363,6 +2441,12 @@
 "en": "Next up:",
 "es": "Lo siguiente:",
 "fr": "Ensuite :"
+},
+"الحاجة الكبيرة نقسّمها": {
+"de": "Großes teilen wir auf",
+"en": "We'll break big things down",
+"es": "Dividimos lo grande",
+"fr": "On découpe les grosses choses"
 },
 "الحاجة دي": {
 "de": "Das hier",
@@ -2598,6 +2682,12 @@
 "es": "Esta pantalla se configura en el teléfono de papá o mamá, tú mismo.",
 "fr": "Cet écran se configure sur le téléphone de papa ou maman, par toi."
 },
+"الشاشة زي ما اخترتها في الواجهة.": {
+"de": "Der Bildschirm so, wie du ihn unter Ansicht gewählt hast.",
+"en": "The screen as you set it in View.",
+"es": "La pantalla tal como la elegiste en Vista.",
+"fr": "L'écran tel que tu l'as choisi dans Affichage."
+},
 "الشبابيك والتراب": {
 "de": "Fenster & Staub",
 "en": "Windows & dusting",
@@ -2651,6 +2741,12 @@
 "en": "Health",
 "es": "Salud",
 "fr": "Santé"
+},
+"الصحة والدوا": {
+"de": "Gesundheit und Medikamente",
+"en": "Health and meds",
+"es": "Salud y medicinas",
+"fr": "Santé et médicaments"
 },
 "الصق أو اكتب الرسالة هنا": {
 "de": "Nachricht hier einfügen oder tippen",
@@ -2928,6 +3024,12 @@
 "es": "Hecho hoy (",
 "fr": "Fait aujourd'hui ("
 },
+"اللي خلص النهارده، وأول حاجات بكرة، وتفضفض قبل ما تنام.": {
+"de": "Was du heute geschafft hast, das Erste für morgen und Raum zum Abladen vor dem Schlafen.",
+"en": "What you got done today, the first things for tomorrow, and a chance to unload before bed.",
+"es": "Lo que terminaste hoy, lo primero de mañana, y un rato para desahogarte antes de dormir.",
+"fr": "Ce que tu as fini aujourd'hui, les premières choses de demain, et un moment pour vider ton sac avant de dormir."
+},
 "اللي سمعته منك": {
 "de": "Was ich von dir gehört habe",
 "en": "What I heard from you",
@@ -2975,6 +3077,12 @@
 "en": "City",
 "es": "Ciudad",
 "fr": "Ville"
+},
+"المذاكرة": {
+"de": "Lernen",
+"en": "Studying",
+"es": "Estudio",
+"fr": "Révisions"
 },
 "المرتب": {
 "de": "Gehalt",
@@ -3168,6 +3276,12 @@
 "es": "El teléfono no cierra la app para ahorrar batería",
 "fr": "Le téléphone ne ferme pas l'appli pour économiser la batterie"
 },
+"المود": {
+"de": "Modus",
+"en": "Mode",
+"es": "Modo",
+"fr": "Mode"
+},
 "الميعاد": {
 "de": "Termin",
 "en": "Time",
@@ -3282,6 +3396,24 @@
 "es": "Autoridad General Egipcia de Topografía",
 "fr": "Autorité générale égyptienne d'arpentage"
 },
+"الواجهة": {
+"de": "Ansicht",
+"en": "View",
+"es": "Vista",
+"fr": "Affichage"
+},
+"الواجهة (مربعات، خط اليوم، كلام) والمود (حاجة واحدة، الشغل، الأم، مشاوير...) من فوق في الشاشة الرئيسية.": {
+"de": "Ansicht (Kacheln, Tageslinie, Chat) und Modus (Nur eins, Arbeit, Mama, Besorgungen...) findest du oben auf dem Startbildschirm.",
+"en": "View (Blocks, Day line, Chat) and Mode (One thing, Work, Mom, Errands...) are at the top of the home screen.",
+"es": "La vista (Bloques, Línea del día, Chat) y el modo (Una sola cosa, Trabajo, Mamá, Recados...) están arriba en la pantalla de inicio.",
+"fr": "L'affichage (Blocs, Fil du jour, Discussion) et le mode (Une seule chose, Travail, Maman, Courses...) sont en haut de l'écran d'accueil."
+},
+"الواجهة والمود": {
+"de": "Ansicht und Modus",
+"en": "View and mode",
+"es": "Vista y modo",
+"fr": "Affichage et mode"
+},
 "الواقعة": {
 "de": "Al-Waqi'a",
 "en": "Al-Waqi'a",
@@ -3293,6 +3425,12 @@
 "en": "Paperwork & errands",
 "es": "Trámites y papeles",
 "fr": "Papiers et démarches"
+},
+"الولاد": {
+"de": "Kinder",
+"en": "Kids",
+"es": "Niños",
+"fr": "Enfants"
 },
 "امبارح": {
 "de": "Gestern",
@@ -3732,6 +3870,12 @@
 "es": "Despertar de mañana",
 "fr": "Réveil demain"
 },
+"بكرة لسه فاضي.": {
+"de": "Morgen ist noch frei.",
+"en": "Tomorrow's still open.",
+"es": "Mañana sigue libre.",
+"fr": "Demain est encore libre."
+},
 "بلطف": {
 "de": "Sanft",
 "en": "Gently",
@@ -3845,6 +3989,12 @@
 "en": "Other",
 "es": "Otro",
 "fr": "Autre"
+},
+"تخطّى": {
+"de": "Überspringen",
+"en": "Skip",
+"es": "Omitir",
+"fr": "Passer"
 },
 "تذكير (اختياري)": {
 "de": "Erinnerung (optional)",
@@ -3995,6 +4145,12 @@
 "en": "Recitation by Sheikh Mishary Alafasy (needs internet)",
 "es": "Recitación del jeque Mishary Alafasy (necesita internet)",
 "fr": "Récitation de Cheikh Mishary Alafasy (internet requis)"
+},
+"تلقائي (زي الموبايل)": {
+"de": "Automatisch (wie dein Handy)",
+"en": "Automatic (follows your phone)",
+"es": "Automático (como tu teléfono)",
+"fr": "Automatique (comme ton téléphone)"
 },
 "تليجرام اتفصل عن سندي. تقدر تربطه تاني من الإعدادات": {
 "de": "Telegram wurde von Sanady getrennt. Du kannst es in den Einstellungen neu verbinden",
@@ -4224,11 +4380,23 @@
 "es": "Yeda",
 "fr": "Djeddah"
 },
+"جرّب Focus+ (للتركيز والبداية)": {
+"de": "Probier Focus+ (für Fokus und Anfangen)",
+"en": "Try Focus+ (for focus and getting started)",
+"es": "Prueba Focus+ (para concentrarte y arrancar)",
+"fr": "Essaie Focus+ (pour te concentrer et démarrer)"
+},
 "جرّب رنة بعد دقيقة": {
 "de": "Testklingeln in einer Minute",
 "en": "Try a test ring in a minute",
 "es": "Prueba un timbre en un minuto",
 "fr": "Teste une sonnerie dans une minute"
+},
+"جرّب فوكس+": {
+"de": "Probier Focus+",
+"en": "Try Focus+",
+"es": "Prueba Focus+",
+"fr": "Essaie Focus+"
 },
 "جلسة تركيز": {
 "de": "Fokus-Session",
@@ -4524,6 +4692,12 @@
 "es": "Alguien no me respondió y siento que está molesto conmigo",
 "fr": "Quelqu'un ne m'a pas répondu et j'ai l'impression qu'il m'en veut"
 },
+"حد معاك وإنت بتشتغل، بيطمن عليك كل شوية.": {
+"de": "Jemand ist bei dir, während du arbeitest, und schaut ab und zu nach dir.",
+"en": "Someone with you while you work, checking in every so often.",
+"es": "Alguien contigo mientras trabajas, que se asoma a ver cómo vas cada tanto.",
+"fr": "Quelqu'un avec toi pendant que tu travailles, qui prend de tes nouvelles de temps en temps."
+},
 "حد من البيت عايز": {
 "de": "Jemand aus deinem Zuhause möchte",
 "en": "Someone from home wants",
@@ -4711,10 +4885,10 @@
 "fr": "Légumes"
 },
 "خط اليوم": {
-"de": "Tagesverlauf",
-"en": "Day timeline",
+"de": "Tageslinie",
+"en": "Day line",
 "es": "Línea del día",
-"fr": "Fil de la journée"
+"fr": "Fil du jour"
 },
 "خطوات": {
 "de": "Schritte",
@@ -5454,6 +5628,18 @@
 "es": "Exhala",
 "fr": "Expire"
 },
+"زهقان أو مشغول أو مضغوط؟ نخلص حاجة واحدة بس من اللي مركونين.": {
+"de": "Keine Lust, viel zu tun oder gestresst? Lass uns nur eine Sache vom Stapel erledigen.",
+"en": "Bored, busy, or stressed? Let's finish just one thing from the pile.",
+"es": "¿Aburrido, ocupado o estresado? Terminemos solo una cosa de las pendientes.",
+"fr": "Pas envie, débordé ou stressé ? On finit juste une chose de la pile."
+},
+"زي الشات: بتكلّمني وأنا برد وأرتّب، من غير قوايم.": {
+"de": "Wie ein Chat: Du redest mit mir, ich antworte und sortiere, ganz ohne Listen.",
+"en": "Like a chat: you talk to me, I reply and sort things out, no lists.",
+"es": "Como un chat: me hablas, yo te respondo y ordeno, sin listas.",
+"fr": "Comme une discussion : tu me parles, je réponds et je range, sans listes."
+},
 "زي العادة": {
 "de": "Wie immer",
 "en": "As usual",
@@ -5796,6 +5982,12 @@
 "es": "Un compañero de seguimiento cada semana",
 "fr": "Un partenaire de suivi chaque semaine"
 },
+"شغال ✓": {
+"de": "Aktiv ✓",
+"en": "On ✓",
+"es": "Activado ✓",
+"fr": "Activé ✓"
+},
 "شغال ✓ · آخر تحديث": {
 "de": "Läuft ✓ · zuletzt aktualisiert",
 "en": "Working ✓ · last updated",
@@ -5825,6 +6017,12 @@
 "en": "Your work today",
 "es": "Tu trabajo hoy",
 "fr": "Ton boulot aujourd'hui"
+},
+"شغلك بس: مواعيد الشغل والمكالمات والفلوس اللي ليك وعليك.": {
+"de": "Nur Arbeit: Arbeitstermine, Anrufe und Geld, das du bekommst oder schuldest.",
+"en": "Just work: work appointments, calls, and money owed to you or by you.",
+"es": "Solo trabajo: citas de trabajo, llamadas y el dinero que te deben o que debes.",
+"fr": "Juste le travail : rendez-vous pro, appels, et l'argent qu'on te doit ou que tu dois."
 },
 "شغّل الشاشة الكبيرة": {
 "de": "Großen Bildschirm einschalten",
@@ -5879,6 +6077,12 @@
 "en": "Shakshuka",
 "es": "Shakshuka",
 "fr": "Chakchouka"
+},
+"شكل الشاشة": {
+"de": "Bildschirm-Look",
+"en": "Screen look",
+"es": "Aspecto de la pantalla",
+"fr": "Apparence de l'écran"
 },
 "شلت:": {
 "de": "Entfernt:",
@@ -6198,6 +6402,12 @@
 "es": "Nuevo hábito",
 "fr": "Nouvelle habitude"
 },
+"عادي": {
+"de": "Normal",
+"en": "Normal",
+"es": "Normal",
+"fr": "Normal"
+},
 "عادي خالص. هرجعلك بيها.": {
 "de": "Völlig okay. Ich komm später darauf zurück.",
 "en": "Totally fine. I'll bring it back to you later.",
@@ -6281,6 +6491,12 @@
 "en": "Want to buy something?",
 "es": "¿Quieres comprar algo?",
 "fr": "Envie d'acheter un truc ?"
+},
+"عايزني أساعدك في إيه أكتر؟": {
+"de": "Wobei willst du am meisten Hilfe?",
+"en": "What do you want the most help with?",
+"es": "¿En qué quieres más ayuda?",
+"fr": "Pour quoi veux-tu le plus d'aide ?"
 },
 "عجة بالبقدونس": {
 "de": "Petersilien-Omelett",
@@ -6389,6 +6605,12 @@
 "en": "On iPhone you need: Share button → Add to Home Screen.",
 "es": "En iPhone necesitas: botón Compartir → Agregar a pantalla de inicio.",
 "fr": "Sur iPhone, il faut : bouton Partager → Sur l'écran d'accueil."
+},
+"على حسب يومك. المود بيغيّر اللي بيظهرلك، ولما تقفله الشاشة بترجع زي ما كانت.": {
+"de": "Je nach deinem Tag. Der Modus ändert, was du siehst, und wenn du ihn beendest, ist der Bildschirm wieder wie vorher.",
+"en": "Depends on your day. A mode changes what you see, and when you turn it off, the screen goes back to how it was.",
+"es": "Según tu día. El modo cambia lo que ves, y cuando lo quitas, la pantalla vuelve a como estaba.",
+"fr": "Selon ta journée. Le mode change ce que tu vois, et quand tu le quittes, l'écran redevient comme avant."
 },
 "على قد طاقتك، مش لازم كله": {
 "de": "So viel, wie deine Energie hergibt – nicht alles",
@@ -6678,6 +6900,12 @@
 "es": "Fawry",
 "fr": "Fawry"
 },
+"فوكس+": {
+"de": "Focus+",
+"en": "Focus+",
+"es": "Focus+",
+"fr": "Focus+"
+},
 "فوكس+ شغال على الموبايل ده.": {
 "de": "Focus+ ist auf diesem Handy an.",
 "en": "Focus+ is on for this phone.",
@@ -6876,6 +7104,12 @@
 "es": "antes de arreglarte. Este tiempo no se pierde: son cosas para terminar antes, y yo te aviso cuándo levantarte.",
 "fr": "avant de te préparer. Ce temps n'est pas perdu : ce sont des choses à finir avant, et c'est moi qui te dirai quand te lever."
 },
+"قبل ميعاد مهم: نعمل حاجات صغيرة لحد ما أقولك تقوم.": {
+"de": "Vor einem wichtigen Termin: Wir erledigen kleine Dinge, bis ich dir sage, dass es losgeht.",
+"en": "Before an important appointment: we'll do small things until I tell you it's time to go.",
+"es": "Antes de una cita importante: hacemos cositas pequeñas hasta que te diga que es hora de salir.",
+"fr": "Avant un rendez-vous important : on fait de petites choses jusqu'à ce que je te dise d'y aller."
+},
 "قبلها بشهر": {
 "de": "einen Monat vorher",
 "en": "a month before",
@@ -7020,6 +7254,12 @@
 "es": "Di todo lo que tienes en la cabeza, con calma, aunque sea un enredo. Sanady lo ordena.",
 "fr": "Dis tout ce que tu as en tête, prends ton temps, même si c'est en vrac. Sanady va l'organiser."
 },
+"قول كل حاجة مرة واحدة": {
+"de": "Sag alles auf einmal",
+"en": "Say it all at once",
+"es": "Dilo todo de una vez",
+"fr": "Dis tout d'un coup"
+},
 "قول لسندي أي حاجة...": {
 "de": "Sag Sanady irgendwas...",
 "en": "Tell Sanady anything...",
@@ -7067,6 +7307,12 @@
 "en": "Tell me what's on your mind.",
 "es": "Dime qué tienes en mente.",
 "fr": "Dis-moi ce que tu as en tête."
+},
+"قولّي كل اللي في دماغك، وأنا أرتّبهولك، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة.": {
+"de": "Erzähl mir alles, was dir im Kopf herumgeht: Ich sortiere es, erinnere dich zur richtigen Zeit und mache mit dir den ersten Schritt.",
+"en": "Tell me everything on your mind, and I'll sort it for you, remind you at the right time, and start the first step with you.",
+"es": "Cuéntame todo lo que tienes en la cabeza: yo lo ordeno, te lo recuerdo en el momento justo y empiezo contigo el primer paso.",
+"fr": "Dis-moi tout ce que tu as en tête : je range tout, je te le rappelle au bon moment et je commence la première étape avec toi."
 },
 "قوم اتحرك دقيقتين: افرد ضهرك وامشي شوية.": {
 "de": "Steh auf und beweg dich zwei Minuten: Streck den Rücken und lauf ein bisschen herum.",
@@ -7218,6 +7464,12 @@
 "es": "Todo en Sanady se guarda solo en este celular. Si se pierde o lo cambias, esta copia recupera todo: tus tareas, tu dinero, dónde están tus cosas y tu diario.",
 "fr": "Tout dans Sanady est enregistré uniquement sur ce téléphone. Si tu le perds ou en changes, cette sauvegarde récupère tout : tes tâches, ton argent, où sont tes affaires et ton journal."
 },
+"كل حاجة في مربع: الشغل، البيت، الفلوس، المواعيد. تدوس على المربع تشوف اللي جواه.": {
+"de": "Alles in Kacheln: Arbeit, Zuhause, Geld, Termine. Tipp auf eine Kachel, um zu sehen, was drin ist.",
+"en": "Everything in a block: work, home, money, appointments. Tap a block to see what's inside.",
+"es": "Todo en bloques: trabajo, casa, dinero, citas. Toca un bloque para ver lo que tiene.",
+"fr": "Tout dans des blocs : travail, maison, argent, rendez-vous. Touche un bloc pour voir ce qu'il contient."
+},
 "كل حاجة كل كام يوم؟ أنا هطلعلك اللي عليه الدور بس.": {
 "de": "Wie oft ist was dran (in Tagen)? Ich zeig dir nur, was fällig ist.",
 "en": "How often does each thing need doing (in days)? I'll only show you what's due.",
@@ -7273,10 +7525,10 @@
 "fr": "Chaque jour"
 },
 "كلام": {
-"de": "Reden",
-"en": "Talk",
-"es": "Hablar",
-"fr": "Parler"
+"de": "Chat",
+"en": "Chat",
+"es": "Chat",
+"fr": "Discussion"
 },
 "كلب": {
 "de": "Hund",
@@ -7626,6 +7878,12 @@
 "es": "Para toda la casa",
 "fr": "Pour toute la maison"
 },
+"للتركيز والبداية": {
+"de": "Für Fokus und Anfangen",
+"en": "For focus and getting started",
+"es": "Para concentrarte y arrancar",
+"fr": "Pour te concentrer et démarrer"
+},
 "للي بعده": {
 "de": "bis zum nächsten",
 "en": "to the next one",
@@ -7680,6 +7938,12 @@
 "es": "Si quieres recordarme algo, mándamelo por este enlace y me llegará en Sanady:",
 "fr": "Si tu veux me rappeler quelque chose, envoie-le via ce lien et ça arrivera sur Sanady :"
 },
+"لو فاتك حاجة بعيد ترتيب يومك وأقولك غيّرت إيه، وتقدر ترجّعه.": {
+"de": "Wenn dir etwas durchrutscht, plane ich deinen Tag neu, sage dir, was sich geändert hat, und du kannst es rückgängig machen.",
+"en": "If you miss something, I'll replan your day, tell you what changed, and you can undo it.",
+"es": "Si se te pasa algo, reorganizo tu día, te digo qué cambié y puedes deshacerlo.",
+"fr": "Si tu rates quelque chose, je réorganise ta journée, je te dis ce qui a changé, et tu peux annuler."
+},
 "لو في خطر دلوقتي: إسعاف مصر 123 · طوارئ الإمارات 999. وكلّم حد بتثق فيه وقوله إنك محتاجه جنبك.": {
 "de": "Wenn du gerade in Gefahr bist: Rettungsdienst Ägypten 123 · Notruf VAE 999. Und ruf jemanden an, dem du vertraust, und sag, dass du ihn jetzt bei dir brauchst.",
 "en": "If you're in danger right now: Egypt ambulance 123 · UAE emergency 999. And call someone you trust and tell them you need them with you.",
@@ -7727,6 +7991,12 @@
 "en": "Night",
 "es": "Noche",
 "fr": "Nuit"
+},
+"ليلي هادي": {
+"de": "Ruhige Nacht",
+"en": "Calm night",
+"es": "Noche tranquila",
+"fr": "Nuit calme"
 },
 "مؤنث": {
 "de": "Weiblich",
@@ -8022,6 +8292,12 @@
 "es": "No se apaga",
 "fr": "Ne s'arrête pas"
 },
+"مشاوير": {
+"de": "Besorgungen",
+"en": "Errands",
+"es": "Recados",
+"fr": "Courses"
+},
 "مشتريات": {
 "de": "Einkäufe",
 "en": "Shopping",
@@ -8130,6 +8406,12 @@
 "es": "No falta nada",
 "fr": "Rien ne manque"
 },
+"مفيش حاجة ناقصة.": {
+"de": "Es fehlt nichts.",
+"en": "Nothing's running low.",
+"es": "No falta nada.",
+"fr": "Rien ne manque."
+},
 "مفيش حاجة.": {
 "de": "Nichts da.",
 "en": "Nothing here.",
@@ -8160,6 +8442,12 @@
 "es": "Nada pendiente",
 "fr": "Rien de dû"
 },
+"مفيش فواتير قريبة.": {
+"de": "Keine Rechnungen in Sicht.",
+"en": "No bills coming up.",
+"es": "No hay facturas próximas.",
+"fr": "Pas de factures à venir."
+},
 "مفيش فواتير. قول «فاتورة النت 450 كل شهر»": {
 "de": "Keine Rechnungen. Sag „Internetrechnung 450 jeden Monat“",
 "en": "No bills. Say “Internet bill 450 every month”",
@@ -8183,6 +8471,12 @@
 "en": "No one yet. Add your mom or a friend.",
 "es": "Nadie todavía. Agrega a tu mamá o a un amigo.",
 "fr": "Personne pour l'instant. Ajoute ta mère ou un ami."
+},
+"مفيش مشاوير برّه النهارده.": {
+"de": "Heute keine Besorgungen unterwegs.",
+"en": "No errands out today.",
+"es": "Hoy no hay recados fuera.",
+"fr": "Pas de courses dehors aujourd'hui."
 },
 "مفيش مناسبات لسه.": {
 "de": "Noch keine Anlässe.",
@@ -8436,6 +8730,12 @@
 "es": "Horarios de comida (separados por comas)",
 "fr": "Heures des repas (séparées par des virgules)"
 },
+"مواعيد الدوا تذكير بس من غير جرعات. مستشار المشتريات بينظّم الصرف بس. كل بياناتك على موبايلك، والكلام اللي بتقوله بيتبعت بس عشان يترتب ومش بيتحفظ عندنا.": {
+"de": "Medikamentenzeiten sind nur Erinnerungen, ohne Dosierungen. Der Einkaufsberater hilft nur, Ausgaben zu ordnen. Alle deine Daten bleiben auf deinem Handy, und was du sagst, wird nur zum Sortieren gesendet und nicht bei uns gespeichert.",
+"en": "Med times are reminders only, no doses. The spending advisor only helps organize spending. All your data stays on your phone, and what you say is sent only to be sorted, never stored with us.",
+"es": "Los horarios de medicinas son solo recordatorios, sin dosis. El asesor de compras solo ayuda a organizar los gastos. Todos tus datos se quedan en tu teléfono, y lo que dices se envía solo para ordenarlo, sin guardarse con nosotros.",
+"fr": "Les horaires de médicaments sont de simples rappels, sans doses. Le conseiller d'achats aide seulement à organiser tes dépenses. Toutes tes données restent sur ton téléphone, et ce que tu dis est envoyé juste pour être rangé, sans être conservé chez nous."
+},
 "مواعيد جديدة. ضيفها للكالندر عشان أفكّرك حتى لو التطبيق مقفول.": {
 "de": "neue Termine. Füg sie deinem Kalender hinzu, damit ich dich auch bei geschlossener App erinnere.",
 "en": "new appointments. Add them to your calendar so I can remind you even when the app is closed.",
@@ -8520,6 +8820,12 @@
 "es": "Modo dueño de negocio",
 "fr": "Mode chef d'entreprise"
 },
+"مودك النهارده": {
+"de": "Dein Modus heute",
+"en": "Your mode today",
+"es": "Tu modo de hoy",
+"fr": "Ton mode du jour"
+},
 "مية ونوم ودكاترة": {
 "de": "Wasser, Schlaf und Ärzte",
 "en": "Water, sleep and doctors",
@@ -8592,6 +8898,12 @@
 "es": "¿Para cuándo la posponemos?",
 "fr": "On la reporte à quand ?"
 },
+"نازل؟ اللي هتشتريه والمشاوير والفواتير اللي تدفعها برّه في مكان واحد.": {
+"de": "Gehst du raus? Einkäufe, Besorgungen und Rechnungen, die du unterwegs zahlst, alles an einem Ort.",
+"en": "Heading out? What to buy, errands, and bills to pay out there, all in one place.",
+"es": "¿Vas a salir? Lo que vas a comprar, los recados y las facturas por pagar fuera, todo en un solo lugar.",
+"fr": "Tu sors ? Ce que tu dois acheter, tes courses et les factures à payer dehors, tout au même endroit."
+},
 "ناقصك:": {
 "de": "Dir fehlt noch:",
 "en": "You still need:",
@@ -8615,6 +8927,12 @@
 "en": "Internet, phone, gym, Netflix... how much you pay without noticing.",
 "es": "Internet, celular, gimnasio, Netflix... cuánto pagas sin darte cuenta.",
 "fr": "Internet, téléphone, salle de sport, Netflix... ce que tu paies sans t'en rendre compte."
+},
+"نتعرّف 🙂": {
+"de": "Lernen wir uns kennen 🙂",
+"en": "Let's get to know each other 🙂",
+"es": "Conozcámonos 🙂",
+"fr": "Faisons connaissance 🙂"
 },
 "نتفليكس": {
 "de": "Netflix",
@@ -8670,6 +8988,12 @@
 "es": "Decidamos rápido cada una:",
 "fr": "On décide vite pour chacune :"
 },
+"نقسّمها لخطوات صغيرة، وأبدأ معاك أول خطوة.": {
+"de": "Wir teilen es in kleine Schritte, und ich mache den ersten mit dir.",
+"en": "We'll break it into small steps, and I'll start the first one with you.",
+"es": "Lo dividimos en pasos pequeños y empiezo contigo el primero.",
+"fr": "On le découpe en petites étapes, et je commence la première avec toi."
+},
 "نقطك": {
 "de": "Deine Punkte",
 "en": "Your points",
@@ -8681,6 +9005,12 @@
 "en": "How many hours did you sleep last night?",
 "es": "¿Cuántas horas dormiste anoche?",
 "fr": "Tu as dormi combien d'heures cette nuit ?"
+},
+"نهاري هادي": {
+"de": "Ruhiger Tag",
+"en": "Calm day",
+"es": "Día tranquilo",
+"fr": "Jour calme"
 },
 "نوعه": {
 "de": "Art",
@@ -8857,6 +9187,12 @@
 "es": "y",
 "fr": "et"
 },
+"وأفكّرك بإيه بكرة": {
+"de": "und morgen vorbereiten",
+"en": "and set up tomorrow",
+"es": "y preparar mañana",
+"fr": "et préparer demain"
+},
 "واتساب": {
 "de": "WhatsApp",
 "en": "WhatsApp",
@@ -8886,6 +9222,12 @@
 "en": "and the rest tomorrow",
 "es": "y lo demás mañana",
 "fr": "et le reste demain"
+},
+"وبتنام الساعة كام؟": {
+"de": "Und wann gehst du schlafen?",
+"en": "And what time do you go to bed?",
+"es": "¿Y a qué hora te vas a dormir?",
+"fr": "Et tu te couches à quelle heure ?"
 },
 "وتتحرك لـ": {
 "de": "und dann los zu",
@@ -9019,6 +9361,12 @@
 "es": "No te preocupes, hoy empieza de nuevo.",
 "fr": "T'inquiète pas, aujourd'hui on repart à zéro."
 },
+"ولا يهمك، بكرة يوم جديد.": {
+"de": "Kein Problem, morgen ist ein neuer Tag.",
+"en": "No worries, tomorrow's a new day.",
+"es": "No pasa nada, mañana es otro día.",
+"fr": "Pas grave, demain est un autre jour."
+},
 "ولا يهمك، ده بيحصل. ارجع لـ «": {
 "de": "Kein Ding, das passiert. Geh zurück zu „",
 "en": "Don't worry, it happens. Go back to \"",
@@ -9042,6 +9390,18 @@
 "en": "And if you're really worn out, order food in today. That's not failing.",
 "es": "Y si estás muy cansada, pide comida hoy. Eso no es fallar.",
 "fr": "Et si tu es vraiment épuisée, commande à manger aujourd'hui. Ce n'est pas un échec."
+},
+"ولو فاتك ميعاد أو نسيت حاجة، ولا يهمك. بنرتّب من تاني، من غير ما نحاسب نفسنا.": {
+"de": "Und wenn du einen Termin verpasst oder etwas vergisst, kein Problem. Wir planen einfach neu, ohne uns Vorwürfe zu machen.",
+"en": "And if you miss an appointment or forget something, no worries. We just replan, no beating ourselves up.",
+"es": "Y si se te pasa una cita u olvidas algo, no pasa nada. Lo reorganizamos, sin culparnos.",
+"fr": "Et si tu rates un rendez-vous ou oublies quelque chose, pas grave. On réorganise, sans se le reprocher."
+},
+"ومنبّه بيرن حتى والتطبيق مقفول. وأحسبلك إمتى تتحرك عشان توصل في ميعادك.": {
+"de": "Und ein Wecker, der auch bei geschlossener App klingelt. Ich rechne aus, wann du losmusst, um pünktlich zu sein.",
+"en": "Plus an alarm that rings even when the app is closed. I'll figure out when you need to leave to get there on time.",
+"es": "Y una alarma que suena aunque la app esté cerrada. Calculo cuándo salir para que llegues a tiempo.",
+"fr": "Et une alarme qui sonne même quand l'appli est fermée. Je calcule quand partir pour arriver à l'heure."
 },
 "وهفتكر.": {
 "de": "und ich merk's mir.",
@@ -9133,6 +9493,12 @@
 "en": "Let's start. I'm right here with you, and if your mind wanders, just come back to this one thing.",
 "es": "Empecemos. Estoy aquí contigo, y si te distraes, vuelve solo a esto.",
 "fr": "On commence. Je suis là avec toi, et si tu décroches, reviens juste à ce truc-là."
+},
+"يلا نتعرّف": {
+"de": "Lernen wir uns kennen",
+"en": "Let's get to know each other",
+"es": "Conozcámonos",
+"fr": "Faisons connaissance"
 },
 "يلا نختار": {
 "de": "Lass uns eins aussuchen",
@@ -9254,6 +9620,18 @@
 "es": "Tu día",
 "fr": "Ta journée"
 },
+"يومك اتلخبط؟ نرتّبه من تاني": {
+"de": "Tag durcheinander? Planen wir ihn neu",
+"en": "Day got messy? Let's replan it",
+"es": "¿Se te desordenó el día? Lo reorganizamos",
+"fr": "Journée chamboulée ? On la réorganise"
+},
+"يومك بالترتيب من الصبح لبالليل، وعلامة بتوريك إنت فين دلوقتي.": {
+"de": "Dein Tag der Reihe nach, von morgens bis abends, mit einer Markierung, die zeigt, wo du gerade bist.",
+"en": "Your day in order from morning to night, with a marker showing where you are now.",
+"es": "Tu día en orden de la mañana a la noche, con una marca que te muestra dónde estás ahora.",
+"fr": "Ta journée dans l'ordre, du matin au soir, avec un repère qui te montre où tu en es."
+},
 "يومك فاضي، استمتع بيه.": {
 "de": "Dein Tag ist frei – genieß ihn.",
 "en": "Your day is free, enjoy it.",
@@ -9344,6 +9722,12 @@
 "es": "⏳ Espera hasta",
 "fr": "⏳ Attends jusqu'à"
 },
+"⏳ الانتظار": {
+"de": "⏳ Warten",
+"en": "⏳ Waiting",
+"es": "⏳ Espera",
+"fr": "⏳ Attente"
+},
 "⏳ بحضّر...": {
 "de": "⏳ Wird vorbereitet...",
 "en": "⏳ Preparing...",
@@ -9355,6 +9739,12 @@
 "en": "☀️ 7:45 Empty your head",
 "es": "☀️ 7:45 Vacía tu cabeza",
 "fr": "☀️ 7h45 Vide ta tête"
+},
+"☀️ أول حاجات بكرة": {
+"de": "☀️ Morgen als Erstes",
+"en": "☀️ First things tomorrow",
+"es": "☀️ Lo primero de mañana",
+"fr": "☀️ Demain en premier"
 },
 "☁️ اتعملت نسخة": {
 "de": "☁️ Backup erstellt",
@@ -9373,6 +9763,18 @@
 "en": "☁️ Automatic backup",
 "es": "☁️ Copia de seguridad automática",
 "fr": "☁️ Sauvegarde automatique"
+},
+"☝️ الشاشة البسيطة": {
+"de": "☝️ Einfacher Bildschirm",
+"en": "☝️ Simple screen",
+"es": "☝️ Pantalla simple",
+"fr": "☝️ Écran simple"
+},
+"☝️ الشاشة الكاملة": {
+"de": "☝️ Voller Bildschirm",
+"en": "☝️ Full screen",
+"es": "☝️ Pantalla completa",
+"fr": "☝️ Écran complet"
 },
 "⚙️ جهّزي موبايله": {
 "de": "⚙️ Sein Handy einrichten",
@@ -9415,6 +9817,12 @@
 "en": "✅ Telegram is connected. Your reminders will reach you there even if Sanady is closed",
 "es": "✅ Telegram está conectado. Tus recordatorios te llegarán ahí aunque Sanady esté cerrado",
 "fr": "✅ Telegram est connecté. Tes rappels t'arriveront là-bas même si Sanady est fermé"
+},
+"✅ خلصت النهارده": {
+"de": "✅ Heute erledigt",
+"en": "✅ Done today",
+"es": "✅ Hecho hoy",
+"fr": "✅ Fait aujourd'hui"
 },
 "✅ دلوقتي": {
 "de": "✅ Jetzt",
@@ -9692,17 +10100,35 @@
 "es": "🎙️ Vacía tu cabeza para mañana",
 "fr": "🎙️ Vide ta tête pour demain"
 },
+"🎙️ قول اللي في دماغك لبكرة": {
+"de": "🎙️ Sag, was dir für morgen im Kopf ist",
+"en": "🎙️ Say what's on your mind for tomorrow",
+"es": "🎙️ Di lo que tienes en mente para mañana",
+"fr": "🎙️ Dis ce que tu as en tête pour demain"
+},
 "🎙️ كمان": {
 "de": "🎙️ Mehr",
 "en": "🎙️ More",
 "es": "🎙️ Más",
 "fr": "🎙️ Encore"
 },
+"🎙️ يلا نبدأ": {
+"de": "🎙️ Los geht's",
+"en": "🎙️ Let's start",
+"es": "🎙️ Empecemos",
+"fr": "🎙️ C'est parti"
+},
 "🎙️ يلا نفرّغ دماغك": {
 "de": "🎙️ Lass uns deinen Kopf leeren",
 "en": "🎙️ Let's empty your head",
 "es": "🎙️ Vamos a vaciar tu cabeza",
 "fr": "🎙️ On vide ta tête"
+},
+"🎧 جلسة تركيز": {
+"de": "🎧 Fokus-Session",
+"en": "🎧 Focus session",
+"es": "🎧 Sesión de concentración",
+"fr": "🎧 Session de concentration"
 },
 "🎯 جرّب فوكس+": {
 "de": "🎯 Focus+ testen",
@@ -9955,6 +10381,12 @@
 "en": "📌 School / issue",
 "es": "📌 Escuela / asunto",
 "fr": "📌 École / souci"
+},
+"📍 مشاوير النهارده": {
+"de": "📍 Besorgungen heute",
+"en": "📍 Today's errands",
+"es": "📍 Recados de hoy",
+"fr": "📍 Courses du jour"
 },
 "📒 الخزنة": {
 "de": "📒 Kasse",
@@ -10352,6 +10784,12 @@
 "es": "🛒 Lo que falta en casa",
 "fr": "🛒 Ce qui manque à la maison"
 },
+"🛒 هتشتري": {
+"de": "🛒 Einkaufen",
+"en": "🛒 To buy",
+"es": "🛒 Por comprar",
+"fr": "🛒 À acheter"
+},
 "🛢️ غيّرت الزيت النهارده": {
 "de": "🛢️ Heute Öl gewechselt",
 "en": "🛢️ Changed the oil today",
@@ -10369,6 +10807,12 @@
 "en": "🤝 Savings circle",
 "es": "🤝 Círculo de ahorro",
 "fr": "🤝 Tontine"
+},
+"🤝 جنبك": {
+"de": "🤝 An deiner Seite",
+"en": "🤝 By your side",
+"es": "🤝 A tu lado",
+"fr": "🤝 À tes côtés"
 },
 "🤝 شريك المتابعة": {
 "de": "🤝 Check-in-Partner",
@@ -10465,6 +10909,12 @@
 "en": "🧾 Bills, installments & subscriptions",
 "es": "🧾 Facturas, cuotas y suscripciones",
 "fr": "🧾 Factures, mensualités et abonnements"
+},
+"🧾 فواتير تدفعها": {
+"de": "🧾 Rechnungen zahlen",
+"en": "🧾 Bills to pay",
+"es": "🧾 Facturas por pagar",
+"fr": "🧾 Factures à payer"
 },
 "🩺 اتأكد إن المنبّه شغال": {
 "de": "🩺 Prüf, ob der Wecker funktioniert",

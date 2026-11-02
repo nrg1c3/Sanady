@@ -29,7 +29,7 @@ with sync_playwright() as p:
     U = 'http://127.0.0.1:8772/index.html'
     pg.goto(U); pg.evaluate(SEED); pg.reload(); pg.wait_for_timeout(1000)
     # ---- mom mode
-    check('mom mode tab in ADHD edition', 'الأم' in pg.inner_text('#modeSeg'))
+    check('mom mode tab in ADHD edition', 'الأم' in pg.evaluate("(MODES.filter(x=>!x[4]||IS_ADHD).map(x=>x[2]).join(' ')+' '+VIEWS.map(x=>x[2]).join(' '))"))
     check('mom mode visible', not pg.is_hidden('#nowMom'))
     t = pg.inner_text('#nowMom')
     check('today shows appointment', 'كشف الأسنان' in t)
@@ -89,7 +89,7 @@ with sync_playwright() as p:
     pg.screenshot(path=os.path.join(OUT, 'f_pets.png'), full_page=True)
     # ---- commercial edition also has mom mode
     pg.evaluate("Object.keys(localStorage).filter(k=>k.startsWith('sy_')).forEach(k=>localStorage.setItem('sy_'+k.slice(3),localStorage.getItem(k)))"); pg.goto(U.replace('index.html','app/index.html')); pg.wait_for_timeout(500)
-    check('mom mode in everyone edition', 'الأم' in pg.inner_text('#modeSeg'))
+    check('mom mode in everyone edition', 'الأم' in pg.evaluate("(MODES.filter(x=>!x[4]||IS_ADHD).map(x=>x[2]).join(' ')+' '+VIEWS.map(x=>x[2]).join(' '))"))
     pg.goto(U); pg.wait_for_timeout(300)
     # ---- child phone (fresh context = the kid's phone)
     kc = b.new_context(viewport={'width': 400, 'height': 860}); kp = kc.new_page(); kp.on('pageerror', lambda e: errs.append('KID ' + str(e)))

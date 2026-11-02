@@ -36,13 +36,18 @@ function adhdSettings(){const box=document.querySelector('#sheetBody .form');if(
  const k=$('sKid');k&&k.insertAdjacentHTML('beforebegin',(IS_ADHD?'<button class="btn ghost" id="sBuddy">🤝 شريك المتابعة الأسبوعي</button>':'')+'<button class="btn ghost" id="sAgent">🤖 '+BRAND+' عمل إيه لوحده</button>');
  if($('sSimple'))$('sSimple').onchange=e=>setSimple(e.target.checked);if($('sBuddy'))$('sBuddy').onclick=buddySheet;$('sAgent').onclick=agentSheet;if(window.trustSettings)trustSettings()}
 new MutationObserver(()=>{if($('sSave')&&!$('sAgent'))adhdSettings()}).observe(document.getElementById('sheetBody'),{childList:true});
-const _render=render;render=function(){applySimple();_render()};
+/* the Focus+ tab: the focus timer is free for everyone; Focus+ adds its tools on top */
+function drawFP(){const box=$('fpCard');if(!box)return;
+ if(!IS_ADHD){box.innerHTML=`<div class="ch"><h3>${FP_ICON} فوكس+</h3><small>للتركيز والبداية</small></div><p class="note">أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت: الشاشة البسيطة، و«جنبك»، والانتظار قبل المواعيد، وشريك متابعة.</p><button class="btn" id="fpTry">جرّب فوكس+</button>`;$('fpTry').onclick=focusSheet;return}
+ box.innerHTML=`<div class="ch"><h3>${FP_ICON} فوكس+</h3><small>شغال ✓</small></div><div class="acts"><button class="btn ghost" id="fpWith">🤝 جنبك</button><button class="btn ghost" id="fpWait">⏳ الانتظار</button><button class="btn ghost" id="fpSimple">${simpleOn()?'☝️ الشاشة الكاملة':'☝️ الشاشة البسيطة'}</button><button class="btn ghost" id="fpBuddy">🤝 شريك المتابعة</button><button class="link" id="fpSet">إعدادات فوكس+</button></div>`;
+ $('fpWith').onclick=()=>setMode('with');$('fpWait').onclick=()=>setMode('wait');$('fpSimple').onclick=()=>{setMode('one');setSimple(!simpleOn())};$('fpBuddy').onclick=buddySheet;$('fpSet').onclick=focusSheet}
+const _render=render;render=function(){applySimple();_render();drawFP()};
 applySimple();
 /* Focus+: what it adds, and turning it on or off (sold through Google Play once the store app is out; free to try now) */
 function focusSheet(){const on=IS_ADHD;
- openSheet(`<h2>🎯 فوكس+</h2><div class="stack"><p>أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.</p>
+ openSheet(`<h2>${FP_ICON} فوكس+</h2><div class="stack"><p>أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.</p>
  <ul class="note" style="line-height:1.9;padding-inline-start:18px"><li>الشاشة البسيطة: حاجة واحدة دلوقتي وزرار صوت كبير</li><li>وضع «جنبك»: حد معاك وإنت بتشتغل</li><li>وضع الانتظار قبل المواعيد، وأنا اللي أقولك تقوم</li><li>البداية بدقيقتين بس، وتقسيم الحاجة الكبيرة لخطوات</li><li>شريك متابعة كل أسبوع</li><li>اختيار الحاجة حسب طاقتك</li></ul>
  <p class="note">${on?'فوكس+ شغال على الموبايل ده.':'تقدر تجربه دلوقتي ببلاش. الاشتراك هيبقى من جوجل بلاي.'}</p>
- <button class="btn big" id="fcGo">${on?'اقفل فوكس+':'🎯 جرّب فوكس+'}</button></div>`);
+ <button class="btn big" id="fcGo">${on?'اقفل فوكس+':'جرّب فوكس+'}</button></div>`);
  $('fcGo').onclick=()=>{store.set('focus',!on);if(!on){store.set('focusAt',Date.now());store.set('simple',true)}location.reload()}}
 Object.assign(window,{focusSheet,setSimple,buddySheet,buddyDraft,weekStats});

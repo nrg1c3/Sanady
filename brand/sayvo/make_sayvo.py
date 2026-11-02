@@ -86,9 +86,9 @@ DIRECTIONS = {
         name="Calm Wave",
         line="A voice wave that settles down and ends in a tick: from noise to done.",
         mark=mark_B,
-        bg=("#27305E", "#161C3A"),          # dusk indigo gradient
-        dark=dict(id="Bd", fg="#FFB679", accent="#7FE0C4", text="#F5F1EA", ar="#FFB679"),
-        light=dict(id="Bl", fg="#E58A43", accent="#1F9C80", text="#1D2447", ar="#E0803A"),
+        bg=("#262A47", "#1B1D33"),          # calm night navy (matches the app)
+        dark=dict(id="Bd", fg="#F0B088", accent="#86D3BA", text="#E8E6F0", ar="#F0B088"),
+        light=dict(id="Bl", fg="#E39466", accent="#2E8E70", text="#262838", ar="#E39466"),
         scale=0.66,
         reach=46,
     ),

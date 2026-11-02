@@ -81,7 +81,7 @@ with sync_playwright() as p:
     check('wrong PIN stays locked', E.locator('#eOff').count() == 0)
     # ---- business mode (commercial edition)
     m = page(M, 'sy_')
-    check('biz mode tab in commercial', 'الشغل' in m.inner_text('#modeSeg'))
+    check('biz mode tab in commercial', 'الشغل' in m.evaluate("(MODES.filter(x=>!x[4]||IS_ADHD).map(x=>x[2]).join(' ')+' '+VIEWS.map(x=>x[2]).join(' '))"))
     m.evaluate("setMode('biz')"); m.wait_for_timeout(300)
     check('biz screen visible', not m.is_hidden('#nowBiz') and 'صاحب الشغل' in m.inner_text('#nowBiz'))
     m.click('#bzNew'); m.fill('#oc', 'أم كريم'); m.fill('#oph', '01022223333'); m.fill('#ot', 'تورتة'); m.fill('#oa', '800'); m.fill('#od', '300')

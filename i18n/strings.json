@@ -5652,12 +5652,6 @@
 "es": "Ponle nombre a lo que sientes, eso solo ya alivia.",
 "fr": "Nomme ce que tu ressens, ça suffit déjà à soulager."
 },
-"سندك اللي جواك. قولّي كل اللي في دماغك وأنا أرتبه، وأفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.": {
-"de": "Der Halt in dir. Sag mir alles, was dir im Kopf herumgeht, und ich sortiere es, erinnere dich zur richtigen Zeit und mache mit dir den ersten Schritt. Ohne Vorwürfe.",
-"en": "The support inside you. Tell me everything on your mind and I'll sort it out, remind you at the right time, and start the first step with you. No blame.",
-"es": "El apoyo que llevas dentro. Dime todo lo que tienes en la cabeza y yo lo ordeno, te lo recuerdo en el momento justo y empiezo contigo el primer paso. Sin culpas.",
-"fr": "Le soutien qui est en toi. Dis-moi tout ce que tu as en tête, je l'organise, je te le rappelle au bon moment, et je fais la première étape avec toi. Sans reproches."
-},
 "سندي": {
 "de": "Sanady",
 "en": "Sanady",
@@ -7055,6 +7049,12 @@
 "en": "For example, say:",
 "es": "Di por ejemplo:",
 "fr": "Dis par exemple :"
+},
+"قولها مرة وأنا أرتّبها. قولّي كل اللي في دماغك، وأنا أفكّرك في الوقت الصح، وأبدأ معاك أول خطوة. من غير لوم.": {
+"de": "Sag es einmal, ich sortiere es. Erzähl mir alles, was dir im Kopf herumgeht: Ich erinnere dich zur richtigen Zeit und mache den ersten Schritt mit dir. Ohne Vorwürfe.",
+"en": "Say it once, I'll sort it. Tell me everything on your mind, and I'll remind you at the right time and start the first step with you. No blame.",
+"es": "Dilo una vez y yo lo ordeno. Cuéntame todo lo que tienes en la cabeza: te lo recuerdo en el momento justo y empiezo el primer paso contigo. Sin culpas.",
+"fr": "Dis-le une fois, je m'en occupe. Dis-moi tout ce que tu as en tête : je te le rappelle au bon moment et je fais le premier pas avec toi. Sans reproche."
 },
 "قوليلي عندك إيه وأقولك تعملي إيه في ربع ساعة": {
 "de": "Sag mir, was du hast, und ich sag dir, was du in einer Viertelstunde machen kannst",

@@ -144,11 +144,19 @@ function hush(){speaking=null;try{AUD.pause()}catch(e){}try{speechSynthesis.canc
 
 /* ---------- voice in ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,recWant=false,recFinal='';
+/* the whole text of a listening session, rebuilt from all results each time. Chrome on Android repeats earlier words
+   inside later results ("انا" → "انا عايز" → "انا عايز اروح"), so a result that starts with the previous one replaces it */
+function srText(e){const segs=[];let int='';const norm=x=>x.replace(/\s+/g,' ').trim();
+ const add=t=>{t=norm(t);if(!t)return;const last=segs[segs.length-1];if(last&&t.startsWith(last))segs[segs.length-1]=t;else if(last&&last.endsWith(t))return;else segs.push(t)};
+ for(let i=0;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)add(r[0].transcript);else int+=' '+r[0].transcript}
+ const fin=segs.join(' ');int=norm(int);const last=segs[segs.length-1]||'';if(last&&int.startsWith(last))int=norm(int.slice(last.length));
+ return{fin,int}}
 function startRec(onUpd,onState){if(!SR){onState&&onState('nosr');return false}hush();recWant=true;recFinal='';
  try{rec&&rec.abort()}catch(e){}rec=null;let fails=0,t0=0;
  const go=()=>{const me=new SR();rec=me;me.lang=({gulf:'ar-AE',en:'en-US',fr:'fr-FR',es:'es-ES',de:'de-DE'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=true;t0=Date.now();
   me.onstart=()=>{if(rec===me)onState&&onState('on')};
-  me.onresult=e=>{if(rec!==me)return;let int='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)recFinal+=(recFinal?' ':'')+r[0].transcript.trim();else int+=r[0].transcript}onUpd&&onUpd(recFinal,int)};
+  const base=recFinal;
+  me.onresult=e=>{if(rec!==me)return;const r=srText(e);recFinal=(base+' '+r.fin).trim();onUpd&&onUpd(recFinal,r.int)};
   me.onerror=ev=>{if(rec!==me)return;if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){recWant=false;onState&&onState('blocked')}};
   me.onend=()=>{if(rec!==me)return;rec=null;if(Date.now()-t0<1500)fails++;if(recWant&&fails<6)setTimeout(()=>{if(recWant&&!rec)try{go()}catch(e){}},fails?400*fails:200);else{recWant=false;onState&&onState('off')}};
   try{me.start()}catch(e){}};go();return true}
@@ -914,11 +922,11 @@ function drawBlocks(box){const open=items.filter(i=>!i.done&&i.type!=='idea');co
  const ks=Object.keys(SEC).filter(k=>by[k]);const ideas=items.filter(i=>i.type==='idea'&&!i.done).length;
  box.innerHTML=`<div id="nudgeL"></div>${top?`<div class="card"><small class="note">الحاجة الجاية</small><b style="font-size:20px">${esc(top.title)}</b><div class="acts" style="display:flex;gap:8px"><button class="btn" id="blGo">يلا نبدأ</button><button class="btn ghost" id="blDone">خلصت ✓</button></div></div>`:''}
  <div class="blocks">${ks.map(k=>{const l=by[k].sort((a,b)=>(a.due||'9').localeCompare(b.due||'9'));return`<button class="blk ${top&&top.sec===k?'hot':''}" data-k="${k}"><i>${SEC[k][0]}</i><b>${SEC[k][1]}</b><small>${esc(l[0].title)}</small><span class="n">${l.length}</span></button>`}).join('')}
- <button class="blk" data-k="money"><i>💰</i><b>فلوسي</b><small>تقدر تصرف ${money(availCalc().avail)} لحد المرتب</small></button>${ideas?`<button class="blk" data-k="ideas"><i>💡</i><b>الأفكار</b><small>${ideas} في الخزنة</small></button>`:''}</div>
+ <button class="blk" data-k="money"><i>💰</i><b>فلوسي</b><small>تقدر تصرف ${money(availCalc().avail)} لحد المرتب</small></button><button class="blk" data-k="summ"><i>📚</i><b>لخّصلي</b><small>محاضرة أو كتاب</small></button>${ideas?`<button class="blk" data-k="ideas"><i>💡</i><b>الأفكار</b><small>${ideas} في الخزنة</small></button>`:''}</div>
  ${ks.length?'':'<div class="card empty">مفيش حاجات لسه. دوس 🎙️ وقول كل اللي في دماغك.</div>'}`;
  nudgeInto($('nudgeL'));
  if(top){$('blGo').onclick=()=>startTask(top.id);$('blDone').onclick=()=>finish(top.id)}
- box.querySelectorAll('.blk').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(k==='money'){show('money');return}show('all');if(k==='ideas'){setSeg('ideas');return}setSeg('tasks');const el=$('sec-'+k);if(el)el.scrollIntoView({block:'start'})})}
+ box.querySelectorAll('.blk').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(k==='money'){show('money');return}if(k==='summ'){summSheet();return}show('all');if(k==='ideas'){setSeg('ideas');return}setSeg('tasks');const el=$('sec-'+k);if(el)el.scrollIntoView({block:'start'})})}
 function drawLine(box){const n=NOW(),k=dayKey();const today=items.filter(i=>i.due&&i.type!=='idea'&&(dayKey(parseL(i.due))===k||(!i.done&&parseL(i.due)<n))&&(!i.done||(i.doneAt&&dayKey(new Date(i.doneAt))===k))).sort((a,b)=>parseL(a.due)-parseL(b.due));
  const rows=[];let marked=false;today.forEach(i=>{const d=parseL(i.due);if(!marked&&d>n){rows.push('<div class="nowm">دلوقتي '+esc(fmtT(n))+'</div>');marked=true}
   rows.push(`<div class="row ${i.done?'past':d<=n?'cur':''}"><div class="tm">${esc(fmtT(d))}</div><div class="ln"></div><div class="bx">${itemRow(i)}</div></div>`)});

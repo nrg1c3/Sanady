@@ -26,7 +26,7 @@ function coachStart(ctx,goal,notes){if(!SR){toast('الموبايل ده مش ب
  $('coP').onclick=()=>{COACH.paused=!COACH.paused;$('coP').textContent=COACH.paused?'▶️ كمّل':'⏸ وقفة';$('coSt').textContent=COACH.paused?'⏸ واقف':'🎙️ بسمع…'};
  coachListen();COACH.iv=setInterval(()=>coachAsk(false),20000);agentLog('🎧 شغّلت المستشار في ودنك',null);try{noSleep&&noSleep()}catch(e){}}
 function coachListen(){if(!COACH.on)return;let me;try{me=new SR()}catch(e){return}COACH.rec=me;me.lang=({gulf:'ar-AE',en:'en-US',fr:'fr-FR',es:'es-ES',de:'de-DE'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=false;
- me.onresult=e=>{if(COACH.paused||Date.now()<COACH.ignore)return;for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal){COACH.txt=(COACH.txt+' '+r[0].transcript.trim()).slice(-2600)}}
+ const base=COACH.txt;me.onresult=e=>{if(COACH.paused||Date.now()<COACH.ignore)return;COACH.txt=(base+' '+srText(e).fin).trim().slice(-2600)
   const tx=$('coTx');if(tx)tx.textContent=COACH.txt.slice(-600)};
  me.onerror=ev=>{if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){COACH.on=false;const s=$('coSt');if(s)s.textContent='🚫 لازم تسمح للميكروفون'}};
  me.onend=()=>{if(COACH.on&&COACH.rec===me)setTimeout(coachListen,250)};try{me.start()}catch(e){}}

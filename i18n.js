@@ -4,6 +4,10 @@
    The brain, the microphone and the voice follow the same setting (prof.lang). */
 (function(){
 'use strict';
+// people who used Sanady ADHD (sn_) or Mudabbir (sm_) on this phone keep their data in Sayvo (sy_); Sanady users get Focus+
+try{if(localStorage.getItem('sy_seen')===null){const from=localStorage.getItem('sn_seen')!==null?'sn_':localStorage.getItem('sm_seen')!==null?'sm_':'';
+ if(from){for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(from)&&localStorage.getItem('sy_'+k.slice(3))===null)localStorage.setItem('sy_'+k.slice(3),localStorage.getItem(k))}
+  if(from==='sn_'&&localStorage.getItem('sy_focus')===null)localStorage.setItem('sy_focus','true')}}}catch(e){}
 const DK='sy_';
 const PFX=new URLSearchParams(location.search).has('demo')?'sydemo_':DK;
 const UI=['en','fr','es','de'];

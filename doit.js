@@ -56,7 +56,7 @@ const _editItem=editItem;editItem=function(it,tm){_editItem(it,tm);if(!it||it.do
  a.insertAdjacentHTML('afterbegin',`<button class="btn ghost" id="eDo">${it.prep?'⚡ اللي جهّزته':'⚡ سندي يعملها'}</button>`);$('eDo').onclick=()=>doSheet(it)};
 
 /* on its own: when a new task is clearly writing/planning work, Sayvo prepares it in the background (a few a day) and tells you */
-async function doTick(){if(!IS_LIVE||DEMO||!navigator.onLine)return;const k=dayKey();if(DOQ.d!==k)DOQ={d:k,n:0};if(DOQ.n>=4)return;
+async function doTick(){if(!IS_LIVE||DEMO||!navigator.onLine||(window.isPlus&&!isPlus()))return;const k=dayKey();if(DOQ.d!==k)DOQ={d:k,n:0};if(DOQ.n>=4)return;
  const it=items.find(i=>doable(i)&&!i.prep&&!i.doTried&&nowMs()-(i.created||0)<3*864e5);if(!it)return;
  it.doTried=nowMs();DOQ.n++;store.set('doq',DOQ);save();const p=await doIt(it);if(p){agentLog(`⚡ جهّزت لوحدي «${it.title}»: ${p.title||''}`,null);render()}}
 setTimeout(doTick,15000);setInterval(doTick,3*6e4);

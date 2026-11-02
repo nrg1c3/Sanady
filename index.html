@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Sayvo</title>
 <meta name="description" content="Say it once. Sayvo sorts it. قولها مرة، وسايفو يرتّبها.">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' data: blob: https:; connect-src 'self' https://api.nrg-egypt.com https://api.alquran.cloud https://www.googleapis.com https://gmail.googleapis.com https://oauth2.googleapis.com; frame-src https://accounts.google.com; object-src 'none'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' data: blob: https:; connect-src 'self' https://cdnjs.cloudflare.com https://api.nrg-egypt.com https://api.alquran.cloud https://www.googleapis.com https://gmail.googleapis.com https://oauth2.googleapis.com; frame-src https://accounts.google.com; object-src 'none'; base-uri 'self'">
 <meta name="theme-color" content="#1B1D33">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -48,6 +48,7 @@
   <button class="chip" id="qNight">🌙 ملخص اليوم</button><button class="chip" id="qWeek">🗓️ مراجعة الأسبوع</button>
   <button class="chip" id="qFind">🔑 فين حطيت...؟</button>
   <button class="chip" id="qMe">🌿 حياتي</button>
+  <button class="chip" id="qSumm">📚 لخّصلي محاضرة أو كتاب</button>
  </div>
  </div>
  <div id="nowWith" class="col" hidden></div>
@@ -154,6 +155,8 @@
 <script src="trust.js"></script>
 <script src="doit.js"></script>
 <script src="coach.js"></script>
+<script src="plans.js"></script>
+<script src="summ.js"></script>
 <script src="demo.js"></script>
 </body>
 </html>

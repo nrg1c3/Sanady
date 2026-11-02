@@ -24,6 +24,16 @@ async function alarmSheet(){const h=await alarmHealth();const ok=h.perm==='grant
 NUDGE_EXTRA.push((t,hard)=>{if(!IS_LIVE||pushOn()||store.get('ahNag','')===dayKey())return[];const need=items.some(i=>!i.done&&(i.type==='med'||i.type==='appt')&&i.due&&parseL(i.due)>t);if(!need)return[];
  return[{id:'ah'+dayKey(),pr:72,i:'🔔',p:'عندك دوا أو مواعيد، والمنبّه لسه مقفول. لو التطبيق اتقفل مش هقدر أفكّرك.',acts:[['شغّله',()=>{store.set('ahNag',dayKey());alarmSheet()}],['بعدين',()=>{store.set('ahNag',dayKey());render()}]]}]});
 
+/* iPhone: Safari only rings alarms and keeps data safe once the app is on the home screen (iOS 16.4+) */
+const IOS_TAB=()=>/iPhone|iPad|iPod/i.test(navigator.userAgent)&&!(matchMedia('(display-mode: standalone)').matches||navigator.standalone);
+function iosSheet(){openSheet(`<h2>📲 حط ${BRAND} على الشاشة الرئيسية</h2><div class="stack"><p>على الآيفون، المنبّه مش بيرن والتطبيق مقفول غير لما يتحط على الشاشة الرئيسية. خطوتين بس:</p>
+ <div class="wtask"><div class="tx"><b>1. دوس زرار المشاركة</b><small class="note">المربع اللي طالع منه سهم ⬆️، تحت في سفاري</small></div></div>
+ <div class="wtask"><div class="tx"><b>2. اختار «Add to Home Screen»</b><small class="note">أو «إضافة إلى الشاشة الرئيسية»، وبعدين «Add»</small></div></div>
+ <p class="note">افتح ${BRAND} من الأيقونة الجديدة، ودوس «شغّل المنبّه». محتاج iOS 16.4 أو أحدث. الآيفون بيفصل بيانات سفاري عن الأيقونة، فلو سجلت حاجات هنا اعمل نسخة احتياطية من الإعدادات الأول، وارجّعها في الأيقونة.</p>
+ <button class="btn" id="iosOk">تمام</button></div>`);$('iosOk').onclick=()=>{store.set('iosNag',dayKey());closeSheet();render()}}
+NUDGE_EXTRA.push((t,hard)=>{if(!IS_LIVE||!IOS_TAB()||store.get('iosNag','')===dayKey())return[];
+ return[{id:'ios'+dayKey(),pr:74,i:'📲',p:'على الآيفون لازم تحطني على الشاشة الرئيسية عشان أرن عليك والتطبيق مقفول. خطوتين بس.',acts:[['وريني إزاي',iosSheet],['بعدين',()=>{store.set('iosNag',dayKey());render()}]]}]});
+
 /* 2) encrypted backup in the cloud, opened only with your recovery code */
 const BKA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const bkNewCode=()=>{const a=crypto.getRandomValues(new Uint8Array(20));return Array.from(a,x=>BKA[x%BKA.length]).join('').replace(/(.{5})(?=.)/g,'$1-')};
@@ -86,6 +96,24 @@ function pilotRate(){const q=[['s','الأسبوع ده قدرت تبدأ الح
 NUDGE_EXTRA.push((t,hard)=>{if(!PILOT||!PILOT.on)return[];const last=PILOT.rAt||PILOT.since;if((new Date(dayKey())-new Date(last))/864e5<7||store.get('plNag','')===dayKey())return[];
  return[{id:'pl'+dayKey(),pr:30,i:'🧪',p:'عدّى أسبوع في التجربة. 3 أسئلة سريعة عن أسبوعك؟',acts:[['يلا',()=>{store.set('plNag',dayKey());pilotRate()}],['بكرة',()=>{store.set('plNag',dayKey());render()}]]}]});
 
+/* 3b) usage numbers for everyone: counts only (never text, names or numbers), so we learn what people really use.
+   A random id that isn't tied to the device or the person; off any time in settings. */
+function feat(k){if(!/^[a-z_]{1,16}$/.test(k))return;const key='ft_'+dayKey();const f=store.get(key,{})||{};f[k]=(f[k]||0)+1;store.set(key,f)}
+function usageStats(k){const born=store.get('born',1);const st=Object.assign({},dayStats(k));delete st.simple;
+ st.auto=1;st.focus=IS_ADHD?1:0;st.installed=(matchMedia('(display-mode: standalone)').matches||navigator.standalone)?1:0;
+ st.ios=/iPhone|iPad|iPod/i.test(navigator.userAgent)?1:0;st['l_'+(window.UI_LANG||'ar')]=1;if(born>1)st.age=Math.floor((Date.now()-born)/864e5);
+ const f=store.get('ft_'+k,{})||{};Object.entries(f).forEach(([x,v])=>{if(Object.keys(st).length<38)st['f_'+x]=v});return st}
+async function usageSend(){if(!IS_LIVE||store.get('noStats',false)||(PILOT&&PILOT.on))return;
+ let aid=store.get('aid','');if(!/^[a-z0-9]{24}$/.test(aid)){const a=crypto.getRandomValues(new Uint8Array(24));aid=Array.from(a,x=>'abcdefghijkmnpqrstuvwxyz23456789'[x%32]).join('');store.set('aid',aid)}
+ const sent=store.get('usent',{})||{};const y=NOW();y.setDate(y.getDate()-1);
+ for(const d of [y,NOW()]){const k=dayKey(d);if(sent[k]===2||(sent[k]===1&&k===dayKey()))continue;
+  try{const r=await fetch(TAPI+'sanady-pilot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({k:'wasl-nrg-2026',d:tDev(),p:aid,day:k,ed:ED,stats:usageStats(k)})});
+   if(r.ok)sent[k]=k===dayKey()?1:2}catch(e){}}
+ store.set('usent',Object.fromEntries(Object.keys(sent).sort().slice(-10).map(k=>[k,sent[k]])))}
+window.addEventListener('load',()=>{const W=(n,k)=>{const f=window[n];if(typeof f!=='function')return;window[n]=function(){try{feat(typeof k==='function'?k.apply(null,arguments):k)}catch(e){}return f.apply(this,arguments)}};
+ W('doSheet','do');W('coachSheet','coach');W('summSheet','summ');W('buddySheet','buddy');W('plansSheet','plans');W('focusSheet','focus');W('alarmSheet','alarm');W('iosSheet','ios');
+ W('setMode',m=>'m_'+String(m||'').replace(/[^a-z]/g,''));W('setView',v=>'v_'+String(v||'').replace(/[^a-z]/g,''))});
+
 /* 4) language of the conversation: Egyptian, Gulf, or English */
 const LANGS=[['eg','مصري'],['gulf','خليجي'],['en','English'],['fr','Français'],['es','Español'],['de','Deutsch']];
 
@@ -96,8 +124,10 @@ function trustSettings(){const box=document.querySelector('#sheetBody .form');if
   const ui=['en','fr','es','de'].includes(v)?v:'ar';if(ui!==was){try{KV.set('lang',ui)}catch(x){}location.reload();return}
   toast(v==='gulf'?'تم، بكلمك خليجي':'تمام، مصري')};
  const k=$('sNot');k&&k.insertAdjacentHTML('afterend',`<button class="btn ghost" id="sAlarm">🩺 اتأكد إن المنبّه شغال</button><button class="btn ghost" id="sCloud">☁️ نسخة احتياطية تلقائية${tGet('bk_code')?' ✓':''}</button>${IS_ADHD?`<button class="btn ghost" id="sPilot">🧪 تجربة ${esc(BRAND)}${PILOT&&PILOT.on?' ✓':''}</button>`:''}`);
+ $('sCloud').insertAdjacentHTML('afterend',`<label class="tog"><input type="checkbox" id="sStats" ${store.get('noStats',false)?'':'checked'}> ابعت أرقام استخدام مجهولة (عدد بس، من غير أي كلام) عشان نحسّن ${esc(BRAND)}</label>`);
+ $('sStats').onchange=e=>store.set('noStats',!e.target.checked);
  $('sAlarm').onclick=alarmSheet;$('sCloud').onclick=backupCloudSheet;if($('sPilot'))$('sPilot').onclick=pilotSheet}
 
-function trustTick(){if(!IS_LIVE)return;backupNow(true);pilotSend()}
+function trustTick(){if(!IS_LIVE)return;backupNow(true);pilotSend();usageSend()}
 setTimeout(trustTick,8000);setInterval(trustTick,30*6e4);
-Object.assign(window,{alarmSheet,backupCloudSheet,backupNow,backupRestore,pilotSheet,pilotRate,dayStats,trustSettings,bkNewCode});
+Object.assign(window,{feat,usageStats,usageSend,iosSheet,alarmSheet,backupCloudSheet,backupNow,backupRestore,pilotSheet,pilotRate,dayStats,trustSettings,bkNewCode});

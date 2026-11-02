@@ -103,5 +103,5 @@ if(typeof paySheet==='function'){const _pay=paySheet;paySheet=function(it){if(!i
  $('pyDone').onclick=()=>{keep();closeSheet();finish(it.id);toast('اتسجلت إنها اتدفعت ✓')};$('pyLater').onclick=()=>{keep();closeSheet()}}}
 
 /* settings entry */
-new MutationObserver(()=>{const k=$('sKid');if($('sSave')&&k&&!$('sGoogle')){k.insertAdjacentHTML('beforebegin','<button class="btn ghost" id="sGoogle">🔗 ربط جوجل (الكالندر والجيميل)</button>');$('sGoogle').onclick=googleSheet}}).observe(document.getElementById('sheetBody'),{childList:true});
+new MutationObserver(()=>{const k=$('sKid')||$('sHome');if($('sSave')&&k&&!$('sGoogle')){k.insertAdjacentHTML($('sKid')?'beforebegin':'afterend','<button class="btn ghost" id="sGoogle">🔗 ربط جوجل (الكالندر والجيميل)</button>');$('sGoogle').onclick=googleSheet}}).observe(document.getElementById('sheetBody'),{childList:true});
 Object.assign(window,{doSheet,doIt,showPrep,googleSheet,G});

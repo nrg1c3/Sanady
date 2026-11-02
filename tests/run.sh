@@ -6,7 +6,7 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"
 W="$(mktemp -d)"; trap 'rm -rf "$W"' EXIT
 # one app (Sayvo). The page at / has Focus+ on (the focus tests), /app/ has it off; same files.
 mk(){ d="$1"; flag="$2"; mkdir -p "$d"; for f in "$HERE"/*; do n=$(basename "$f"); [ "$n" = index.html ] || ln -s "$f" "$d/$n"; done
-  sed "s|<head>|<head><script>try{if(localStorage.getItem('sy_focus')===null)localStorage.setItem('sy_focus','$flag')}catch(e){}</script>|" "$HERE/index.html" > "$d/index.html"; }
+  sed "s|<head>|<head><script>try{if(localStorage.getItem('sy_focus')===null)localStorage.setItem('sy_focus','$flag');if(localStorage.getItem('sy_seenPick')===null)localStorage.setItem('sy_seenPick','true')}catch(e){}</script>|" "$HERE/index.html" > "$d/index.html"; }
 mk "$W" true; rm -rf "$W/app"; mk "$W/app" false; ln -s "$HERE" "$W/Sanady"
 export PYTHONPATH="$HERE/tests/_ar${PYTHONPATH:+:$PYTHONPATH}"
 fail=0

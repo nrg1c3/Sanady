@@ -12214,5 +12214,101 @@
 "en": "🫶 Rough day",
 "es": "🫶 Día difícil",
 "fr": "🫶 Journée difficile"
+},
+"1. دوس زرار المشاركة": {
+"en": "1. Tap the Share button",
+"fr": "1. Touchez le bouton Partager",
+"es": "1. Toca el botón Compartir",
+"de": "1. Tippe auf „Teilen“"
+},
+"2. اختار «Add to Home Screen»": {
+"en": "2. Choose “Add to Home Screen”",
+"fr": "2. Choisissez « Sur l’écran d’accueil »",
+"es": "2. Elige «Añadir a pantalla de inicio»",
+"de": "2. Wähle „Zum Home-Bildschirm“"
+},
+"· غيّر الشكل": {
+"en": "· change the look",
+"fr": "· changer l’affichage",
+"es": "· cambiar el aspecto",
+"de": "· Ansicht ändern"
+},
+"أو «إضافة إلى الشاشة الرئيسية»، وبعدين «Add»": {
+"en": "Then tap “Add”",
+"fr": "Puis touchez « Ajouter »",
+"es": "Luego toca «Añadir»",
+"de": "Dann auf „Hinzufügen“ tippen"
+},
+"ابعت أرقام استخدام مجهولة (عدد بس، من غير أي كلام) عشان نحسّن": {
+"en": "Send anonymous usage numbers (counts only, never your words) to help improve",
+"fr": "Envoyer des chiffres d’usage anonymes (des comptes seulement, jamais vos mots) pour améliorer",
+"es": "Enviar cifras de uso anónimas (solo conteos, nunca tus palabras) para mejorar",
+"de": "Anonyme Nutzungszahlen senden (nur Zählungen, nie deine Worte), um zu verbessern:"
+},
+"اشتراك واحد: كل اللي في Plus، ومعاه أدوات التركيز": {
+"en": "One subscription: everything in Plus, plus the focus tools",
+"fr": "Un seul abonnement : tout Plus, et les outils de concentration",
+"es": "Una sola suscripción: todo lo de Plus, más las herramientas de enfoque",
+"de": "Ein Abo: alles aus Plus, dazu die Fokus-Werkzeuge"
+},
+"الاشتراك هيبقى قريب. ولو عندك ADHD، Sayvo Focus+ فيه كل ده وأدوات التركيز في اشتراك واحد.": {
+"en": "Subscriptions are coming soon. If you have ADHD, Sayvo Focus+ includes all of this plus the focus tools in one subscription.",
+"fr": "Les abonnements arrivent bientôt. Avec un TDAH, Sayvo Focus+ inclut tout cela et les outils de concentration en un seul abonnement.",
+"es": "Las suscripciones llegan pronto. Si tienes TDAH, Sayvo Focus+ incluye todo esto y las herramientas de enfoque en una sola suscripción.",
+"de": "Abos kommen bald. Mit ADHS enthält Sayvo Focus+ all das plus die Fokus-Werkzeuge in einem Abo."
+},
+"المربع اللي طالع منه سهم ⬆️، تحت في سفاري": {
+"en": "The square with an arrow ⬆️, at the bottom of Safari",
+"fr": "Le carré avec une flèche ⬆️, en bas de Safari",
+"es": "El cuadrado con una flecha ⬆️, abajo en Safari",
+"de": "Das Quadrat mit dem Pfeil ⬆️, unten in Safari"
+},
+"تقدر تجربه دلوقتي ببلاش. بعد التجربة هيبقى اشتراك واحد اسمه Sayvo Focus+، فيه كل اللي في Plus كمان.": {
+"en": "Try it free now. After the trial it becomes one subscription, Sayvo Focus+, which also includes everything in Plus.",
+"fr": "Essayez-le gratuitement. Après l’essai, ce sera un seul abonnement, Sayvo Focus+, qui inclut aussi tout Plus.",
+"es": "Pruébalo gratis ahora. Después será una sola suscripción, Sayvo Focus+, que también incluye todo lo de Plus.",
+"de": "Jetzt kostenlos testen. Danach ist es ein Abo, Sayvo Focus+, das auch alles aus Plus enthält."
+},
+"على الآيفون لازم تحطني على الشاشة الرئيسية عشان أرن عليك والتطبيق مقفول. خطوتين بس.": {
+"en": "On iPhone, add me to your Home Screen so I can ring even when the app is closed. Just two steps.",
+"fr": "Sur iPhone, ajoutez-moi à l’écran d’accueil pour que je sonne même appli fermée. Deux étapes.",
+"es": "En iPhone, añádeme a la pantalla de inicio para que suene aunque la app esté cerrada. Solo dos pasos.",
+"de": "Auf dem iPhone: leg mich auf den Home-Bildschirm, damit ich auch bei geschlossener App klingle. Nur zwei Schritte."
+},
+"على الآيفون، المنبّه مش بيرن والتطبيق مقفول غير لما يتحط على الشاشة الرئيسية. خطوتين بس:": {
+"en": "On iPhone, alarms only ring with the app closed once it's on your Home Screen. Two steps:",
+"fr": "Sur iPhone, les alarmes ne sonnent appli fermée qu’une fois sur l’écran d’accueil. Deux étapes :",
+"es": "En iPhone, las alarmas solo suenan con la app cerrada si está en la pantalla de inicio. Dos pasos:",
+"de": "Auf dem iPhone klingeln Alarme bei geschlossener App nur vom Home-Bildschirm aus. Zwei Schritte:"
+},
+"على الشاشة الرئيسية": {
+"en": "to your Home Screen",
+"fr": "sur l’écran d’accueil",
+"es": "en la pantalla de inicio",
+"de": "auf den Home-Bildschirm"
+},
+"كل اللي في Sayvo Plus": {
+"en": "Everything in Sayvo Plus",
+"fr": "Tout Sayvo Plus",
+"es": "Todo lo de Sayvo Plus",
+"de": "Alles aus Sayvo Plus"
+},
+"من الأيقونة الجديدة، ودوس «شغّل المنبّه». محتاج iOS 16.4 أو أحدث. الآيفون بيفصل بيانات سفاري عن الأيقونة، فلو سجلت حاجات هنا اعمل نسخة احتياطية من الإعدادات الأول، وارجّعها في الأيقونة.": {
+"en": "from the new icon and tap “Turn on alarms”. Needs iOS 16.4 or later. iPhone keeps Safari's data separate from the icon, so if you saved things here, make a backup in Settings first and restore it in the icon.",
+"fr": "depuis la nouvelle icône et touchez « Activer les alarmes ». iOS 16.4 ou plus récent. L’iPhone sépare les données de Safari de l’icône : si vous avez déjà des choses ici, faites d’abord une sauvegarde dans Réglages et restaurez-la dans l’icône.",
+"es": "desde el nuevo icono y toca «Activar alarmas». Necesita iOS 16.4 o posterior. El iPhone separa los datos de Safari del icono: si ya guardaste cosas aquí, haz primero una copia en Ajustes y restáurala en el icono.",
+"de": "über das neue Symbol und tippe auf „Alarme einschalten“. Braucht iOS 16.4 oder neuer. Das iPhone trennt Safari-Daten vom Symbol: Wenn du hier schon etwas gespeichert hast, mach zuerst ein Backup in den Einstellungen und stell es im Symbol wieder her."
+},
+"وريني إزاي": {
+"en": "Show me how",
+"fr": "Montrez-moi",
+"es": "Muéstrame cómo",
+"de": "Zeig mir wie"
+},
+"📲 حط": {
+"en": "📲 Add",
+"fr": "📲 Ajoutez",
+"es": "📲 Añade",
+"de": "📲 Lege"
 }
 }

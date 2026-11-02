@@ -4,6 +4,8 @@
    The texts still say سندي in places: the name is swapped on screen. */
 const ED='main';
 const DK='sy_';
+// Arabic users (Egypt, the Gulf, or an Arabic phone) see the local extras: senior phone, kid screen, faith, Basata
+const LOCAL=(window.UI_LANG||'ar')==='ar';
 const BRAND='سايفو';
 const brandify=s=>String(s).replace(/سندي|مُدبّر/g,BRAND);
 const BRAIN_URL='https://api.nrg-egypt.com/webhook/sanady-brain';
@@ -743,9 +745,9 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
  <button class="btn ghost" id="sNot">${store.get('push',false)?'🔕 اقفل المنبّه':'🔔 شغّل المنبّه (يرن والتطبيق مقفول)'}</button>
  <button class="btn ghost" id="sFocus">${FP_ICON} فوكس+ ${IS_ADHD?'✓':''}</button>
  <button class="btn ghost" id="sPlan">⭐ الباقات والاشتراك</button>
- <button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>
+ ${LOCAL?'<button class="btn ghost" id="sOld">👵 حوّل الموبايل ده لموبايل كبير السن</button>':''}
  <button class="btn ghost" id="sHome">🏠 البيت المشترك (قايمة واحدة لكل البيت)</button>
- <button class="btn ghost" id="sKid">👧 حوّل الموبايل ده لموبايل طفل</button>
+ ${LOCAL?'<button class="btn ghost" id="sKid">👧 حوّل الموبايل ده لموبايل طفل</button>':''}
  <button class="btn ghost" id="sFam">👨‍👩‍👧 خلّي حد من العيلة يضيفلك تذكير</button>
  <button class="btn ghost" id="sExp">🩺 يوميات للدكتور (ملف)</button>
  <a class="btn ghost" href="privacy.html">🔒 الخصوصية والأمان</a>
@@ -758,7 +760,7 @@ $('btnSet').onclick=()=>{openSheet(`<h2>الإعدادات</h2><div class="form"
 
  if($('sTg'))$('sTg').onclick=()=>tgSheet();
  $('sBk').onclick=()=>backupSheet();
- $('sKid').onclick=()=>kidSetup();
+ if($('sKid'))$('sKid').onclick=()=>kidSetup();
  $('sHome').onclick=()=>homeSheet();
  if($('sFocus'))$('sFocus').onclick=()=>focusSheet();if($('sOld'))$('sOld').onclick=()=>elderSetup();if($('sPlan'))$('sPlan').onclick=()=>plansSheet();
  $('sDoc').onclick=()=>docsSheet();
@@ -806,12 +808,19 @@ function pickSheet(kind){const L=kind==='view'?VIEWS:MODES,cur=kind==='view'?cur
 // both choices are on the screen: the view (three tiles, each with a few words) and the mode (a row of chips); the chosen mode is explained underneath
 const VSHORT={blocks:'كل حاجة في مربع',line:'يومك بالترتيب',chat:'زي الشات'};
 function drawNow(){const m=curMode(),v=curView(),M=MODES.find(x=>x[0]===m),V=VIEWS.find(x=>x[0]===v);
+ // first days: a new user sees one line instead of all the choices; tapping it (or day 4) opens them for good
+ if(store.get('born',0)===0)store.set('born',(store.get('view',null)||store.get('mode2',null)||items.length>5)?1:Date.now());
+ if(!store.get('seenPick',false)){const b=store.get('born',1);if(b===1||Date.now()-b>3*864e5)store.set('seenPick',true)}
+ if(!store.get('seenPick',false)){$('modeSeg').innerHTML=`<button class="link" id="pickMore">${V[1]} ${V[2]}${m!=='none'?' · '+M[1]+' '+M[2]:''} · غيّر الشكل</button>`;
+  $('pickMore').onclick=()=>{store.set('seenPick',true);drawNow()};drawNowBody(m,v);return}
  $('modeSeg').innerHTML=`<div class="lbl">الواجهة</div><div class="vrow">${VIEWS.map(([k,ic,t])=>`<button class="vt ${k===v?'on':''}" data-v="${k}" aria-pressed="${k===v}"><i>${ic}</i><b>${t}</b><small>${VSHORT[k]}</small></button>`).join('')}</div>
  <div class="lbl">المود</div><div class="mrow">${MODES.map(([k,ic,t,d,plus])=>`<button class="mc ${k===m?'on':''} ${plus&&!IS_ADHD?'lock':''}" data-m="${k}" aria-pressed="${k===m}"><i>${ic}</i>${t}${plus?'<em class="fpb">+</em>':''}</button>`).join('')}</div>
  <p class="mdesc">${m==='none'?V[3]:M[3]}</p>`;
  $('modeSeg').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>setView(b.dataset.v));
  $('modeSeg').querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
  {const on=$('modeSeg').querySelector('.mc.on'),row=$('modeSeg').querySelector('.mrow');if(on&&row){const r=on.getBoundingClientRect(),rr=row.getBoundingClientRect();if(r.left<rr.left||r.right>rr.right)row.scrollLeft+=(r.left+r.width/2)-(rr.left+rr.width/2)}}
+ drawNowBody(m,v)}
+function drawNowBody(m,v){
  const box={one:'nowOne',with:'nowWith',wait:'nowWait',mom:'nowMom',biz:'nowBiz',out:'nowOut',calm:'nowCalm'};
  Object.values(box).forEach(id=>{const e=$(id);if(e)e.hidden=id!==box[m]});$('nowLay').hidden=m!=='none';
  if(m==='one'){drawTBar();drawNudge();drawNext();drawEnergy();drawTop3();drawMini()}

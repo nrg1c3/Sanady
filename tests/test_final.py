@@ -57,7 +57,7 @@ with sync_playwright() as p:
     st3 = pg.evaluate("()=>({d:JSON.parse(localStorage.getItem('sy_docs')),n:JSON.parse(localStorage.getItem('sy_items')).filter(i=>i.doc==='البطاقة'&&!i.done).length})")
     check('deleting a document removes its renewal task', 'البطاقة' not in st3['d'] and st3['n'] == 0, st3)
     # body nudges
-    pg.evaluate("()=>{closeSheet();localStorage.setItem('sy_bodyAt',JSON.stringify(Date.now()-4*36e5))}")
+    pg.evaluate("()=>{closeSheet();const h=x=>{const d=new Date(Date.now()+x*36e5);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};prof.wake=h(-3);prof.sleep=h(5);localStorage.setItem('sy_bodyAt',JSON.stringify(Date.now()-4*36e5))}")  # awake whatever the clock says
     nud = pg.evaluate("()=>nudges().filter(x=>x.id.startsWith('bd')).map(x=>x.p)")
     check('body nudge after 3 waking hours', len(nud) == 1, nud)
     pg.evaluate("()=>{const x=nudges().find(x=>x.id.startsWith('bd'));x.acts[0][1]()}")

@@ -211,7 +211,7 @@ let PETL=store.get('pets',[]);const savePets=()=>{store.set('pets',PETL);save()}
 function drawInterests(b){const T=isMuslim()?prayTimes(NOW(),FAITH.city):null;let nx=null;
  if(T){const n=nowMs();nx=['fajr','dhuhr','asr','maghrib','isha'].map(p=>[p,T[p]]).find(([,d])=>d>n);if(!nx){const t2=prayTimes(new Date(n+864e5),FAITH.city);nx=['fajr',t2.fajr]}}
  const others=items.filter(i=>i.sec==='me'&&i.type==='task'&&i.repeat&&!i.done&&!i.pet);
- b.innerHTML=`<div class="card"><div class="ch"><h3>🤲 الدين</h3><small>تذكير بالصلاة وأذكار وقرآن، أو صلوات الكنيسة. اختياري تماماً.</small></div>
+ b.innerHTML=`${(LOCAL||FAITH.f)?`<div class="card"><div class="ch"><h3>🤲 الدين</h3><small>تذكير بالصلاة وأذكار وقرآن، أو صلوات الكنيسة. اختياري تماماً.</small></div>
   <div class="seg" id="fSeg"><button data-f="m" class="${isMuslim()?'on':''}">مسلم</button><button data-f="c" class="${isChristian()?'on':''}">مسيحي</button><button data-f="" class="${FAITH.f?'':'on'}">مش دلوقتي</button></div>
   ${isMuslim()?`<label class="note">المدينة<select id="fCity">${Object.entries(CITIES).map(([k,c])=>`<option value="${k}" ${k===FAITH.city?'selected':''}>${c[0]}</option>`).join('')}</select></label>
    ${nx?`<div class="say">الصلاة الجاية: ${PNAMES[nx[0]]} ${esc(pT(nx[1]))} · بعد ${durAr((nx[1]-nowMs())/6e4)}</div>`:''}
@@ -224,6 +224,7 @@ function drawInterests(b){const T=isMuslim()?prayTimes(NOW(),FAITH.city):null;le
   ${isChristian()?`${[['am','صلاة الصبح'],['pm','صلاة قبل النوم'],['read','قراية الإنجيل']].map(([k,t])=>`<div class="item"><div class="tx"><b>${t}</b></div><input type="time" data-ct="${k}" value="${esc(FAITH.chr[k])}" style="max-width:130px"><label class="tog"><input type="checkbox" data-co="${k}" ${FAITH.chr.on[k]?'checked':''}>🔔</label></div>`).join('')}
    <div class="item"><div class="tx"><b>القداس</b></div><select id="cMass" style="max-width:120px">${DAYS.map((d,i)=>`<option value="${i}" ${+FAITH.chr.mass===i?'selected':''}>${d}</option>`).join('')}</select><input type="time" data-ct="massT" value="${esc(FAITH.chr.massT)}" style="max-width:120px"><label class="tog"><input type="checkbox" data-co="mass" ${FAITH.chr.on.mass?'checked':''}>🔔</label></div>
    <button class="btn ghost" id="cLord">🙏 الصلاة الربانية</button>`:''}</div>
+ `:''}
  <div class="card"><div class="ch"><h3>🐾 حيواناتي</h3><small>أكلهم وتطعيماتهم والدكتور البيطري</small></div><div id="petL">${PETL.map(p=>`<div class="wtask" data-p="${p.id}"><div class="tx"><b>${PETS[p.type][0]} ${esc(p.name)}</b><small class="note">أكل: ${esc(p.feed.join('، '))}${p.vac?' · التطعيم الجاي '+esc(fmtWhen(p.vac+'T10:00')):''}${p.vet?' · <a class="link" href="tel:'+esc(p.vet)+'">البيطري</a>':''}</small></div><button class="mini-b rm">✕</button></div>`).join('')||'<p class="note">مفيش لسه.</p>'}</div><button class="btn ghost" id="petAdd">+ ضيف حيوان</button></div>
  <div class="card"><div class="ch"><h3>✨ اهتمامات تانية</h3><small>رياضة، قراية، رسم... وأنا أفكّرك</small></div>${others.map(itemRow).join('')||'<p class="note">مفيش لسه.</p>'}
   <div class="inrow"><input id="oT" placeholder="مثلاً: رياضة"><input id="oH" type="time" value="19:00" style="max-width:120px"></div><div class="inrow"><select id="oR"><option value="daily">كل يوم</option><option value="weekly">كل أسبوع</option></select><button class="btn" id="oGo">ضيف</button></div></div>`;

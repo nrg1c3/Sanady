@@ -1,6 +1,6 @@
 // البيت المشترك: كذا موبايل في نفس البيت بيشوفوا نفس قايمة الناقص والنضافة والولاد.
 // كود البيت هو المفتاح: القوايم بتتقفل على الموبايل قبل ما تطلع، والسيرفر بيشوف كلام مقفول بس.
-const HSYNC_URL='https://2.31.109.72.sslip.io/webhook/sanady-home';
+const HSYNC_URL='https://api.nrg-egypt.com/webhook/sanady-home';
 const HS={code:null,key:null,hid:'',busy:false,last:+(store.get('hs_at',0)||0),err:''};
 const hsGet=k=>{try{return localStorage.getItem(DK+k)}catch(e){return null}};
 const hsSet=(k,v)=>{try{v==null?localStorage.removeItem(DK+k):localStorage.setItem(DK+k,v)}catch(e){}};

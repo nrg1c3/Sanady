@@ -8,6 +8,7 @@
 <h2>اللي بيتبعت بره الموبايل</h2><ul>
 <li><b>الكلام اللي بتفرّغه:</b> النص بيتبعت لـ Claude من Anthropic عن طريق سيرفر n8n بتاعنا عشان يترتب، ومعاه قايمة مختصرة بالحاجات المفتوحة واسمك عشان الرد يبقى مظبوط. السيرفر مضبوط إنه ما يحفظش أي بيانات تشغيل.</li>
 <li><b>صوت سندي:</b> الجملة اللي سندي هيقولها بتتبعت لخدمة تحويل نص لصوت (ElevenLabs) عن طريق نفس السيرفر.</li>
+<li><b>الأرقام الشخصية:</b> أرقام التليفونات والإيميلات وأرقام الكروت والبطايق بتتشال من الكلام على الموبايل قبل ما يطلع، وبترجع مكانها بعد الترتيب. السيرفر مبيشوفهاش.</li>
 <li><b>كود الجهاز:</b> التطبيق بيعمل كود عشوائي للموبايل (مش رقمك ولا اسمك)، وبيبعته مع كل طلب عشان نحدد عدد الطلبات لكل جهاز ونمنع الاستخدام الغلط.</li>
 <li><b>التعرّف على كلامك:</b> بيستخدم خاصية المتصفح نفسه (زي Chrome)، وده بيخضع لسياسة الشركة صاحبة المتصفح.</li>
 <li><b>المنبّه (اختياري):</b> لو شغّلته، سيرفرنا بيحفظ مواعيد الرنّ بس (الوقت ورقم داخلي) وعنوان الإشعارات بتاع موبايلك، عشان يصحّي الموبايل في الميعاد. نص التذكير نفسه ما بيخرجش من موبايلك، الموبايل هو اللي بيعرضه. لما تقفل المنبّه كل ده بيتمسح.</li>
@@ -28,6 +29,8 @@
 <p><b>Your data stays on your phone.</b> No account. Tasks, ideas, money figures, people, item locations and diary are stored only on the device and can be wiped in one tap.</p>
 <p><b>What leaves the phone:</b> the text of a brain dump (plus a short list of open items and your first name) goes to Claude by Anthropic through our n8n server, which is set to keep no execution data. Sentences Sanady speaks go to a text-to-speech service (ElevenLabs) through the same server. Each request also carries a random device code (not your number or name) used only for rate limits. Speech recognition uses the browser's own service. Money figures are never sent; the "can I buy this?" maths runs on the phone.</p>
 <p><b>Alarms (optional):</b> when turned on, our server keeps only alarm times (time plus an internal id) and the phone's push address, to wake the phone on time. The reminder text never leaves the phone; the phone shows it. Turning the alarm off deletes all of this.</p>
+<p><b>Personal numbers:</b> phone numbers, emails, card and ID numbers are removed from the text on the phone before it is sent, and put back after sorting. The server never sees them.</p>
+<p><b>Security:</b> every request is limited to the app's own address, carries a signed device token and is rate-limited; the page only talks to our server (api.nrg-egypt.com) and the public Quran service.</p>
 <p><b>Shared home (optional):</b> the shared lists (needs, chores, kids) are encrypted on the phone with the household code before upload; the server stores them encrypted and cannot read them. Personal tasks, money and diary are never shared.</p>
 <p><b>Bill payment:</b> the pay button opens the Basata or Fawry app and copies the meter number; payment happens inside their app and we never see money or card details.</p>
 <p><b>Limits:</b> Sanady is not a doctor, therapy or diagnosis. Medication reminders only, never dosing. The purchase advisor organises spending only and never recommends investments or loans. If a user expresses risk of self-harm, Sanady stops and shows real support lines (Egypt 08008880700 / 0220816831, UAE 800 4673, emergency 123 Egypt / 999 UAE).</p>

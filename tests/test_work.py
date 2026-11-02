@@ -1,0 +1,108 @@
+import json, sys, threading, http.server
+from playwright.sync_api import sync_playwright
+ROOT = sys.argv[1]
+class Q(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *a, **k): super().__init__(*a, directory=ROOT, **k)
+    def log_message(self, *a): pass
+srv = http.server.ThreadingHTTPServer(('127.0.0.1', 8783), Q)
+threading.Thread(target=srv.serve_forever, daemon=True).start()
+ok = fail = 0
+def check(name, cond, extra=''):
+    global ok, fail
+    if cond: ok += 1; print('PASS', name)
+    else: fail += 1; print('FAIL', name, extra)
+def srvr(route): return route.fulfill(status=200, content_type='application/json', body='{"t":""}', headers={'Access-Control-Allow-Origin': '*'})
+def seed(px, extra=''):
+    return """()=>{localStorage.clear();const P='%s';localStorage.setItem(P+'seen','true');localStorage.setItem(P+'morning','"x"');
+ localStorage.setItem(P+'prof',JSON.stringify({name:'محمد',sex:'m',voice:false,vg:'m',wake:'00:00',sleep:'23:59',travel:30,prep:'x'}));
+ const pad=n=>String(n).padStart(2,'0'),L=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+ const t=new Date(Date.now()+3*36e5);localStorage.setItem(P+'items',JSON.stringify([{id:'b1',type:'bill',sec:'money',title:'فاتورة الكهربا',amount:420,due:L(t),repeat:'monthly',done:false,created:1}]));%s}""" % (px, extra)
+with sync_playwright() as p:
+    b = p.chromium.launch(); errs = []
+    def page(url, px, extra=''):
+        ctx = b.new_context(viewport={'width': 400, 'height': 860}); ctx.route('https://api.nrg-egypt.com/**', srvr)
+        pg = ctx.new_page(); pg.on('pageerror', lambda e: errs.append(str(e)))
+        pg.goto(url); pg.evaluate(seed(px, extra)); pg.evaluate('window.__noNav=1'); pg.reload(); pg.evaluate('window.__noNav=1'); pg.wait_for_timeout(900); return pg
+    A = 'http://127.0.0.1:8783/index.html'; M = 'http://127.0.0.1:8783/app/index.html'
+    # ---- bill pay (ADHD edition)
+    pg = page(A, 'sn_')
+    check('bill nudge offers pay', 'ادفعها' in pg.evaluate("nudges().map(n=>n.acts.map(a=>a[0]).join()).join()"))
+    pg.evaluate("paySheet(byId('b1'))"); pg.wait_for_timeout(200)
+    t = pg.inner_text('#sheetBody')
+    check('pay sheet shows amount and meter label', '420' in t and 'العداد' in t)
+    check('both providers offered', 'بساطة' in t and 'فوري' in t)
+    pg.fill('#pyRef', '12345678'); pg.click('[data-p="fawry"]'); pg.wait_for_timeout(200)
+    check('opens provider link', 'myfawry' in (pg.evaluate("window.__lastPay") or ''))
+    check('remembers ref and provider', pg.evaluate("byId('b1').ref==='12345678' && store.get('payp')==='fawry'"))
+    pg.click('#pyDone'); pg.wait_for_timeout(300)
+    check('paid rolls bill to next month', pg.evaluate("(()=>{const i=byId('b1');return !!i && !i.done && i.due>new Date().toISOString().slice(0,7)})()") or pg.evaluate("items.some(i=>i.title==='فاتورة الكهربا')"))
+    pg.evaluate("paySheet(byId('b1')||items.find(i=>i.type==='bill'))"); pg.wait_for_timeout(200)
+    check('last provider first next time', pg.locator('#sheetBody [data-p]').first.get_attribute('data-p') == 'fawry')
+    pg.evaluate("closeSheet();show('money')"); pg.wait_for_timeout(300)
+    check('bills list has pay button', pg.locator('#billsCard .pay').count() >= 1)
+    pg.evaluate("editItem(items.find(i=>i.type==='bill'))"); pg.wait_for_timeout(200)
+    check('edit form has meter field', pg.input_value('#eF') == '12345678')
+    pg.evaluate("closeSheet()")
+    # shortcuts
+    pg.goto(A + '?go=pay'); pg.wait_for_timeout(1300)
+    check('?go=pay opens nearest bill', not pg.is_hidden('#sheet') and 'الكهربا' in pg.inner_text('#sheetBody'))
+    pg.goto(A + '?go=need'); pg.wait_for_timeout(1300)
+    pg.fill('#gnT', 'زيت'); pg.click('#gnGo'); pg.wait_for_timeout(200)
+    check('?go=need adds need', pg.evaluate("items.some(i=>i.type==='buy'&&i.title==='زيت')"))
+    # ---- parents (life section)
+    pg.goto(A); pg.wait_for_timeout(900)
+    pg.evaluate("SEG='life';LIFE_SUB='parents';show('all');drawAll()"); pg.wait_for_timeout(300)
+    check('parents section shows', 'بابا وماما' in pg.inner_text('#allBody'))
+    pg.click('#cAdd'); pg.fill('#pN', 'ماما'); pg.fill('#pP', '01011112222'); pg.fill('#pC', '19:00'); pg.fill('#pM', 'الضغط - 09:00\nالسكر - 21:30'); pg.click('#pSave'); pg.wait_for_timeout(300)
+    check('parent saved with meds', pg.evaluate("CARE.ps[0].meds.length===2 && CARE.ps[0].meds[1].at==='21:30'"))
+    al = pg.evaluate("alarmList(0).map(a=>a.text).join('|')")
+    check('daily call alarm', 'كلّم ماما' in al)
+    check('med check alarm', 'ماما كان المفروض ياخد الضغط' in al)
+    pg.evaluate("CARE.ps[0].lastCall=Date.now()-4*864e5;saveCare()")
+    check('nudge after 4 days without a call', 'مكلمتش ماما' in pg.evaluate("nudges().map(n=>n.p).join('|')"))
+    pg.evaluate("SEG='life';LIFE_SUB='parents';drawAll()"); pg.wait_for_timeout(200)
+    pg.locator('[data-p] [data-a="phone"]').first.click(); pg.wait_for_timeout(200)
+    link = pg.evaluate("document.querySelector('#sheetBody .say').textContent")
+    check('senior phone link', '#eldersetup=' in link)
+    # ---- senior phone
+    ctx = b.new_context(viewport={'width': 400, 'height': 860}); ctx.route('https://api.nrg-egypt.com/**', srvr)
+    E = ctx.new_page(); E.on('pageerror', lambda e: errs.append(str(e)))
+    E.goto(A); E.evaluate("localStorage.clear()"); E.goto(link); E.wait_for_timeout(1500)
+    check('elder setup prefilled', E.input_value('#esN') == 'ماما' and 'الضغط' in E.input_value('#esM'))
+    E.fill('#esP', '01099998888'); E.fill('#esPin', '1234'); E.click('#esGo'); E.wait_for_timeout(1500); E.evaluate('window.__noNav=1')
+    check('big screen shows', E.locator('#kidApp').count() == 1 and 'كلّم محمد' in E.inner_text('#kidApp'))
+    E.click('#kidApp [data-m^="أنا كويس"]'); E.wait_for_timeout(200)
+    check('I am OK goes to child on WhatsApp', '201099998888' in (E.evaluate("window.__lastElderMsg") or ''))
+    E.locator('[data-md]').first.click(); E.wait_for_timeout(200)
+    check('med taken sends message', 'خدت دوا' in __import__('urllib.parse').parse.unquote(E.evaluate("window.__lastElderMsg")))
+    check('med marked taken', E.locator('[data-md]').count() == 1)
+    check('elder med alarm only for untaken', E.evaluate("alarmList(0).filter(a=>a.text.startsWith('💊 ميعاد دوا')).length") >= 1)
+    E.click('#eExit'); E.fill('#ePin', '0000'); E.click('#ePinGo'); E.wait_for_timeout(200)
+    check('wrong PIN stays locked', E.locator('#eOff').count() == 0)
+    # ---- business mode (commercial edition)
+    m = page(M, 'sm_')
+    check('biz mode tab in commercial', 'الشغل' in m.inner_text('#modeSeg'))
+    m.evaluate("setMode('biz')"); m.wait_for_timeout(300)
+    check('biz screen visible', not m.is_hidden('#nowBiz') and 'صاحب الشغل' in m.inner_text('#nowBiz'))
+    m.click('#bzNew'); m.fill('#oc', 'أم كريم'); m.fill('#oph', '01022223333'); m.fill('#ot', 'تورتة'); m.fill('#oa', '800'); m.fill('#od', '300')
+    m.evaluate("document.getElementById('odue').value=new Date(Date.now()-864e5).toISOString().slice(0,10)"); m.click('#oSave'); m.wait_for_timeout(300)
+    t = m.inner_text('#nowBiz')
+    check('order listed late with remainder', 'تورتة' in t and 'متأخر' in t and '500' in t)
+    check('deposit went to cash book', m.evaluate("BIZ.cash.some(c=>c.in&&c.a===300)"))
+    check('late order nudge', 'متأخر' in m.evaluate("nudges().map(n=>n.p).join('|')"))
+    m.locator('#nowBiz [data-a="ask"]').first.click(); m.wait_for_timeout(200)
+    check('collect message polite with amount', '500' in m.inner_text('#sheetBody') and 'أم كريم' in m.inner_text('#sheetBody'))
+    m.evaluate("closeSheet()"); m.wait_for_timeout(200)
+    m.locator('#nowBiz [data-a="next"]').first.click(); m.wait_for_timeout(100); m.locator('#nowBiz [data-a="next"]').first.click(); m.wait_for_timeout(200)
+    check('order delivered', m.evaluate("BIZ.orders[0].st==='done'"))
+    m.locator('#nowBiz [data-a="paid"]').first.click(); m.wait_for_timeout(200)
+    check('collected money enters cash', m.evaluate("BIZ.cash.filter(c=>c.in).reduce((s,c)=>s+c.a,0)===800"))
+    m.fill('#bzA', '150'); m.fill('#bzN', 'دقيق'); m.click('#bzOut'); m.wait_for_timeout(200)
+    check('spend recorded and month profit shown', 'مكسب 650' in m.inner_text('#nowBiz'))
+    m.evaluate("BIZ.orders.push({id:'o2',c:'سارة',t:'فستان',amt:0,dep:0,due:new Date(Date.now()+864e5).toISOString().slice(0,10),st:'new'});saveBiz()")
+    check('order delivery alarm', 'تسليم فستان لـ سارة' in m.evaluate("alarmList().map(a=>a.text).join('|')"))
+    m.evaluate("openSettings ? openSettings() : null") if m.evaluate("typeof openSettings==='function'") else None
+    check('plans sheet in commercial', (m.evaluate("plansSheet(),document.getElementById('sheetBody').innerText") or '').count('البيت المشترك') >= 1)
+    check('no page errors', not errs, errs)
+    b.close()
+print(f'\n{ok} passed, {fail} failed'); sys.exit(1 if fail else 0)

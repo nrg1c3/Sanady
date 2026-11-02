@@ -5,10 +5,10 @@ const ED=window.SANADY_ED==='main'?'main':'adhd';
 const DK=ED==='main'?'sm_':'sn_';
 const BRAND=ED==='main'?'مُدبّر':'سندي';
 const brandify=s=>ED==='main'?String(s).replace(/سندي/g,BRAND):s; // each app keeps its own data, device id and alarms
-const BRAIN_URL='https://2.31.109.72.sslip.io/webhook/sanady-brain';
-const TTS_URL='https://2.31.109.72.sslip.io/webhook/wasl-tts';
+const BRAIN_URL='https://api.nrg-egypt.com/webhook/sanady-brain';
+const TTS_URL='https://api.nrg-egypt.com/webhook/wasl-tts';
 /* every request to our server carries a signed device token (the voice service requires it) */
-(()=>{const BASE='https://2.31.109.72.sslip.io/webhook/',K='wasl-nrg-2026',_fetch=window.fetch.bind(window);
+(()=>{const BASE='https://api.nrg-egypt.com/webhook/',K='wasl-nrg-2026',_fetch=window.fetch.bind(window);
  const get=k=>{try{return localStorage.getItem(k)}catch(e){return null}},set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
  let dev=get(DK+'dev');if(!dev||!/^[A-Za-z0-9_-]{8,64}$/.test(dev)){dev=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/[^A-Za-z0-9]/g,'').slice(0,32);set(DK+'dev',dev)}
  let tok=get(DK+'tok')||'',triedAt=+(get(DK+'tok_at')||0),pending=null;
@@ -124,16 +124,16 @@ async function ttsBlob(t,useCache,signal){const g=prof.vg==='m'?'m':'f';const ke
 async function speak(t,done){t=brandify(String(t||'').trim());if(!t||!prof.voice){done&&done();return}
  try{speechSynthesis.cancel()}catch(e){}try{AUD.pause()}catch(e){}const me={};speaking=me;
  const fin=()=>{if(speaking===me)speaking=null;done&&done()};
- try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),12000);const b=await ttsBlob(t,!!DEMO,ac.signal);clearTimeout(to);if(speaking!==me)return;
+ try{if(prof.lang&&prof.lang!=='eg')throw 0;const ac=new AbortController();const to=setTimeout(()=>ac.abort(),12000);const b=await ttsBlob(t,!!DEMO,ac.signal);clearTimeout(to);if(speaking!==me)return;
   const u=URL.createObjectURL(b);AUD.src=u;AUD.onended=()=>{URL.revokeObjectURL(u);fin()};AUD.onerror=fin;await AUD.play();return}catch(e){}
- try{const u=new SpeechSynthesisUtterance(t);u.lang='ar-EG';u.rate=.95;const v=speechSynthesis.getVoices().find(v=>/^ar/i.test(v.lang));if(v)u.voice=v;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u)}catch(e){fin()}}
+ try{const L=({gulf:'ar-AE',en:'en-US'})[prof.lang]||'ar-EG';const u=new SpeechSynthesisUtterance(t);u.lang=L;u.rate=.95;const v=speechSynthesis.getVoices().find(v=>v.lang===L)||speechSynthesis.getVoices().find(v=>v.lang.slice(0,2)===L.slice(0,2));if(v)u.voice=v;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u)}catch(e){fin()}}
 function hush(){speaking=null;try{AUD.pause()}catch(e){}try{speechSynthesis.cancel()}catch(e){}}
 
 /* ---------- voice in ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,recWant=false,recFinal='';
 function startRec(onUpd,onState){if(!SR){onState&&onState('nosr');return false}hush();recWant=true;recFinal='';
  try{rec&&rec.abort()}catch(e){}rec=null;let fails=0,t0=0;
- const go=()=>{const me=new SR();rec=me;me.lang='ar-EG';me.continuous=true;me.interimResults=true;t0=Date.now();
+ const go=()=>{const me=new SR();rec=me;me.lang=({gulf:'ar-AE',en:'en-US'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=true;t0=Date.now();
   me.onstart=()=>{if(rec===me)onState&&onState('on')};
   me.onresult=e=>{if(rec!==me)return;let int='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)recFinal+=(recFinal?' ':'')+r[0].transcript.trim();else int+=r[0].transcript}onUpd&&onUpd(recFinal,int)};
   me.onerror=ev=>{if(rec!==me)return;if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){recWant=false;onState&&onState('blocked')}};
@@ -143,11 +143,16 @@ function stopRec(){recWant=false;try{rec&&rec.stop()}catch(e){}}
 
 /* ---------- brain (n8n + Claude), with offline fallback ---------- */
 function brainCtx(){return{profile:{name:prof.name,sex:prof.sex},now:toLocal(NOW())+' ('+DAYS[NOW().getDay()]+')'}}
+// personal numbers never leave the phone: phones, emails, card and ID numbers become ⟦n⟧ and come back filled in
+function maskPII(text,keep){return String(text||'').replace(/[\w.+-]+@[\w-]+\.[\w.]+|(?:\+|00)?\d[\d\s-]{9,}\d/g,m=>{const d=m.replace(/\D/g,'');if(!/@/.test(m)&&d.length<10)return m;keep.push(m);return '⟦'+keep.length+'⟧'})}
+function unmaskPII(v,keep){if(!keep.length)return v;if(typeof v==='string')return v.replace(/⟦(\d+)⟧/g,(m,i)=>keep[+i-1]||m);if(Array.isArray(v))return v.map(x=>unmaskPII(x,keep));if(v&&typeof v==='object'){const o={};for(const k in v)o[k]=unmaskPII(v[k],keep);return o}return v}
 async function brain(mode,extra){if(DEMO&&DEMO.brain){const r=DEMO.brain(mode,extra);if(r){await new Promise(z=>setTimeout(z,900));return r}}
- const body={k:'wasl-nrg-2026',mode,ed:ED,...brainCtx(),...extra};
+ const keep=[];extra=Object.assign({},extra);['text','note','to'].forEach(k=>{if(typeof extra[k]==='string')extra[k]=maskPII(extra[k],keep)});
+ if(Array.isArray(extra.items))extra.items=extra.items.map(i=>Object.assign({},i,{title:maskPII(i.title,keep)}));
+ const body={k:'wasl-nrg-2026',mode,ed:ED,lang:prof.lang||'eg',...brainCtx(),...extra};
  for(let k=0;k<2;k++){try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),22000);
   const r=await fetch(BRAIN_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ac.signal});clearTimeout(to);
-  if(r.ok){const j=await r.json();if(!j.error)return j}}catch(e){}}
+  if(r.ok){const j=await r.json();if(!j.error)return unmaskPII(j,keep)}}catch(e){}}
  return null}
 /* offline: simple keyword sorting so the brain dump never gets lost */
 function localSort(text){const needs=[];
@@ -226,7 +231,10 @@ function applyTalk(r,text){const added=[];const lines=[];
  $('dState').hidden=true;$('dHeard').hidden=true;$('dText').hidden=true;$('dDone').closest('.acts').hidden=true;
  $('dRes').innerHTML=`<div class="stack"><div class="say">${esc(reply)}</div>${r.offline?'<p class="note">⚠️ رتبتهم من غير نت، راجعهم.</p>':''}${found?'<div class="say">'+esc(found)+'</div>':''}
   ${lines.length?'<div class="res">'+lines.map(l=>'<small class="note">'+esc(l)+'</small>').join('')+'</div>':''}<div class="res">${gHTML}</div>${wantsHTML}
-  <div class="acts"><button class="btn" id="dOk">تمام</button><button class="btn ghost" id="dMore">🎙️ كمان</button></div></div>`;
+  ${text?`<details class="heardback"><summary>اللي سمعته منك</summary><p class="note">${esc(text)}</p></details>`:''}
+  <div class="acts"><button class="btn" id="dOk">تمام</button><button class="btn ghost" id="dMore">🎙️ كمان</button>${added.length?'<button class="btn ghost" id="dUndo">لغي اللي اتضاف</button>':''}</div>${added.length?'<p class="note">دوس على أي حاجة عشان تعدّلها.</p>':''}</div>`;
+ $('dRes').querySelectorAll('.item[data-id] .tx').forEach(tx=>tx.onclick=()=>{const it=byId(tx.closest('.item').dataset.id);if(it)editItem(it)});
+ if($('dUndo'))$('dUndo').onclick=()=>{added.forEach(a=>{items=items.filter(i=>i.id!==a.id)});save();toast('لغيت اللي اتضاف');closeSheet()};
  $('dRes').querySelectorAll('.rm').forEach(b=>b.onclick=()=>{const row=b.closest('.item');removeItem(row.dataset.id);row.remove()});
  if(V)bindVerdict(V,r.wants);
  $('dOk').onclick=closeSheet;$('dMore').onclick=()=>openDump();
@@ -484,7 +492,7 @@ function icsAll(){const n=nowMs();const list=items.filter(i=>!i.done&&i.type!=='
 
 /* ---------- MONEY screen ---------- */
 /* ---------- Telegram reminders: reach the phone even when Sanady is closed ---------- */
-const REMIND_URL='https://2.31.109.72.sslip.io/webhook/sanady-remind';
+const REMIND_URL='https://api.nrg-egypt.com/webhook/sanady-remind';
 const TG_READY=false; // Telegram reminders are switched off until the Sanady bot exists
 function tgOn(){return TG_READY&&!DEMO&&store.get('tg',false)}
 async function tgCall(mode,extra){let dev='';try{dev=localStorage.getItem(DK+'dev')||''}catch(e){}
@@ -587,7 +595,7 @@ function docsSheet(){const n=nowMs();const list=Object.keys(docs).map(k=>({k,e:d
  $('dcAdd').onclick=()=>{const nm=$('dcN').value.trim().slice(0,40),e=$('dcE').value;if(!nm||!/^\d{4}-\d{2}-\d{2}$/.test(e)){toast('اكتب الاسم والتاريخ');return}docRenew(nm,e);toast('تمام، هفكّرك تجدد '+nm+' قبلها بشهر');render();docsSheet()}}
 
 /* ---------- alarms: ring inside the app, and through push when the app is closed ---------- */
-const PUSH_URL='https://2.31.109.72.sslip.io/webhook/sanady-push';
+const PUSH_URL='https://api.nrg-egypt.com/webhook/sanady-push';
 const ALARM_TYPES=['task','call','appt','med','bill'];
 function alarmText(i,d){const t=i.title;
  if(i.type==='appt')return'🚶 اتحرك دلوقتي عشان تلحق: '+t+(i.where?' في '+i.where:'')+' الساعة '+fmtT(d);

@@ -126,7 +126,7 @@ def icon_svg(d, size=512, scale=None, rounded=False):
 
 
 def lockup_html(d, w, h, on_dark, tagline=None):
-    """Mark + 'Sayvo' wordmark + small Arabic name. on_dark -> brand bg."""
+    """Mark + Sayvo wordmark (no Arabic: the brand is global). on_dark -> brand bg."""
     p = d["dark"] if on_dark else d["light"]
     if on_dark:
         c0, c1 = d["bg"]
@@ -153,7 +153,7 @@ def lockup_html(d, w, h, on_dark, tagline=None):
     </style></head><body>
       <div class="row">
         <svg width="{mh}" height="{mh}" viewBox="0 0 100 100">{d['mark'](p)}</svg>
-        <div class="words"><div class="en">Sayvo</div><div class="ar">سايفو</div></div>
+        <div class="words"><div class="en">Sayvo</div></div>
       </div>{tag}
     </body></html>"""
 

@@ -153,7 +153,7 @@ function srText(e){const segs=[];let int='';const norm=x=>x.replace(/\s+/g,' ').
  for(let i=0;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)add(r[0].transcript);else int+=' '+r[0].transcript}
  const fin=segs.join(' ');int=norm(int);const last=segs[segs.length-1]||'';if(last&&int.startsWith(last))int=norm(int.slice(last.length));
  return{fin,int}}
-function startRec(onUpd,onState){if(!SR){onState&&onState('nosr');return false}hush();recWant=true;recFinal='';
+function startRec(onUpd,onState,init){if(!SR){onState&&onState('nosr');return false}hush();recWant=true;recFinal=init||'';
  try{rec&&rec.abort()}catch(e){}rec=null;let fails=0,t0=0;
  const go=()=>{const me=new SR();rec=me;me.lang=({gulf:'ar-AE',en:'en-US',fr:'fr-FR',es:'es-ES',de:'de-DE'})[prof.lang]||'ar-EG';me.continuous=true;me.interimResults=true;t0=Date.now();
   me.onstart=()=>{if(rec===me)onState&&onState('on')};
@@ -163,6 +163,16 @@ function startRec(onUpd,onState){if(!SR){onState&&onState('nosr');return false}h
   me.onend=()=>{if(rec!==me)return;rec=null;if(Date.now()-t0<1500)fails++;if(recWant&&fails<6)setTimeout(()=>{if(recWant&&!rec)try{go()}catch(e){}},fails?400*fails:200);else{recWant=false;onState&&onState('off')}};
   try{me.start()}catch(e){}};go();return true}
 function stopRec(){recWant=false;try{rec&&rec.stop()}catch(e){}}
+
+/* keep the screen on while Sayvo is open (like Wasl): the phone locking mid-sentence stops the mic.
+   Asked again whenever the app comes back to the front; off in settings. */
+let WL=null;
+async function keepAwake(){if(!('wakeLock' in navigator)||document.visibilityState!=='visible'||store.get('awake',true)===false)return;
+ try{if(!WL){WL=await navigator.wakeLock.request('screen');WL.addEventListener('release',()=>{WL=null})}}catch(e){WL=null}}
+function letSleep(){try{WL&&WL.release()}catch(e){}WL=null}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')keepAwake()});
+['pointerdown','keydown'].forEach(ev=>addEventListener(ev,()=>{if(!WL)keepAwake()},{passive:true}));
+setTimeout(keepAwake,500);window.noSleep=keepAwake;
 
 /* ---------- brain (n8n + Claude), with offline fallback ---------- */
 function brainCtx(){return{profile:{name:prof.name,sex:prof.sex},now:toLocal(NOW())+' ('+DAYS[NOW().getDay()]+')'}}
@@ -224,11 +234,14 @@ function openDump(prefill,hint){openSheet(`<h2>فرّغ دماغك</h2><div clas
  const heard=$('dHeard'),txt=$('dText');let typed=false;
  const showType=()=>{typed=true;txt.hidden=false;heard.hidden=true;$('dState').hidden=true;stopRec();txt.focus()};
  $('dType').onclick=showType;
+ txt.oninput=()=>store.set('dumpDraft',txt.value.trim()?{t:txt.value,at:Date.now()}:null);
  if(prefill){showType();txt.value=prefill}
  else if(DEMO&&DEMO.dumpText){$('dState').innerHTML='<span class="dot"></span><span>بسمعك...</span>';DEMO.typeInto(heard,DEMO.dumpText)}
- else{const ok=startRec((f,i)=>{if(!heard.isConnected)return;heard.innerHTML=esc(f)+(i?' <span class="int">'+esc(i)+'</span>':'')},st=>{if(!$('dState'))return;if(st==='blocked'||st==='nosr'){$('dState').innerHTML='<span>الميكروفون مش متاح، اكتب بدل الكلام.</span>';showType()}else if(st==='off'&&!typed)$('dState').innerHTML='<span>وقفت. دوس "خلصت" أو كمّل كتابة.</span>'});if(!ok)showType()}
+ else{const dr=store.get('dumpDraft',null),d0=dr&&Date.now()-dr.at<2*864e5?dr.t:'';if(d0){heard.innerHTML=esc(d0);$('dState').insertAdjacentHTML('afterend','<p class="note" id="dKept">كمّلت من آخر كلام قلته وما اتبعتش ✓ <button class="link" id="dClear">امسحه</button></p>');$('dClear').onclick=()=>{store.set('dumpDraft',null);recFinal='';heard.innerHTML='';$('dKept').remove();openDump()}}
+  const ok=startRec((f,i)=>{if(f)store.set('dumpDraft',{t:f,at:Date.now()});if(!heard.isConnected)return;heard.innerHTML=esc(f)+(i?' <span class="int">'+esc(i)+'</span>':'')},st=>{if(!$('dState'))return;if(st==='blocked'||st==='nosr'){$('dState').innerHTML='<span>الميكروفون مش متاح، اكتب بدل الكلام.</span>';showType()}else if(st==='off'&&!typed)$('dState').innerHTML='<span>وقفت. دوس "خلصت" أو كمّل كتابة.</span>'},d0);if(!ok)showType()}
  $('dDone').onclick=async()=>{stopRec();const text=(typed?txt.value:(DEMO&&DEMO.dumpText&&!recFinal?heard.textContent:(recFinal||heard.textContent))).trim();if(text.length<2){toast('لسه ما قلتش حاجة');return}
   $('dDone').disabled=true;$('dType').hidden=true;$('dState').hidden=false;$('dState').className='listening thinking';$('dState').innerHTML='<span class="dot"></span><span>بيرتب...</span>';
+  store.set('dumpDraft',null);
   if(CRISIS_RX.test(text)){closeSheet();showCrisis();return}
   const open=items.filter(i=>!i.done).slice(-50).map(i=>({id:i.id,type:i.type,sec:i.sec,title:i.title,due:i.due}));
   const fq=findQuestion(text);if(fq){const k=placeOf(fq);if(k){applyTalk({reply:'',add:[],update:[],find:fq},text);return}}

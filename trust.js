@@ -34,6 +34,10 @@ function iosSheet(){openSheet(`<h2>📲 حط ${BRAND} على الشاشة الر
 NUDGE_EXTRA.push((t,hard)=>{if(!IS_LIVE||!IOS_TAB()||store.get('iosNag','')===dayKey())return[];
  return[{id:'ios'+dayKey(),pr:74,i:'📲',p:'على الآيفون لازم تحطني على الشاشة الرئيسية عشان أرن عليك والتطبيق مقفول. خطوتين بس.',acts:[['وريني إزاي',iosSheet],['بعدين',()=>{store.set('iosNag',dayKey());render()}]]}]});
 
+/* a brain dump that was cut off (screen locked, call came in) is kept until it's sent */
+NUDGE_EXTRA.push(t=>{const d=store.get('dumpDraft',null);if(!d||!d.t||t-d.at>2*864e5||$('dHeard'))return[];
+ return[{id:'dd'+d.at,pr:80,i:'🎙️',p:'كلامك اللي ما خلصش محفوظ: «'+String(d.t).slice(0,60)+(d.t.length>60?'…':'')+'». تكمّله؟',acts:[['كمّل',()=>openDump()],['امسحه',()=>{store.set('dumpDraft',null);render()}]]}]});
+
 /* 2) encrypted backup in the cloud, opened only with your recovery code */
 const BKA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const bkNewCode=()=>{const a=crypto.getRandomValues(new Uint8Array(20));return Array.from(a,x=>BKA[x%BKA.length]).join('').replace(/(.{5})(?=.)/g,'$1-')};
@@ -126,6 +130,8 @@ function trustSettings(){const box=document.querySelector('#sheetBody .form');if
  const k=$('sNot');k&&k.insertAdjacentHTML('afterend',`<button class="btn ghost" id="sAlarm">🩺 اتأكد إن المنبّه شغال</button><button class="btn ghost" id="sCloud">☁️ نسخة احتياطية تلقائية${tGet('bk_code')?' ✓':''}</button>${IS_ADHD?`<button class="btn ghost" id="sPilot">🧪 تجربة ${esc(BRAND)}${PILOT&&PILOT.on?' ✓':''}</button>`:''}`);
  $('sCloud').insertAdjacentHTML('afterend',`<label class="tog"><input type="checkbox" id="sStats" ${store.get('noStats',false)?'':'checked'}> ابعت أرقام استخدام مجهولة (عدد بس، من غير أي كلام) عشان نحسّن ${esc(BRAND)}</label>`);
  $('sStats').onchange=e=>store.set('noStats',!e.target.checked);
+ $('sStats').closest('label').insertAdjacentHTML('afterend',`<label class="tog"><input type="checkbox" id="sAwake" ${store.get('awake',true)===false?'':'checked'}> الشاشة تفضل منوّرة وإنت فاتح ${esc(BRAND)}</label>`);
+ $('sAwake').onchange=e=>{store.set('awake',e.target.checked);if(e.target.checked)keepAwake();else letSleep()};
  $('sAlarm').onclick=alarmSheet;$('sCloud').onclick=backupCloudSheet;if($('sPilot'))$('sPilot').onclick=pilotSheet}
 
 function trustTick(){if(!IS_LIVE)return;backupNow(true);pilotSend();usageSend()}

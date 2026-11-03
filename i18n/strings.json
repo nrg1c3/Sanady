@@ -12310,5 +12310,35 @@
 "fr": "📲 Ajoutez",
 "es": "📲 Añade",
 "de": "📲 Lege"
+},
+"». تكمّله؟": {
+"en": "”. Continue it?",
+"fr": "». On continue ?",
+"es": "». ¿Lo continúas?",
+"de": "“. Weitermachen?"
+},
+"الشاشة تفضل منوّرة وإنت فاتح": {
+"en": "Keep the screen on while using",
+"fr": "Garder l’écran allumé pendant l’utilisation de",
+"es": "Mantener la pantalla encendida mientras usas",
+"de": "Bildschirm anlassen, solange du nutzt:"
+},
+"كلامك اللي ما خلصش محفوظ: «": {
+"en": "What you were saying is saved: “",
+"fr": "Ce que vous disiez est gardé : «",
+"es": "Lo que estabas diciendo está guardado: «",
+"de": "Was du gesagt hast, ist gespeichert: „"
+},
+"كمّل": {
+"en": "Continue",
+"fr": "Continuer",
+"es": "Continuar",
+"de": "Weiter"
+},
+"كمّلت من آخر كلام قلته وما اتبعتش ✓": {
+"en": "Picked up from what you said last time that wasn't sent ✓",
+"fr": "Repris là où vous vous étiez arrêté, ce n’était pas envoyé ✓",
+"es": "Seguí desde lo último que dijiste y no se envió ✓",
+"de": "Weiter ab dem, was du zuletzt gesagt hast und noch nicht gesendet war ✓"
 }
 }

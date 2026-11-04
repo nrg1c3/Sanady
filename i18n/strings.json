@@ -12340,5 +12340,11 @@
 "fr": "Repris là où vous vous étiez arrêté, ce n’était pas envoyé ✓",
 "es": "Seguí desde lo último que dijiste y no se envió ✓",
 "de": "Weiter ab dem, was du zuletzt gesagt hast und noch nicht gesendet war ✓"
+},
+"السمع من السيرفر مش شغال، هسمع بالموبايل": {
+"en": "Server listening isn't working, switching to the phone's listening",
+"fr": "L’écoute par le serveur ne marche pas, je passe à celle du téléphone",
+"es": "La escucha del servidor no funciona, uso la del teléfono",
+"de": "Zuhören über den Server klappt nicht, ich nutze das Handy"
 }
 }

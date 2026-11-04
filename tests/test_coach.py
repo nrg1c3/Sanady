@@ -6,7 +6,7 @@ class H(http.server.SimpleHTTPRequestHandler):
     def log_message(s,*a): pass
 srv=http.server.ThreadingHTTPServer(('127.0.0.1',8797),H);threading.Thread(target=srv.serve_forever,daemon=True).start()
 asks=[];errs=[]
-FAKE="""window.SpeechRecognition=class{constructor(){this.continuous=false;window.__sr=this;this.results=[]}start(){setTimeout(()=>this.onstart&&this.onstart(),10)}stop(){this.onend&&this.onend()}abort(){this.onend&&this.onend()}};
+FAKE="""navigator.mediaDevices&&(navigator.mediaDevices.getUserMedia=()=>Promise.reject(Object.assign(new Error("no"),{name:"NotFoundError"})));window.SpeechRecognition=class{constructor(){this.continuous=false;window.__sr=this;this.results=[]}start(){setTimeout(()=>this.onstart&&this.onstart(),10)}stop(){this.onend&&this.onend()}abort(){this.onend&&this.onend()}};
 window.__say=(t,final)=>{const s=window.__sr;const r={0:{transcript:t},isFinal:!!final};const last=s.results[s.results.length-1];if(last&&!last.isFinal)s.results[s.results.length-1]=r;else s.results.push(r);s.onresult({results:s.results,resultIndex:0})};"""
 def brain(route):
     b=json.loads(route.request.post_data or '{}')

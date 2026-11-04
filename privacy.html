@@ -8,6 +8,7 @@
 <h2>اللي بيتبعت بره الموبايل</h2><ul>
 <li><b>الكلام اللي بتقوله أو بتكتبه:</b> التعرّف على الصوت بيتم بخاصية الموبايل أو المتصفح نفسه، والنص بس هو اللي بيتبعت لسيرفرنا (n8n) ومنه لـ Claude من Anthropic عشان يترتب، ومعاه قايمة مختصرة بالحاجات المفتوحة واسمك الأول. السيرفر مضبوط إنه ما يحفظش بيانات التشغيل.</li>
 <li><b>صوت سايفو:</b> الجملة اللي سايفو هيقولها بالعامية المصرية بتتبعت لخدمة تحويل نص لصوت (ElevenLabs) عن طريق نفس السيرفر. باقي اللغات بتستخدم صوت الموبايل نفسه.</li>
+<li><b>مستشار في ودنك (Focus+):</b> وهو شغال، الصوت بيتسجل على الموبايل ويتقطع عند كل وقفة، والقطع اللي فيها كلام بس بتتبعت لسيرفرنا ومنه لخدمة تحويل الصوت لنص (ElevenLabs) عشان تتكتب. الصوت والنص ما بيتحفظوش عندنا.</li>
 <li><b>الأرقام الشخصية:</b> أرقام التليفونات والإيميلات وأرقام الكروت والبطايق بتتشال من الكلام على الموبايل قبل ما يطلع، وبترجع مكانها بعد الترتيب. السيرفر مبيشوفهاش.</li>
 <li><b>كود الجهاز:</b> التطبيق بيعمل كود عشوائي للموبايل (مش رقمك ولا اسمك) وتوكن موقّع، وبيبعتهم مع كل طلب عشان نحدد عدد الطلبات لكل جهاز ونمنع الاستخدام الغلط.</li>
 <li><b>المنبّه (اختياري):</b> سيرفرنا بيحفظ مواعيد الرنّ بس (الوقت ورقم داخلي) وعنوان الإشعارات بتاع موبايلك. نص التذكير نفسه ما بيخرجش من موبايلك. لما تقفل المنبّه كل ده بيتمسح.</li>
@@ -29,6 +30,7 @@
 <div class="en" id="en"><h1>Sayvo: Privacy &amp; Safety</h1><small>Last updated November 2026 · Sayvo by NRG</small>
 <p><b>No account, and your data is kept on your phone.</b> Tasks, ideas, money figures, people, item locations and diary are stored on the device and can be wiped in one tap. A few things are sent to our server so the app can work; they are listed here.</p>
 <p><b>What leaves the phone:</b> speech is recognised by the phone or browser itself; only the text is sent to our server (n8n) and from there to Claude by Anthropic to be sorted, with a short list of open items and your first name. The server is set to keep no execution data. In Egyptian Arabic, the sentences Sayvo speaks go to a text-to-speech service (ElevenLabs) through the same server; other languages use the phone's own voice.</p>
+<p><b>Whisper coach (Focus+):</b> while it runs, audio is recorded on the phone and cut at each pause; only the parts with speech are sent to our server and on to a speech-to-text service (ElevenLabs) to be written out. Neither the audio nor the text is kept.</p>
 <p><b>Personal numbers:</b> phone numbers, emails, card and ID numbers are removed from the text on the phone before it is sent, and put back after sorting. The server never sees them.</p>
 <p><b>Device code:</b> the app creates a random device code (not your number or name) and a signed token, sent with each request for rate limits and abuse prevention.</p>
 <p><b>Alarms (optional):</b> our server keeps only alarm times (time plus an internal id) and the phone's push address. The reminder text never leaves the phone. Turning alarms off deletes this.</p>

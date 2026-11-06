@@ -73,10 +73,10 @@ window.tr=tr;window.__i18nMiss=miss;
 /* translate the page as it changes */
 const SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,NOSCRIPT:1};
 const ATTR=['placeholder','title','aria-label'];
-function tNode(t){const p=t.parentNode;if(!p||SKIP[p.nodeName]||p.isContentEditable)return;const v=t.nodeValue;if(!v||!AR.test(v))return;const n=tr(v);if(n!==v)t.nodeValue=n}
+function tNode(t){const p=t.parentNode;if(!p||SKIP[p.nodeName]||p.isContentEditable||(p.closest&&p.closest('[translate=no]')))return;const v=t.nodeValue;if(!v||!AR.test(v))return;const n=tr(v);if(n!==v)t.nodeValue=n}
 function tEl(e){for(const a of ATTR){const v=e.getAttribute&&e.getAttribute(a);if(v&&AR.test(v)){const n=tr(v);if(n!==v)e.setAttribute(a,n)}}
  if(e.nodeName==='INPUT'&&/^(button|submit)$/.test(e.type)&&AR.test(e.value))e.value=tr(e.value)}
-function walk(n){if(!n)return;if(n.nodeType===3)return tNode(n);if(n.nodeType!==1||SKIP[n.nodeName])return;tEl(n);
+function walk(n){if(!n)return;if(n.nodeType===3)return tNode(n);if(n.nodeType!==1||SKIP[n.nodeName]||n.getAttribute('translate')==='no')return;tEl(n);
  const w=document.createTreeWalker(n,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT);let x;while((x=w.nextNode())){if(x.nodeType===3)tNode(x);else tEl(x)}}
 function all(){if(!ready())return;walk(document.body);if(AR.test(document.title))document.title=tr(document.title)}
 new MutationObserver(ms=>{if(!ready())return;for(const m of ms){if(m.type==='characterData')tNode(m.target);else if(m.type==='attributes')tEl(m.target);else m.addedNodes.forEach(walk)}})

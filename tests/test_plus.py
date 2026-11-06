@@ -26,7 +26,7 @@ with sync_playwright() as p:
     pg.goto('http://127.0.0.1:8797/app/index.html'); pg.evaluate("localStorage.setItem('sy_seen','true')"); pg.reload(); pg.wait_for_timeout(600)
     # plans page
     pg.evaluate("plansSheet()"); t = pg.inner_text('#sheetBody')
-    check('plans: free, Plus, Focus+', 'مجاني' in t and 'Sayvo Plus' in t and 'Sayvo Focus+' in t)
+    check('plans: free and Sayvo Focus', 'مجاني' in t and 'سايفو فوكس' in t and 'Plus' not in t)
     check('calls coming soon in Plus', 'قريباً' in t and '📞' in t)
     # summaries: short text -> one final call
     pg.evaluate("closeSheet();runSumm('lecture','تسويق رقمي',{text:'كلام '.repeat(200)})"); pg.wait_for_timeout(1200)

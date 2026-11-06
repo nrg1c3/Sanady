@@ -18,12 +18,27 @@
 <div id="app">
 
 <header class="top">
+ <button class="ic" id="mnuTop" aria-label="القايمة" title="القايمة">☰</button>
  <div class="hello"><b id="greet">أهلاً</b><small id="today"></small></div>
  <div class="topbtns">
   <button class="ic" id="btnFeel" aria-label="مضغوط؟" title="مضغوط؟">🌧️</button>
   <button class="ic" id="btnSet" aria-label="الإعدادات" title="الإعدادات">⚙️</button>
+  <button class="ic orbmini" id="toOrb" aria-label="دايرة الصوت" title="دايرة الصوت"><i></i></button>
  </div>
 </header>
+
+<!-- ============ HOME: just the voice orb (like a call screen) ============ -->
+<section class="screen" id="home">
+ <button class="ic mnu" id="mnuBtn" aria-label="القايمة" title="القايمة">☰</button>
+ <div class="orbbox">
+  <div class="orbsay" id="orbSay" aria-live="polite" translate="no"></div>
+  <button class="orb" id="orb" aria-label="اتكلم"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="core"></i></button>
+  <p class="orbhint" id="orbHint">دوس واتكلم</p>
+  <p class="orbheard" id="orbHeard" dir="auto" translate="no"></p>
+  <button class="orbnow" id="orbNow"></button>
+ </div>
+ <button class="ic kb" id="orbKb" aria-label="اكتب" title="اكتب">⌨️</button>
+</section>
 
 <!-- ============ NOW ============ -->
 <section class="screen on" id="now">
@@ -137,6 +152,19 @@
 </nav>
 </div>
 
+<!-- ============ SIDE MENU ============ -->
+<div class="drawer" id="drawer" hidden><nav class="dbox" id="dbox" aria-label="القايمة">
+ <div class="dhead"><b id="dName">سايفو</b><button class="sx" id="drawerX" aria-label="قفل">✕</button></div>
+ <button data-d="home">🎙️ دايرة الصوت</button>
+ <button data-d="now">🌅 النهارده</button>
+ <button data-d="all">🗂️ المهام وكل حاجة</button>
+ <button data-d="money">💰 الفلوس والفواتير</button>
+ <button data-d="life">🏠 البيت والعيلة</button>
+ <button data-d="focus">🎯 فوكس+</button>
+ <button data-d="plans">⭐ الباقات</button>
+ <button data-d="set">⚙️ الإعدادات</button>
+</nav></div>
+
 <!-- ============ SHEET (generic overlay) ============ -->
 <div class="sheet" id="sheet" hidden><div class="sbox"><button class="sx" id="sheetX" aria-label="قفل">✕</button><div id="sheetBody"></div></div></div>
 <div class="toast" id="toast" hidden></div>
@@ -157,6 +185,8 @@
 <script src="coach.js"></script>
 <script src="plans.js"></script>
 <script src="summ.js"></script>
+<script src="pay.js"></script>
+<script src="orb.js"></script>
 <script src="demo.js"></script>
 </body>
 </html>

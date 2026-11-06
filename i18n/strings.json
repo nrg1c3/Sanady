@@ -12346,5 +12346,305 @@
 "fr": "L’écoute par le serveur ne marche pas, je passe à celle du téléphone",
 "es": "La escucha del servidor no funciona, uso la del teléfono",
 "de": "Zuhören über den Server klappt nicht, ich nutze das Handy"
+},
+". احتفظ بيه عشان ترجّع اشتراكك على أي موبايل.": {
+"en": ". Keep it to bring your subscription back on any phone.",
+"fr": ". Gardez-le pour retrouver votre abonnement sur n’importe quel téléphone.",
+"es": ". Guárdalo para recuperar tu suscripción en cualquier teléfono.",
+"de": ". Bewahre ihn auf, um dein Abo auf jedem Handy wiederherzustellen."
+},
+"أبدأ بدايرة الصوت (من غير ما أشوف حاجة تانية)": {
+"en": "Start on the voice orb (nothing else on screen)",
+"fr": "Commencer sur l’orbe vocal (rien d’autre à l’écran)",
+"es": "Empezar en el orbe de voz (nada más en pantalla)",
+"de": "Mit dem Sprach-Orb starten (sonst nichts auf dem Bildschirm)"
+},
+"أدوات التركيز": {
+"en": "Focus tools",
+"fr": "Outils de concentration",
+"es": "Herramientas de enfoque",
+"de": "Fokus-Werkzeuge"
+},
+"إنت عليها دلوقتي": {
+"en": "Your current plan",
+"fr": "Votre formule actuelle",
+"es": "Tu plan actual",
+"de": "Dein aktueller Plan"
+},
+"اتكلم": {
+"en": "Talk",
+"fr": "Parler",
+"es": "Habla",
+"de": "Sprechen"
+},
+"اشترك في": {
+"en": "Subscribe to",
+"fr": "S’abonner à",
+"es": "Suscribirse a",
+"de": "Abonnieren:"
+},
+"اشتركت قبل كده؟ رجّع اشتراكك": {
+"en": "Subscribed before? Restore your subscription",
+"fr": "Déjà abonné ? Restaurez votre abonnement",
+"es": "¿Ya te suscribiste? Recupera tu suscripción",
+"de": "Schon abonniert? Abo wiederherstellen"
+},
+"اكتب": {
+"en": "Type",
+"fr": "Écrire",
+"es": "Escribir",
+"de": "Tippen"
+},
+"الاشتراك لسه بيتجهز. لحد ما يجهز، كل حاجة مفتوحة ببلاش.": {
+"en": "Subscriptions aren't ready yet. Until then, everything is open for free.",
+"fr": "Les abonnements ne sont pas encore prêts. D’ici là, tout est ouvert gratuitement.",
+"es": "Las suscripciones aún no están listas. Mientras tanto, todo está abierto gratis.",
+"de": "Abos sind noch nicht fertig. Bis dahin ist alles kostenlos offen."
+},
+"الجاي:": {
+"en": "Next:",
+"fr": "Ensuite :",
+"es": "Siguiente:",
+"de": "Als Nächstes:"
+},
+"الدفع لسه بيتجهز": {
+"en": "Payments are still being set up",
+"fr": "Le paiement est en cours de préparation",
+"es": "Los pagos aún se están preparando",
+"de": "Zahlungen werden noch eingerichtet"
+},
+"الدفع ما اتأكدش. لو اتخصم منك فلوس، دوس «رجّع اشتراكك»": {
+"en": "Payment wasn't confirmed. If you were charged, tap “Restore your subscription”",
+"fr": "Paiement non confirmé. Si vous avez été débité, touchez « Restaurer votre abonnement »",
+"es": "El pago no se confirmó. Si te cobraron, toca «Recupera tu suscripción»",
+"de": "Zahlung nicht bestätigt. Falls abgebucht, tippe auf „Abo wiederherstellen“"
+},
+"الدفع من جوجل بلاي مش متاح دلوقتي": {
+"en": "Google Play payment isn't available right now",
+"fr": "Le paiement Google Play n’est pas disponible pour le moment",
+"es": "El pago de Google Play no está disponible ahora",
+"de": "Google-Play-Zahlung ist gerade nicht verfügbar"
+},
+"السيرفر مش متاح دلوقتي، جرّب كمان شوية": {
+"en": "The server isn't available right now, try again shortly",
+"fr": "Le serveur n’est pas disponible, réessayez bientôt",
+"es": "El servidor no está disponible, inténtalo en un rato",
+"de": "Der Server ist gerade nicht erreichbar, versuch es gleich nochmal"
+},
+"الشاشة البسيطة، و«جنبك»، والانتظار قبل المواعيد، وشريك متابعة": {
+"en": "Simple screen, “With you”, waiting mode before appointments, and an accountability buddy",
+"fr": "Écran simple, « À côté de toi », attente avant les rendez-vous et un binôme de suivi",
+"es": "Pantalla simple, «A tu lado», espera antes de las citas y un compañero de seguimiento",
+"de": "Einfacher Bildschirm, „Neben dir“, Warten vor Terminen und ein Begleit-Buddy"
+},
+"الفواتير والفلوس": {
+"en": "Bills and money",
+"fr": "Factures et argent",
+"es": "Facturas y dinero",
+"de": "Rechnungen und Geld"
+},
+"القايمة": {
+"en": "Menu",
+"fr": "Menu",
+"es": "Menú",
+"de": "Menü"
+},
+"الكود ده مش عليه اشتراك شغال": {
+"en": "That code has no active subscription",
+"fr": "Ce code n’a pas d’abonnement actif",
+"es": "Ese código no tiene una suscripción activa",
+"de": "Dieser Code hat kein aktives Abo"
+},
+"الكود مش مظبوط": {
+"en": "That code doesn't look right",
+"fr": "Ce code semble incorrect",
+"es": "Ese código no es correcto",
+"de": "Dieser Code stimmt nicht"
+},
+"الميكروفون مش متاح، اكتب بدل الكلام": {
+"en": "The mic isn't available, type instead",
+"fr": "Le micro n’est pas disponible, écrivez plutôt",
+"es": "El micrófono no está disponible, escribe",
+"de": "Das Mikrofon ist nicht verfügbar, tippe stattdessen"
+},
+"بسمعك… دوس تاني لما تخلص": {
+"en": "Listening… tap again when you're done",
+"fr": "Je vous écoute… touchez à nouveau quand vous avez fini",
+"es": "Te escucho… toca otra vez cuando termines",
+"de": "Ich höre zu… tippe nochmal, wenn du fertig bist"
+},
+"بيرتّب…": {
+"en": "Sorting…",
+"fr": "Je range…",
+"es": "Ordenando…",
+"de": "Sortiere…"
+},
+"تقدر تجربه دلوقتي ببلاش. بعد التجربة هيبقى جزء من اشتراك سايفو فوكس، اللي فيه كل حاجة.": {
+"en": "Try it free now. After the trial it's part of Sayvo Focus, which includes everything.",
+"fr": "Essayez-le gratuitement. Après l’essai, il fera partie de Sayvo Focus, qui inclut tout.",
+"es": "Pruébalo gratis. Después será parte de Sayvo Focus, que lo incluye todo.",
+"de": "Jetzt kostenlos testen. Danach gehört es zu Sayvo Focus, das alles enthält."
+},
+"تلخيص المحاضرات والكتب جزء من سايفو فوكس.": {
+"en": "Lecture and book summaries are part of Sayvo Focus.",
+"fr": "Les résumés de cours et de livres font partie de Sayvo Focus.",
+"es": "Los resúmenes de clases y libros son parte de Sayvo Focus.",
+"de": "Zusammenfassungen von Vorlesungen und Büchern gehören zu Sayvo Focus."
+},
+"جوجل بلاي مش متاح دلوقتي": {
+"en": "Google Play isn't available right now",
+"fr": "Google Play n’est pas disponible pour le moment",
+"es": "Google Play no está disponible ahora",
+"de": "Google Play ist gerade nicht verfügbar"
+},
+"خلصت مرات «سندي يعملها» المجانية للشهر ده. مع": {
+"en": "You've used this month's free “Sayvo does it”. With",
+"fr": "Vous avez utilisé les « Sayvo s’en charge » gratuits du mois. Avec",
+"es": "Usaste los «Sayvo lo hace» gratis de este mes. Con",
+"de": "Die kostenlosen „Sayvo macht’s“ für diesen Monat sind aufgebraucht. Mit"
+},
+"دايرة الصوت": {
+"en": "Voice orb",
+"fr": "Orbe vocal",
+"es": "Orbe de voz",
+"de": "Sprach-Orb"
+},
+"دوس واتكلم": {
+"en": "Tap and talk",
+"fr": "Touchez et parlez",
+"es": "Toca y habla",
+"de": "Tippen und sprechen"
+},
+"دوّر على اشتراكي في جوجل بلاي": {
+"en": "Find my Google Play subscription",
+"fr": "Trouver mon abonnement Google Play",
+"es": "Buscar mi suscripción de Google Play",
+"de": "Mein Google-Play-Abo suchen"
+},
+"رجّع اشتراكك": {
+"en": "Restore your subscription",
+"fr": "Restaurer votre abonnement",
+"es": "Recupera tu suscripción",
+"de": "Abo wiederherstellen"
+},
+"رجّعه": {
+"en": "Restore",
+"fr": "Restaurer",
+"es": "Recuperar",
+"de": "Wiederherstellen"
+},
+"سايفو فوكس": {
+"en": "Sayvo Focus",
+"fr": "Sayvo Focus",
+"es": "Sayvo Focus",
+"de": "Sayvo Focus"
+},
+"قريباً، برصيد": {
+"en": "Coming soon, with credit",
+"fr": "Bientôt, avec du crédit",
+"es": "Pronto, con crédito",
+"de": "Bald, mit Guthaben"
+},
+"كل حاجة اتفتحت.": {
+"en": "Everything is unlocked.",
+"fr": "Tout est débloqué.",
+"es": "Todo está desbloqueado.",
+"de": "Alles ist freigeschaltet."
+},
+"كل حاجة، في اشتراك واحد": {
+"en": "Everything, in one subscription",
+"fr": "Tout, en un seul abonnement",
+"es": "Todo, en una sola suscripción",
+"de": "Alles in einem Abo"
+},
+"كود اشتراكك:": {
+"en": "Your subscription code:",
+"fr": "Votre code d’abonnement :",
+"es": "Tu código de suscripción:",
+"de": "Dein Abo-Code:"
+},
+"كود الاشتراك (اتبعتلك على الإيميل لما دفعت)": {
+"en": "Subscription code (emailed to you when you paid)",
+"fr": "Code d’abonnement (envoyé par e-mail lors du paiement)",
+"es": "Código de suscripción (te llegó por correo al pagar)",
+"de": "Abo-Code (kam per E-Mail, als du bezahlt hast)"
+},
+"ما لقيتش اشتراك شغال على الحساب ده": {
+"en": "No active subscription found on this account",
+"fr": "Aucun abonnement actif trouvé sur ce compte",
+"es": "No hay suscripción activa en esta cuenta",
+"de": "Kein aktives Abo für dieses Konto gefunden"
+},
+"مفيش حاجة مستعجلة دلوقتي": {
+"en": "Nothing urgent right now",
+"fr": "Rien d’urgent pour le moment",
+"es": "Nada urgente ahora",
+"de": "Gerade nichts Dringendes"
+},
+"هتقدر تدفع بالكارت أو فوري أو المحفظة.": {
+"en": "You'll be able to pay by card, Fawry or wallet.",
+"fr": "Vous pourrez payer par carte, Fawry ou portefeuille.",
+"es": "Podrás pagar con tarjeta, Fawry o billetera.",
+"de": "Du kannst per Karte, Fawry oder Wallet zahlen."
+},
+"يعملها لك من غير ما تعدّ.": {
+"en": "it does it for you without counting.",
+"fr": "il s’en charge sans compter.",
+"es": "lo hace por ti sin contar.",
+"de": "erledigt es für dich ohne Zählen."
+},
+"⚙️ الإعدادات": {
+"en": "⚙️ Settings",
+"fr": "⚙️ Réglages",
+"es": "⚙️ Ajustes",
+"de": "⚙️ Einstellungen"
+},
+"✓ إنت مشترك": {
+"en": "✓ You're subscribed",
+"fr": "✓ Vous êtes abonné",
+"es": "✓ Estás suscrito",
+"de": "✓ Du bist abonniert"
+},
+"🌅 النهارده": {
+"en": "🌅 Today",
+"fr": "🌅 Aujourd’hui",
+"es": "🌅 Hoy",
+"de": "🌅 Heute"
+},
+"🎉 أهلاً بيك في": {
+"en": "🎉 Welcome to",
+"fr": "🎉 Bienvenue dans",
+"es": "🎉 Bienvenido a",
+"de": "🎉 Willkommen bei"
+},
+"🎙️ دايرة الصوت": {
+"en": "🎙️ Voice orb",
+"fr": "🎙️ Orbe vocal",
+"es": "🎙️ Orbe de voz",
+"de": "🎙️ Sprach-Orb"
+},
+"🎯 أدوات التركيز والمستشار في ودنك": {
+"en": "🎯 Focus tools and the whisper coach",
+"fr": "🎯 Outils de concentration et coach à l’oreille",
+"es": "🎯 Herramientas de enfoque y el coach al oído",
+"de": "🎯 Fokus-Werkzeuge und der Flüster-Coach"
+},
+"🏠 البيت والعيلة": {
+"en": "🏠 Home and family",
+"fr": "🏠 Maison et famille",
+"es": "🏠 Casa y familia",
+"de": "🏠 Zuhause und Familie"
+},
+"💰 الفلوس والفواتير": {
+"en": "💰 Money and bills",
+"fr": "💰 Argent et factures",
+"es": "💰 Dinero y facturas",
+"de": "💰 Geld und Rechnungen"
+},
+"🗂️ المهام وكل حاجة": {
+"en": "🗂️ Tasks and everything",
+"fr": "🗂️ Tâches et tout le reste",
+"es": "🗂️ Tareas y todo",
+"de": "🗂️ Aufgaben und alles"
 }
 }

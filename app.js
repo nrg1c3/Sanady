@@ -224,10 +224,10 @@ function showCrisis(){openSheet('<h2>خلّينا نوقف لحظة</h2>'+crisis
 
 /* ---------- BRAIN DUMP ---------- */
 $('bigMic').onclick=()=>openDump();
-function openDump(prefill,hint){openSheet(`<h2>فرّغ دماغك</h2><div class="stack">
+function openDump(prefill,hint,auto){openSheet(`<h2>فرّغ دماغك</h2><div class="stack">
  <p class="note">${esc(hint||'قول كل اللي في دماغك براحتك، حتى لو ملخبط. سندي هيرتبه.')}</p>
  <div class="listening" id="dState"><span class="dot"></span><span>بسمعك...</span></div>
- <div class="heard" id="dHeard"></div>
+ <div class="heard" id="dHeard" translate="no" dir="auto"></div>
  <textarea id="dText" placeholder="أو اكتب هنا" hidden></textarea>
  <div class="acts"><button class="btn big" id="dDone">خلصت ✓</button><button class="btn ghost" id="dType">⌨️ اكتب</button></div>
  <div id="dRes"></div></div>`);
@@ -235,7 +235,8 @@ function openDump(prefill,hint){openSheet(`<h2>فرّغ دماغك</h2><div clas
  const showType=()=>{typed=true;txt.hidden=false;heard.hidden=true;$('dState').hidden=true;stopRec();txt.focus()};
  $('dType').onclick=showType;
  txt.oninput=()=>store.set('dumpDraft',txt.value.trim()?{t:txt.value,at:Date.now()}:null);
- if(prefill){showType();txt.value=prefill}
+ if(prefill&&auto){typed=true;txt.value=prefill;$('dState').hidden=true;heard.textContent=prefill;$('dType').hidden=true}
+ else if(prefill){showType();txt.value=prefill}
  else if(DEMO&&DEMO.dumpText){$('dState').innerHTML='<span class="dot"></span><span>بسمعك...</span>';DEMO.typeInto(heard,DEMO.dumpText)}
  else{const dr=store.get('dumpDraft',null),d0=dr&&Date.now()-dr.at<2*864e5?dr.t:'';if(d0){heard.innerHTML=esc(d0);$('dState').insertAdjacentHTML('afterend','<p class="note" id="dKept">كمّلت من آخر كلام قلته وما اتبعتش ✓ <button class="link" id="dClear">امسحه</button></p>');$('dClear').onclick=()=>{store.set('dumpDraft',null);recFinal='';heard.innerHTML='';$('dKept').remove();openDump()}}
   const ok=startRec((f,i)=>{if(f)store.set('dumpDraft',{t:f,at:Date.now()});if(!heard.isConnected)return;heard.innerHTML=esc(f)+(i?' <span class="int">'+esc(i)+'</span>':'')},st=>{if(!$('dState'))return;if(st==='blocked'||st==='nosr'){$('dState').innerHTML='<span>الميكروفون مش متاح، اكتب بدل الكلام.</span>';showType()}else if(st==='off'&&!typed)$('dState').innerHTML='<span>وقفت. دوس "خلصت" أو كمّل كتابة.</span>'},d0);if(!ok)showType()}
@@ -247,7 +248,8 @@ function openDump(prefill,hint){openSheet(`<h2>فرّغ دماغك</h2><div clas
   const fq=findQuestion(text);if(fq){const k=placeOf(fq);if(k){applyTalk({reply:'',add:[],update:[],find:fq},text);return}}
   let r=await brain('talk',{text,items:open,places:Object.keys(places).slice(0,40)});if(!r)r=localSort(text);
   if(r.crisis){closeSheet();showCrisis();return}
-  applyTalk(r,text)}}
+  applyTalk(r,text)};
+ if(prefill&&auto)$('dDone').click()}
 function applyTalk(r,text){const added=[];const lines=[];
  (r.add||[]).forEach(a=>{if(a.type==='idea'&&!a.sec)a.sec='me';const it=addItem({...a,from:'dump'});added.push(it);if(a.type==='call'){const nm=(a.title.match(/(?:أكلم|اكلم|أتصل ب|أرد على|ارد على)\s*(\S+)/)||[])[1];if(nm&&!people.find(p=>p.name===nm))people.push({id:uid(),name:nm,last:nowMs(),every:30})}});
  (r.update||[]).forEach(u=>{const it=byId(u.id);if(!it)return;if(u.remove){removeItem(u.id);lines.push('شلت: '+it.title);return}if(u.done){finish(u.id,true);lines.push('خلصت: '+it.title);return}

@@ -1,4 +1,4 @@
-/* ---------- Sayvo Plus: summarize a lecture or a book ----------
+/* ---------- Sayvo Focus (paid): summarize a lecture or a book ----------
    Lecture: the phone writes down what's said (its own speech recognition), then Sayvo summarizes it: key points,
    terms, review questions, and any assignment or exam date becomes a task. Book: a PDF, photos of pages, or pasted text,
    summarized part by part, then as a whole. The material is sent only to be summarized and is never kept on our server;
@@ -19,7 +19,7 @@ function summSheet(){openSheet(`<h2>📚 لخّصلي</h2><div class="stack"><p 
 
 /* recording a lecture with the phone's own speech recognition */
 const LEC={on:false,txt:'',t0:0,rec:null,wl:null,iv:null,paused:false};
-function lecSheet(){if(!isPlus()){paywall('تلخيص المحاضرات والكتب جزء من Sayvo Plus.');return}if(!SR){toast('الموبايل ده مش بيدعم السماع. جرّب Chrome');return}
+function lecSheet(){if(!isPlus()){paywall('تلخيص المحاضرات والكتب جزء من سايفو فوكس.');return}if(!SR){toast('الموبايل ده مش بيدعم السماع. جرّب Chrome');return}
  openSheet(`<h2>🎓 محاضرة</h2><div class="stack"><label class="form">اسم المادة أو المحاضرة<input id="lcT" placeholder="مثلاً: تسويق رقمي، المحاضرة 3"></label>
  <p class="note">حط الموبايل قريب من الدكتور، وسيب الشاشة مفتوحة. الكلام بيتكتب على موبايلك، ولما تخلص بلخّصه.</p><button class="btn big" id="lcGo">🔴 ابدأ التسجيل</button></div>`);
  $('lcGo').onclick=()=>lecStart($('lcT').value.trim()||'محاضرة')}
@@ -42,14 +42,14 @@ function lecStop(){LEC.on=false;clearInterval(LEC.iv);try{LEC.rec&&LEC.rec.stop(
 /* books: PDF text (pdf.js, loaded only when needed) or photos of pages */
 function loadPdfJs(){return new Promise((res,rej)=>{if(window.pdfjsLib)return res(pdfjsLib);const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
  s.onload=()=>{try{pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'}catch(e){}res(pdfjsLib)};s.onerror=rej;document.head.appendChild(s)})}
-async function pdfSumm(file){if(!isPlus()){paywall('تلخيص المحاضرات والكتب جزء من Sayvo Plus.');return}if(!allowed('book')){paywall('خلصت كتب الشهر ده.');return}
+async function pdfSumm(file){if(!isPlus()){paywall('تلخيص المحاضرات والكتب جزء من سايفو فوكس.');return}if(!allowed('book')){paywall('خلصت كتب الشهر ده.');return}
  progress('📖 بقرا الملف…');let text='';
  try{const lib=await loadPdfJs();const pdf=await lib.getDocument({data:await file.arrayBuffer()}).promise;const n=Math.min(pdf.numPages,400);
   for(let p=1;p<=n;p++){const pg=await pdf.getPage(p);const c=await pg.getTextContent();text+=c.items.map(i=>i.str).join(' ')+'\n';if(p%10===0)progress('📖 بقرا الصفحات… '+p+' من '+n)}}
  catch(e){toast('ما قدرتش أقرا الملف ده');closeSheet();return}
  if(text.replace(/\s/g,'').length<500){openSheet('<h2>📄 الملف ده صور</h2><div class="stack"><p>الملف ده عبارة عن صور مش نص. صوّر الصفحات المهمة من «📷 صوّر صفحات» وأنا أقراها.</p></div>');return}
  useUp('book');runSumm('book',file.name.replace(/\.pdf$/i,''),{text})}
-async function imgSumm(files){if(!isPlus()){paywall('تلخيص المحاضرات والكتب جزء من Sayvo Plus.');return}if(!allowed('book')){paywall('خلصت كتب الشهر ده.');return}
+async function imgSumm(files){if(!isPlus()){paywall('تلخيص المحاضرات والكتب جزء من سايفو فوكس.');return}if(!allowed('book')){paywall('خلصت كتب الشهر ده.');return}
  files=files.slice(0,36);progress('📷 بجهّز الصور…');const imgs=[];
  for(const f of files){try{imgs.push(await shrink(f))}catch(e){}}
  if(!imgs.length){toast('ما قدرتش أقرا الصور');closeSheet();return}useUp('book');runSumm('book',files.length+' صفحات',{images:imgs})}

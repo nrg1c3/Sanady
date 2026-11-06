@@ -25,7 +25,7 @@ with sync_playwright() as p:
     for lang, loc, tz in [('en', 'en-US', 'America/New_York'), ('fr', 'fr-FR', 'Europe/Paris'), ('es', 'es-ES', 'Europe/Madrid'), ('de', 'de-DE', 'Europe/Berlin')]:
         for app in ['Sanady/', 'app/']:
             ctx = b.new_context(locale=loc, timezone_id=tz, viewport={'width': 390, 'height': 844})
-            ctx.add_init_script("try{if(localStorage.getItem('sy_seenPick')===null)localStorage.setItem('sy_seenPick','true')}catch(e){}")
+            ctx.add_init_script("try{if(localStorage.getItem('sy_seenPick')===null)localStorage.setItem('sy_seenPick','true');if(localStorage.getItem('sy_orb')===null)localStorage.setItem('sy_orb','false')}catch(e){}")
             pg = ctx.new_page(); errs = []
             pg.on('pageerror', lambda e: errs.append(str(e)))
             pg.route('https://fonts.**', lambda r: r.abort())

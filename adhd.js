@@ -53,7 +53,7 @@ applySimple();
 function focusSheet(){const on=IS_ADHD;
  openSheet(`<h2>${FP_ICON} فوكس+</h2><div class="stack"><p>أدوات زيادة للي بيلاقي صعوبة يبدأ أو يركّز أو بينسى الوقت، سواء عنده ADHD أو لأ.</p>
  <ul class="note" style="line-height:1.9;padding-inline-start:18px"><li>الشاشة البسيطة: حاجة واحدة دلوقتي وزرار صوت كبير</li><li>وضع «جنبك»: حد معاك وإنت بتشتغل</li><li>وضع الانتظار قبل المواعيد، وأنا اللي أقولك تقوم</li><li>البداية بدقيقتين بس، وتقسيم الحاجة الكبيرة لخطوات</li><li>شريك متابعة كل أسبوع</li><li>اختيار الحاجة حسب طاقتك</li><li>مستشار في ودنك: يسمع الاجتماع أو المحادثة ويهمسلك بالرد المناسب</li></ul>
- <p class="note">${on?'فوكس+ شغال على الموبايل ده.':'تقدر تجربه دلوقتي ببلاش. بعد التجربة هيبقى اشتراك واحد اسمه Sayvo Focus+، فيه كل اللي في Plus كمان.'}</p>
+ <p class="note">${on?'فوكس+ شغال على الموبايل ده.':'تقدر تجربه دلوقتي ببلاش. بعد التجربة هيبقى جزء من اشتراك سايفو فوكس، اللي فيه كل حاجة.'}</p>
  <button class="btn big" id="fcGo">${on?'اقفل فوكس+':'جرّب فوكس+'}</button></div>`);
  $('fcGo').onclick=()=>{store.set('focus',!on);if(!on){store.set('focusAt',Date.now());store.set('simple',true)}location.reload()}}
 Object.assign(window,{focusSheet,setSimple,buddySheet,buddyDraft,weekStats});

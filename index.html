@@ -29,15 +29,24 @@
 
 <!-- ============ HOME: just the voice orb (like a call screen) ============ -->
 <section class="screen" id="home">
- <button class="ic mnu" id="mnuBtn" aria-label="القايمة" title="القايمة">☰</button>
- <div class="orbbox">
+ <div class="aur" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i></div>
+ <div class="htop"><button class="hb" id="mnuBtn" aria-label="القايمة" title="القايمة"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h11M4 17h16"/></svg></button>
+  <span class="hbrand">Sayvo</span>
+  <button class="hb" id="orbToday" aria-label="النهارده" title="النهارده"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></button></div>
+ <div class="hmid">
+  <svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="hmG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4F8BFF"/><stop offset=".45" stop-color="#8E7BFF"/><stop offset=".75" stop-color="#5FD3B3"/><stop offset="1" stop-color="#F6B07E"/></linearGradient></defs>
+   <path d="M8 52 C12 52 13 22 19 22 C25 22 25 76 31 76 C36 76 36 36 41 36 C45.5 36 45.5 62 50 62 C53 62 54 54 56.5 54 L66 66 L91 36" fill="none" stroke="url(#hmG)" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <h1 class="hgreet" id="orbGreet"></h1>
   <div class="orbsay" id="orbSay" aria-live="polite" translate="no"></div>
-  <button class="orb" id="orb" aria-label="اتكلم"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="core"></i></button>
-  <p class="orbhint" id="orbHint">دوس واتكلم</p>
   <p class="orbheard" id="orbHeard" dir="auto" translate="no"></p>
-  <button class="orbnow" id="orbNow"></button>
  </div>
- <button class="ic kb" id="orbKb" aria-label="اكتب" title="اكتب">⌨️</button>
+ <button class="orbnow" id="orbNow"></button>
+ <div class="hbar">
+  <button class="hb big" id="orbKb" aria-label="اكتب" title="اكتب"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg></button>
+  <button class="orb" id="orb" aria-label="اتكلم"><span class="wave"><i></i><i></i><i></i></span><span class="lbl"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><b id="orbHint">اتكلم</b></span></button>
+  <button class="hb big" id="orbStop" aria-label="خلصت" title="خلصت" hidden><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="hb big" id="orbFocus" aria-label="فوكس+" title="فوكس+"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></button>
+ </div>
 </section>
 
 <!-- ============ NOW ============ -->

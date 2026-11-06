@@ -4,9 +4,12 @@
    Settings can switch the start screen back to "Today". */
 const ORB={on:false,txt:'',idle:null,last:0};
 const orbHome=()=>store.get('orb',true)!==false;
-function orbState(st){const o=$('orb');if(!o)return;o.className='orb'+(st?' '+st:'');
- const h=$('orbHint');if(h)h.textContent=st==='listen'?'بسمعك… دوس تاني لما تخلص':st==='think'?'بيرتّب…':st==='speak'?'':'دوس واتكلم'}
-function drawOrb(){const c=candidates(),it=c[0],b=$('orbNow');if(!b)return;
+function orbState(st){const o=$('orb');if(!o)return;o.className='orb'+(st?' '+st:'');const H=$('home');if(H){H.classList.remove('listen','think','speak');if(st)H.classList.add(st)}
+ const h=$('orbHint');if(h)h.textContent=st==='listen'?'خلصت؟ دوس هنا':st==='think'?'بيرتّب…':st==='speak'?'سايفو بيتكلم':'اتكلم';
+ const x=$('orbStop'),f=$('orbFocus');if(x&&f){x.hidden=st!=='listen';f.hidden=st==='listen'}}
+function orbGreet(){const h=new Date().getHours();
+ return `${h<12?'صباح الخير':h<18?'أهلاً':'مساء الخير'}${prof.name?`، <span translate="no">${esc(prof.name)}</span>`:''}<br>إيه اللي في دماغك؟`}
+function drawOrb(){const c=candidates(),it=c[0],b=$('orbNow');if(!b)return;const g=$('orbGreet');if(g&&!ORB.on)g.innerHTML=orbGreet();
  if(it){const t=it.due?fmtT(parseL(it.due)):'';b.innerHTML=`<span>الجاي:</span> <b translate="no" dir="auto">${esc(it.title)}</b>${t?` <small>${t}</small>`:''}`;b.hidden=false}
  else{b.innerHTML='<span>مفيش حاجة مستعجلة دلوقتي</span>';b.hidden=false}
  const n=$('dName');if(n)n.textContent=prof.name?BRAND+' · '+prof.name:BRAND}
@@ -38,6 +41,8 @@ setInterval(()=>{const o=$('orb');if(!o||!document.querySelector('#home.on')||OR
 $('orb').onclick=orbTap;
 $('orbKb').onclick=()=>{openDump();setTimeout(()=>{const t=$('dType');t&&t.click()},50)};
 $('orbNow').onclick=()=>show('now');
+$('orbToday').onclick=()=>show('now');$('orbFocus').onclick=()=>show('focus');
+$('orbStop').onclick=()=>{clearInterval(ORB.idle);ORB.on=false;stopRec();store.set('dumpDraft',null);$('orbHeard').textContent='';orbState('');toast('اتلغى')}; // cancel: nothing is sent
 $('mnuBtn').onclick=openDrawer;$('mnuTop').onclick=openDrawer;$('toOrb').onclick=()=>show('home');
 $('drawerX').onclick=closeDrawer;$('drawer').onclick=e=>{if(e.target.id==='drawer')closeDrawer()};
 $('dbox').querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{const d=b.dataset.d;closeDrawer();

@@ -12646,5 +12646,29 @@
 "fr": "🗂️ Tâches et tout le reste",
 "es": "🗂️ Tareas y todo",
 "de": "🗂️ Aufgaben und alles"
+},
+"اتلغى": {
+"en": "Cancelled",
+"fr": "Annulé",
+"es": "Cancelado",
+"de": "Abgebrochen"
+},
+"خلصت؟ دوس هنا": {
+"en": "Done? Tap here",
+"fr": "Fini ? Touchez ici",
+"es": "¿Listo? Toca aquí",
+"de": "Fertig? Hier tippen"
+},
+"سايفو بيتكلم": {
+"en": "Sayvo is talking",
+"fr": "Sayvo parle",
+"es": "Sayvo está hablando",
+"de": "Sayvo spricht"
+},
+"إيه اللي في دماغك؟": {
+"en": "What's on your mind?",
+"fr": "Qu’avez-vous en tête ?",
+"es": "¿Qué tienes en mente?",
+"de": "Was geht dir durch den Kopf?"
 }
 }
